@@ -57,7 +57,7 @@ app.post("/api/chat", async (req, res) => {
           throw error;
         }
 
-        console.log(Retry attempt ${attempt} after error ${status});
+        console.log(`Retry attempt ${attempt} after error ${status}`);
 
         await new Promise(resolve =>
           setTimeout(resolve, attempt * 2000)
