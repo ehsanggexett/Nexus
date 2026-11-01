@@ -36,13 +36,37 @@ app.post("/api/chat", async (req, res) => {
       apiKey: process.env.GEMINI_API_KEY
     });
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: message.trim()
-    });
+    let response;
+    const maxAttempts = 3;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        response = await ai.models.generateContent({
+          model: "gemini-3.8-flash",
+          contents: message.trim()
+        });
+
+        break;
+      } catch (error) {
+        const status = error.status || error.code;
+
+        if (
+          attempt === maxAttempts ||
+          ![429, 500, 502, 503, 504].includes(Number(status))
+        ) {
+          throw error;
+        }
+
+        console.log(Retry attempt ${attempt} after error ${status});
+
+        await new Promise(resolve =>
+          setTimeout(resolve, attempt * 2000)
+        );
+      }
+    }
 
     res.json({
-      reply: response.text || "پاسخی دریافت نشد."
+      reply: response?.text || "پاسخی دریافت نشد."
     });
 
   } catch (error) {
@@ -52,8 +76,4 @@ app.post("/api/chat", async (req, res) => {
       error: "ارتباط با هوش مصنوعی با مشکل مواجه شد."
     });
   }
-});
-
-app.listen(PORT, () => {
-  console.log("Siman AI running on port " + PORT);
 });
