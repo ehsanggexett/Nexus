@@ -10,11 +10,52 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const dirname = path.dirname(filename);
 const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static(rootDir));
+
+function isTemporaryError(error) {
+  const status = Number(error.status || error.code);
+  return [429, 500, 502, 503, 504].includes(status);
+}
+
+async function askGroq(message) {
+  if (!process.env.GROQ_API_KEY) {
+    throw new Error("GROQ_API_KEY is not configured.");
+  }
+
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": Bearer ${process.env.GROQ_API_KEY}
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-oss-20b",
+        messages: [
+          { role: "user", content: message }
+        ]
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      Groq API Error ${response.status}: ${
+        data.error?.message || "Unknown error"
+      }
+    );
+  }
+
+  return data.choices?.[0]?.message?.content ||
+    "پاسخی دریافت نشد.";
+}
 
 app.post("/api/chat", async (req, res) => {
   try {
@@ -28,7 +69,7 @@ app.post("/api/chat", async (req, res) => {
 
     if (!process.env.GEMINI_API_KEY) {
       return res.status(503).json({
-        error: "کلید هوش مصنوعی روی سرور تنظیم نشده است."
+        error: "کلید Gemini روی سرور تنظیم نشده است."
       });
     }
 
@@ -36,37 +77,50 @@ app.post("/api/chat", async (req, res) => {
       apiKey: process.env.GEMINI_API_KEY
     });
 
-    let response;
-    const maxAttempts = 3;
+    let geminiResponse;
+    let geminiError;
 
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
       try {
-        response = await ai.models.generateContent({
+        geminiResponse = await ai.models.generateContent({
           model: "gemini-3.8-flash",
           contents: message.trim()
         });
 
         break;
       } catch (error) {
-        const status = error.status || error.code;
+        geminiError = error;
 
-        if (
-          attempt === maxAttempts ||
-          ![429, 500, 502, 503, 504].includes(Number(status))
-        ) {
+        if (!isTemporaryError(error)) {
           throw error;
         }
 
-        console.log(`Retry attempt ${attempt} after error ${status}`);
+        console.log(Gemini retry ${attempt}/3);
 
-        await new Promise(resolve =>
-          setTimeout(resolve, attempt * 2000)
-        );
+        if (attempt < 3) {
+          await new Promise(resolve =>
+            setTimeout(resolve, attempt * 2000)
+          );
+        }
       }
     }
 
-    res.json({
-      reply: response?.text || "پاسخی دریافت نشد."
+    if (geminiResponse?.text) {
+      return res.json({
+        reply: geminiResponse.text,
+        provider: "Gemini"
+      });
+    }
+
+    if (geminiError) {
+      console.log("Gemini unavailable. Switching to Groq...");
+    }
+
+    const groqReply = await askGroq(message.trim());
+
+    return res.json({
+      reply: groqReply,
+      provider: "Groq"
     });
 
   } catch (error) {
@@ -77,6 +131,7 @@ app.post("/api/chat", async (req, res) => {
     });
   }
 });
+
 app.listen(PORT, () => {
   console.log("Siman AI running on port " + PORT);
 });
