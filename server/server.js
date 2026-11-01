@@ -45,14 +45,13 @@ async function askGroq(message) {
 
   const data = await response.json();
 
-  if (!response.ok) {
-    throw new Error(
-     ` Groq API Error ${response.status}: ${
-        data.error?.message || "Unknown error"
-      }
-    );
-  }
-
+if (!response.ok) {
+  throw new Error(
+   ` Groq API Error ${response.status}: ${
+      data.error?.message || "Unknown error"
+    }
+  );
+}
   return data.choices?.[0]?.message?.content ||
     "پاسخی دریافت نشد.";
 }
