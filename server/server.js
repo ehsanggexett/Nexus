@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json({ limit: "20kb" }));
@@ -32,7 +32,7 @@ async function askGroq(message) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": Bearer ${process.env.GROQ_API_KEY}
+        "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
         model: "openai/gpt-oss-20b",
@@ -47,7 +47,7 @@ async function askGroq(message) {
 
   if (!response.ok) {
     throw new Error(
-      Groq API Error ${response.status}: ${
+     ` Groq API Error ${response.status}: ${
         data.error?.message || "Unknown error"
       }
     );
@@ -95,7 +95,7 @@ app.post("/api/chat", async (req, res) => {
           throw error;
         }
 
-        console.log(Gemini retry ${attempt}/3);
+        console.log(`Gemini retry ${attempt}/3`);
 
         if (attempt < 3) {
           await new Promise(resolve =>
