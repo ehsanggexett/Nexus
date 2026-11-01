@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const dirname = path.dirname(filename);
 const rootDir = path.resolve(__dirname, "..");
 
 app.use(express.json({ limit: "20kb" }));
@@ -37,7 +37,7 @@ app.post("/api/chat", async (req, res) => {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.8-flash",
       contents: message.trim()
     });
 
@@ -55,5 +55,5 @@ app.post("/api/chat", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("NexusAI running on port " + PORT);
+  console.log("Siman AI running on port " + PORT);
 });
