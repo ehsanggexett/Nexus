@@ -56,3 +56,4 @@ app.post("/api/chat", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log("NexusAI running on port " + PORT);
+});
