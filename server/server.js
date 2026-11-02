@@ -355,17 +355,13 @@ app.post("/api/chat", async (req, res) => {
         console.error("Web Search Error:", error.message);
       }
     }
-
-    const messageForAI = searchContext
-      ? 
-پیام کاربر:
-${finalMessage}
-
-${searchContext}
-
-لطفاً به فارسی پاسخ بده و لینک‌های واقعی نتایج را در متن پاسخ هم ذکر کن.
-
-      : finalMessage;
+const messageForAI = searchContext
+  ? "User message:\n" +
+    finalMessage +
+    "\n\nSearch results:\n" +
+    searchContext +
+    "\n\nAnswer in Persian. Use only the real URLs provided in the search results. Never invent links or prices."
+  : finalMessage; 
     // تلاش اول: Gemini
     if (process.env.GEMINI_API_KEY) {
       try {
