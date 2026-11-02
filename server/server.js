@@ -151,13 +151,12 @@ async function searchWeb(message) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      "Tavily API Error " +
-      response.status +
-      ": " +
-      (data.detail?.error ⠟⠵⠞⠵⠟⠞⠺⠞⠺⠺⠵⠟ "Unknown error")
-    );
-  }
+throw new Error(
+  "Tavily API Error " +
+  response.status +
+  ": " +
+  "Search request failed"
+);
 
   const results = (data.results || [])
     .filter(item => {
