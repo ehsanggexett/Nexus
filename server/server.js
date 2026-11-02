@@ -13,7 +13,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, "..");
 
-// حداکثر حجم درخواست برای عکس 5 مگابایتی
 app.use(express.json({ limit: "7mb" }));
 app.use(express.static(rootDir));
 
@@ -22,6 +21,15 @@ const ALLOWED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
   "image/gif"
+];
+
+// سایت‌های ایرانی برای جست‌وجوی محصولات
+const IRANIAN_STORE_DOMAINS = [
+  "digikala.com",
+  "torob.com",
+  "emalls.ir",
+  "technolife.ir",
+  "meghdadit.com"
 ];
 
 function isTemporaryError(error) {
@@ -48,7 +56,6 @@ function validateImage(image) {
     throw new Error("اطلاعات تصویر معتبر نیست.");
   }
 
-  // اگر داده به شکل Data URL ارسال شده باشد
   if (base64.startsWith("data:")) {
     const match = base64.match(/^data:([^;]+);base64,(.+)$/);
 
@@ -73,6 +80,123 @@ function validateImage(image) {
     data: buffer.toString("base64"),
     mimeType
   };
+}
+
+// تشخیص درخواست‌هایی که به جست‌وجوی اینترنت نیاز دارند
+function needsWebSearch(message) {
+  const text = message.toLowerCase();
+
+  const searchWords = [
+    "پیدا کن",
+    "پیدا کنه",
+    "جستجو کن",
+    "جست‌وجو کن",
+    "بگرد",
+    "لینک بده",
+    "لینک محصول",
+    "لینک خرید",
+    "لینک سایت",
+    "قیمت",
+    "خرید",
+    "فروشگاه",
+    "محصول",
+    "موجوده",
+    "موجودی",
+    "از کجا بخرم",
+    "دیجی کالا",
+    "دیجی‌کالا",
+    "ترب",
+    "emalls",
+    "digikala",
+    "torob",
+    "find",
+    "search for",
+    "product link",
+    "buy",
+    "price"
+  ];
+
+  return searchWords.some(word => text.includes(word));
+}
+
+// جست‌وجوی واقعی در Tavily
+async function searchWeb(message) {
+  if (!process.env.TAVILY_API_KEY) {
+    console.log("TAVILY_API_KEY is not configured.");
+    return {
+      results: [],
+      error: "کلید جست‌وجوی اینترنت تنظیم نشده است."
+    };
+  }
+
+  const response = await fetch(
+    "https://api.tavily.com/search",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + process.env.TAVILY_API_KEY
+      },
+      body: JSON.stringify({
+        query: message,
+        search_depth: "basic",
+        topic: "general",
+        max_results: 6,
+        include_answer: false,
+        include_domains: IRANIAN_STORE_DOMAINS
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      "Tavily API Error " +
+      response.status +
+      ": " +
+      (data.detail?.error ⠟⠵⠞⠵⠟⠞⠺⠞⠺⠺⠵⠟ "Unknown error")
+    );
+  }
+
+  const results = (data.results || [])
+    .filter(item => {
+      try {
+        const url = new URL(item.url);
+        return url.protocol === "https:" || url.protocol === "http:";
+      } catch {
+        return false;
+      }
+    })
+    .slice(0, 6)
+    .map(item => ({
+      title: item.title || "صفحه بدون عنوان",
+      url: item.url,
+      content: item.content || ""
+    }));
+
+  return { results };
+}
+
+// ساخت متن کمکی از نتایج جست‌وجو
+function createSearchContext(results) {
+  if (!results.length) {
+    return "";
+  }
+  return 
+نتایج واقعی جست‌وجوی اینترنت در ادامه آمده است.
+فقط از اطلاعات همین نتایج استفاده کن.
+آدرس لینک‌ها را تغییر نده و لینک جدید نساز.
+اگر قیمت در نتایج مشخص نیست، قیمت حدس نزن.
+اگر نتیجه مناسبی پیدا نشده، صادقانه بگو.
+
+${results.map((item, index) => 
+نتیجه ${index + 1}:
+عنوان: ${item.title}
+لینک واقعی: ${item.url}
+اطلاعات صفحه: ${item.content}
+).join("\n")}
+;
 }
 
 async function askGemini(message, image) {
@@ -117,10 +241,10 @@ async function askGemini(message, image) {
     } catch (error) {
       lastError = error;
 
-console.error(
-  "Gemini attempt " + attempt + "/3 failed:",
-  error.message
-);
+      console.error(
+        "Gemini attempt " + attempt + "/3 failed:",
+        error.message
+      );
 
       if (!isTemporaryError(error)) {
         break;
@@ -146,7 +270,6 @@ async function askGroq(message, image) {
   let content = message;
 
   if (image) {
-    // مدل بینایی Groq برای تحلیل عکس
     model = "qwen/qwen3.8-27b";
 
     content = [
@@ -157,7 +280,8 @@ async function askGroq(message, image) {
       {
         type: "image_url",
         image_url: {
-url: "data:" + image.mimeType + ";base64," + image.data        }
+          url: "data:" + image.mimeType + ";base64," + image.data
+        }
       }
     ];
   }
@@ -193,7 +317,8 @@ url: "data:" + image.mimeType + ";base64," + image.data        }
       (data.error?.message || "Unknown error")
     );
   }
-return data.choices?.[0]?.message?.content ||
+
+  return data.choices?.[0]?.message?.content ||
     "پاسخی از Groq دریافت نشد.";
 }
 
@@ -223,14 +348,41 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
+    // جست‌وجو فقط برای پیام‌های متنی و درخواست‌های مرتبط
+    let sources = [];
+    let searchContext = "";
+
+    if (!image && needsWebSearch(finalMessage)) {
+      try {
+        const searchData = await searchWeb(finalMessage);
+        sources = searchData.results || [];
+        searchContext = createSearchContext(sources);
+
+        console.log("Web search results:", sources.length);
+      } catch (error) {
+        console.error("Web Search Error:", error.message);
+      }
+    }
+
+    const messageForAI = searchContext
+      ? 
+پیام کاربر:
+${finalMessage}
+
+${searchContext}
+
+لطفاً به فارسی پاسخ بده و لینک‌های واقعی نتایج را در متن پاسخ هم ذکر کن.
+
+      : finalMessage;
     // تلاش اول: Gemini
     if (process.env.GEMINI_API_KEY) {
       try {
-        const reply = await askGemini(finalMessage, image);
+        const reply = await askGemini(messageForAI, image);
 
         return res.json({
           reply,
-          provider: "Gemini"
+          provider: "Gemini",
+          sources
         });
       } catch (error) {
         console.error(
@@ -243,11 +395,12 @@ app.post("/api/chat", async (req, res) => {
     // تلاش دوم: Groq
     if (process.env.GROQ_API_KEY) {
       try {
-        const reply = await askGroq(finalMessage, image);
+        const reply = await askGroq(messageForAI, image);
 
         return res.json({
           reply,
-          provider: "Groq"
+          provider: "Groq",
+          sources
         });
       } catch (error) {
         console.error("Groq Error:", error.message);
@@ -261,7 +414,7 @@ app.post("/api/chat", async (req, res) => {
   } catch (error) {
     console.error("Server Error:", error.message);
 
-    res.status(400).json({
+    return res.status(400).json({
       error: error.message || "در پردازش درخواست خطایی رخ داد."
     });
   }
