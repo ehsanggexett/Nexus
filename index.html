@@ -5,91 +5,384 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090b12">
 <title>Nexus1 AI</title>
+
 <style>
-:root{color-scheme:dark;--bg:#090b12;--panel:#151b29;--line:#2a3347;--muted:#929bb0;--accent:#8875ff}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 75% -15%,#292052 0,transparent 42%),var(--bg);color:#f5f6fb;font-family:Tahoma,Arial,sans-serif}
-button,input{font:inherit}button{cursor:pointer}
-.app{min-height:100vh;display:flex}
-aside{width:258px;flex:0 0 258px;padding:24px 16px;background:rgba(16,20,32,.96);border-left:1px solid var(--line);display:flex;flex-direction:column}
-.brand{display:flex;align-items:center;gap:11px;padding:4px 7px 24px}
-.brand-mark{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#9b8cff,#5d49d4);font-size:21px;font-weight:bold}
-.brand-name{font-size:22px;font-weight:800}
-.brand-name span{color:#a99cff}
-.brand-sub{color:var(--muted);font-size:11px;margin-top:5px}
-.side-label{color:#68738b;font-size:10px;padding:10px 10px}
-.menu{display:grid;gap:7px}
-.menu button{display:flex;align-items:center;gap:12px;width:100%;padding:12px;color:#cbd1df;background:transparent;border:1px solid transparent;border-radius:12px;text-align:right;font-size:13px}
-.menu button:hover,.menu button.active{background:#24213c;border-color:#554a91;color:#fff}
-.menu-icon{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:#202638;font-size:16px}
-.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding:17px 8px 0}
-.creator{color:#818ba1;font-size:11px;line-height:1.9}
-.creator strong{color:#b8adff}
-main{min-width:0;flex:1;display:flex;flex-direction:column;align-items:center;padding:24px 30px}
-.topbar{width:min(1050px,100%);display:flex;justify-content:space-between;align-items:center}
-.mobile-brand{display:none;font-weight:bold;font-size:18px}
-.top-status{color:#a9b2c5;font-size:11px;background:#151b29;border:1px solid var(--line);padding:8px 12px;border-radius:30px}
-.top-status i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#55d69a;margin-left:7px}
-.welcome{width:min(850px,100%);text-align:center;margin:7vh auto 25px}
-.welcome-badge{display:inline-flex;padding:7px 12px;border:1px solid #40376c;background:#1b1930;color:#bcb2ff;border-radius:30px;font-size:11px}
-h1{font-size:clamp(27px,4vw,42px);margin:18px 0 10px;line-height:1.5}
-h1 span{color:#a99aff}
-.subtitle{color:var(--muted);font-size:14px;line-height:1.9}
-.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:30px auto 0;width:min(780px,100%)}
-.tool{min-height:112px;padding:17px 10px;background:linear-gradient(145deg,#171d2c,#121725);border:1px solid var(--line);border-radius:16px;color:#f1f2fa;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
-.tool:hover{border-color:#7163c7;background:#201d39}
-.tool-icon{font-size:23px}
-.tool-title{font-size:12px;font-weight:bold}
-.tool-desc{font-size:10px;color:#929bb0}
-.chat{width:min(900px,100%);margin:auto auto 0;padding-top:24px}
-#status{text-align:center;color:#9f96ed;font-size:11px;min-height:20px;margin:0 0 12px}
-#messages{display:flex;flex-direction:column;gap:13px;padding:8px 5px 14px;max-height:43vh;overflow-y:auto;scroll-behavior:smooth}
-.message{max-width:88%;padding:13px 16px;border-radius:16px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}
-.message.user{align-self:flex-start;background:#302a55;border:1px solid #51468a;border-bottom-left-radius:5px}
-.message.ai{align-self:stretch;background:#151b29;border:1px solid var(--line);border-bottom-right-radius:5px}
-  .message-image{display:block;max-width:min(320px,100%);max-height:260px;object-fit:contain;border-radius:11px;margin-bottom:9px}
-.composer{background:#151b29;border:1px solid #343d52;border-radius:19px;padding:10px;box-shadow:0 15px 45px #0005}
-.preview-wrap{display:none;padding:4px 5px 10px;align-items:center;gap:10px}
-.preview-wrap.show{display:flex}
-.preview-wrap img{width:58px;height:58px;object-fit:cover;border-radius:10px}
-.preview-info{flex:1;color:#aeb7c9;font-size:11px}
-.remove-image{border:0;background:#292f40;color:#d8dbea;border-radius:9px;padding:8px 11px;font-size:11px}
-.compose-row{display:flex;align-items:center;gap:8px}
-#message{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#fff;padding:12px 10px;font-size:13px}
-#message::placeholder{color:#778198}
-.icon-button{width:39px;height:39px;flex:0 0 39px;border-radius:12px;border:1px solid #333d52;background:#20283a;color:#dce1ef;display:grid;place-items:center;font-size:17px}
-.icon-button:hover{border-color:#8070e7;background:#2b2946}
-.send{min-width:83px;height:39px;border:0;border-radius:12px;background:linear-gradient(135deg,#8976ff,#6652dc);color:white;font-size:12px;font-weight:bold;padding:0 14px}
-#imageInput{display:none}
-.composer-hint{color:#69748b;text-align:center;font-size:10px;margin-top:10px}
-.footer{text-align:center;color:#657087;font-size:10px;margin:14px 0 5px}
-@media(max-width:760px){
-aside{width:76px;flex-basis:76px;padding:17px 8px}
-.brand{justify-content:center;padding:2px 0 23px}
-.brand-copy,.side-label,.menu-text,.side-bottom{display:none}
-.menu button{justify-content:center;padding:9px 5px}
-.menu-icon{width:39px;height:39px;font-size:18px}
-main{padding:17px 14px}
-.topbar{justify-content:flex-end}
-.mobile-brand{display:block;margin-left:auto}
-.welcome{margin-top:6vh}
-.tools{grid-template-columns:repeat(2,minmax(0,1fr));max-width:440px;gap:9px;margin-top:24px}
-.tool{min-height:100px}
-.chat{padding-top:15px}
-#messages{max-height:39vh}
-.message{max-width:94%;font-size:12px}
+:root {
+  color-scheme: dark;
+  --bg: #090b12;
+  --panel: #151b29;
+  --line: #2a3347;
+  --muted: #929bb0;
+  --accent: #8875ff;
 }
-@media(max-width:390px){
-aside{width:62px;flex-basis:62px}
-.menu-icon{width:36px;height:36px}
-main{padding:14px 9px}
-.send{min-width:66px;padding:0 9px}
-.icon-button{width:35px;height:35px;flex-basis:35px}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 75% -15%,#292052 0,transparent 42%),var(--bg);
+  color: #f5f6fb;
+  font-family: Tahoma,Arial,sans-serif;
+}
+
+button,input { font: inherit; }
+button { cursor: pointer; }
+
+.app { min-height: 100vh; display: flex; }
+
+aside {
+  width: 258px;
+  flex: 0 0 258px;
+  padding: 24px 16px;
+  background: rgba(16,20,32,.96);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 4px 7px 24px;
+}
+
+.brand-mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg,#9b8cff,#5d49d4);
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.brand-name { font-size: 22px; font-weight: 800; }
+.brand-name span { color: #a99cff; }
+.brand-sub { color: var(--muted); font-size: 11px; margin-top: 5px; }
+
+.side-label { color: #68738b; font-size: 10px; padding: 10px 10px; }
+.menu { display: grid; gap: 7px; }
+
+.menu button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  color: #cbd1df;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.menu button:hover,
+.menu button.active {
+  background: #24213c;
+  border-color: #554a91;
+  color: #fff;
+}
+
+.menu-icon {
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #202638;
+  font-size: 16px;
+}
+
+.side-bottom {
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding: 17px 8px 0;
+}
+
+.creator { color: #818ba1; font-size: 11px; line-height: 1.9; }
+.creator strong { color: #b8adff; }
+
+main {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 30px;
+}
+
+.topbar {
+  width: min(1050px,100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-brand { display: none; font-weight: bold; font-size: 18px; }
+
+.top-status {
+  color: #a9b2c5;
+  font-size: 11px;
+  background: #151b29;
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  border-radius: 30px;
+}
+
+.top-status i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #55d69a;
+  margin-left: 7px;
+}
+
+.welcome {
+  width: min(850px,100%);
+  text-align: center;
+  margin: 7vh auto 25px;
+}
+
+.welcome-badge {
+  display: inline-flex;
+  padding: 7px 12px;
+  border: 1px solid #40376c;
+  background: #1b1930;
+  color: #bcb2ff;
+  border-radius: 30px;
+  font-size: 11px;
+}
+
+h1 {
+  font-size: clamp(27px,4vw,42px);
+  margin: 18px 0 10px;
+  line-height: 1.5;
+}
+
+h1 span { color: #a99aff; }
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 12px;
+  margin: 30px auto 0;
+  width: min(780px,100%);
+}
+
+.tool {
+  min-height: 112px;
+  padding: 17px 10px;
+  background: linear-gradient(145deg,#171d2c,#121725);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: #f1f2fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+}
+
+.tool:hover { border-color: #7163c7; background: #201d39; }
+.tool-icon { font-size: 23px; }
+.tool-title { font-size: 12px; font-weight: bold; }
+.tool-desc { font-size: 10px; color: #929bb0; }
+
+.chat {
+  width: min(900px,100%);
+  margin: auto auto 0;
+  padding-top: 24px;
+}
+
+#status {
+  text-align: center;
+  color: #9f96ed;
+  font-size: 11px;
+  min-height: 20px;
+  margin: 0 0 12px;
+}
+  #messages {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 8px 5px 14px;
+  max-height: 43vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.message {
+  max-width: 88%;
+  padding: 13px 16px;
+  border-radius: 16px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+.message.user {
+  align-self: flex-start;
+  background: #302a55;
+  border: 1px solid #51468a;
+  border-bottom-left-radius: 5px;
+}
+
+.message.ai {
+  align-self: stretch;
+  background: #151b29;
+  border: 1px solid var(--line);
+  border-bottom-right-radius: 5px;
+}
+
+.message-image {
+  display: block;
+  max-width: min(320px,100%);
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 11px;
+  margin-bottom: 9px;
+}
+
+.composer {
+  background: #151b29;
+  border: 1px solid #343d52;
+  border-radius: 19px;
+  padding: 10px;
+  box-shadow: 0 15px 45px #0005;
+}
+
+.preview-wrap {
+  display: none;
+  padding: 4px 5px 10px;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-wrap.show { display: flex; }
+
+.preview-wrap img {
+  width: 58px;
+  height: 58px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.preview-info { flex: 1; color: #aeb7c9; font-size: 11px; }
+
+.remove-image {
+  border: 0;
+  background: #292f40;
+  color: #d8dbea;
+  border-radius: 9px;
+  padding: 8px 11px;
+  font-size: 11px;
+}
+
+.compose-row { display: flex; align-items: center; gap: 8px; }
+
+#message {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: #fff;
+  padding: 12px 10px;
+  font-size: 13px;
+}
+
+#message::placeholder { color: #778198; }
+
+.icon-button {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  border-radius: 12px;
+  border: 1px solid #333d52;
+  background: #20283a;
+  color: #dce1ef;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+}
+
+.icon-button:hover { border-color: #8070e7; background: #2b2946; }
+
+.send {
+  min-width: 83px;
+  height: 39px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#8976ff,#6652dc);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 0 14px;
+}
+
+#imageInput { display: none; }
+
+.composer-hint {
+  color: #69748b;
+  text-align: center;
+  font-size: 10px;
+  margin-top: 10px;
+}
+
+.footer {
+  text-align: center;
+  color: #657087;
+  font-size: 10px;
+  margin: 14px 0 5px;
+}
+
+.voice-active {
+  border-color: #55d69a !important;
+  background: #18372e !important;
+}
+
+@media(max-width:760px) {
+  aside { width: 76px; flex-basis: 76px; padding: 17px 8px; }
+  .brand { justify-content: center; padding: 2px 0 23px; }
+  .brand-copy,.side-label,.menu-text,.side-bottom { display: none; }
+  .menu button { justify-content: center; padding: 9px 5px; }
+  .menu-icon { width: 39px; height: 39px; font-size: 18px; }
+  main { padding: 17px 14px; }
+  .topbar { justify-content: flex-end; }
+  .mobile-brand { display: block; margin-left: auto; }
+  .welcome { margin-top: 6vh; }
+  .tools { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 440px; gap: 9px; margin-top: 24px; }
+  .tool { min-height: 100px; }
+  .chat { padding-top: 15px; }
+  #messages { max-height: 39vh; }
+  .message { max-width: 94%; font-size: 12px; }
+}
+
+@media(max-width:390px) {
+  aside { width: 62px; flex-basis: 62px; }
+  .menu-icon { width: 36px; height: 36px; }
+  main { padding: 14px 9px; }
+  .send { min-width: 66px; padding: 0 9px; }
+  .icon-button { width: 35px; height: 35px; flex-basis: 35px; }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <aside>
   <div class="brand">
     <div class="brand-mark">N</div>
@@ -98,15 +391,38 @@ main{padding:14px 9px}
       <div class="brand-sub">دستیار هوشمند شما</div>
     </div>
   </div>
+
   <div class="side-label">فضای کاری</div>
+
   <nav class="menu">
-    <button class="active" data-mode="دستیار هوشمند" onclick="choose('دستیار هوشمند',this)"><span class="menu-icon">✦</span><span class="menu-text">چت هوشمند</span></button>
-    <button data-mode="حالت درس" onclick="choose('حالت درس',this)"><span class="menu-icon">▤</span><span class="menu-text">حالت درس</span></button>
-    <button data-mode="عکس‌سازی" onclick="choose('عکس‌سازی',this)"><span class="menu-icon">▧</span><span class="menu-text">ابزار تصویر</span></button>
-    <button data-mode="گفت‌وگوی صوتی" onclick="startVoice()"><span class="menu-icon">◖</span><span class="menu-text">گفت‌وگوی صوتی</span></button>
-    <button data-mode="برنامه‌نویسی" onclick="choose('برنامه‌نویسی',this)"><span class="menu-icon">⌘</span><span class="menu-text">برنامه‌نویسی</span></button>
+    <button class="active" data-mode="دستیار هوشمند" onclick="choose('دستیار هوشمند',this)">
+      <span class="menu-icon">✦</span>
+      <span class="menu-text">چت هوشمند</span>
+    </button>
+
+    <button data-mode="حالت درس" onclick="choose('حالت درس',this)">
+      <span class="menu-icon">▤</span>
+      <span class="menu-text">حالت درس</span>
+    </button>
+    <button data-mode="عکس‌سازی" onclick="choose('عکس‌سازی',this)">
+      <span class="menu-icon">▧</span>
+      <span class="menu-text">ابزار تصویر</span>
+    </button>
+
+    <button data-mode="گفت‌وگوی صوتی" id="sideVoiceButton" onclick="startVoiceChat()">
+      <span class="menu-icon">◖</span>
+      <span class="menu-text">گفت‌وگوی صوتی</span>
+    </button>
+
+    <button data-mode="برنامه‌نویسی" onclick="choose('برنامه‌نویسی',this)">
+      <span class="menu-icon">⌘</span>
+      <span class="menu-text">برنامه‌نویسی</span>
+    </button>
   </nav>
-  <div class="side-bottom"><div class="creator">ساخته شده توسط<br><strong>ehsanGGExE</strong></div></div>
+
+  <div class="side-bottom">
+    <div class="creator">ساخته شده توسط<br><strong>ehsanGGExE</strong></div>
+  </div>
 </aside>
 
 <main>
@@ -119,32 +435,66 @@ main{padding:14px 9px}
     <div class="welcome-badge">✦ نسل جدید دستیار هوشمند</div>
     <h1>به <span>Nexus1 AI</span> خوش آمدی</h1>
     <p class="subtitle">ایده‌هات رو مطرح کن؛ برای یادگیری، برنامه‌نویسی و گفتگو کنارت هستم.</p>
+
     <div class="tools">
-      <button class="tool" onclick="choose('حالت درس')"><span class="tool-icon">▤</span><span class="tool-title">حالت درس</span><span class="tool-desc">یادگیری و توضیح مرحله‌ای</span></button>
-      <button class="tool" onclick="choose('عکس‌سازی')"><span class="tool-icon">▧</span><span class="tool-title">ابزار تصویر</span><span class="tool-desc">ارسال و بررسی عکس</span></button>
-      <button class="tool" onclick="startVoice()"><span class="tool-icon">◖</span><span class="tool-title">گفت‌وگوی صوتی</span><span class="tool-desc">صحبت با دستیار</span></button>
-      <button class="tool" onclick="choose('برنامه‌نویسی')"><span class="tool-icon">⌘</span><span class="tool-title">برنامه‌نویسی</span><span class="tool-desc">کمک در نوشتن کد</span></button>
+      <button class="tool" onclick="choose('حالت درس')">
+        <span class="tool-icon">▤</span>
+        <span class="tool-title">حالت درس</span>
+        <span class="tool-desc">یادگیری و توضیح مرحله‌ای</span>
+      </button>
+
+      <button class="tool" onclick="choose('عکس‌سازی')">
+        <span class="tool-icon">▧</span>
+        <span class="tool-title">ابزار تصویر</span>
+        <span class="tool-desc">ارسال و بررسی عکس</span>
+      </button>
+
+      <button class="tool" onclick="startVoiceChat()">
+        <span class="tool-icon">◖</span>
+        <span class="tool-title">گفت‌وگوی صوتی</span>
+        <span class="tool-desc">صحبت با دستیار</span>
+      </button>
+
+      <button class="tool" onclick="choose('برنامه‌نویسی')">
+        <span class="tool-icon">⌘</span>
+        <span class="tool-title">برنامه‌نویسی</span>
+        <span class="tool-desc">کمک در نوشتن کد</span>
+      </button>
     </div>
   </section>
 
   <section class="chat">
     <p id="status">Nexus1 AI آمادهٔ پاسخ‌گویی است</p>
     <div id="messages" aria-live="polite"></div>
+
     <div class="composer">
       <div class="preview-wrap" id="previewWrap">
         <img id="imagePreview" alt="پیش‌نمایش تصویر انتخاب‌شده">
         <div class="preview-info" id="previewInfo">تصویر برای ارسال آماده است</div>
         <button class="remove-image" type="button" onclick="removeImage()">حذف عکس</button>
       </div>
+
       <div class="compose-row">
         <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
-        <button class="icon-button" type="button" title="انتخاب عکس" onclick="document.getElementById('imageInput').click()">＋</button>
-        <button class="icon-button" type="button" id="micButton" title="شروع صحبت" onclick="startVoice()">🎙</button>
-        <input id="message" type="text" placeholder="پیامت را برای Nexus1 AI بنویس..." autocomplete="off">
+
+        <button class="icon-button" type="button" title="انتخاب عکس"
+          onclick="document.getElementById('imageInput').click()">＋</button>
+
+        <button class="icon-button" type="button" id="micButton"
+          title="میکروفون معمولی" onclick="startVoice()">🎙</button>
+
+        <input id="message" type="text"
+          placeholder="پیامت را برای Nexus1 AI بنویس..."
+          autocomplete="off">
+
         <button class="send" id="sendButton" onclick="sendMessage()">ارسال ↑</button>
       </div>
     </div>
-    <div class="composer-hint">برای افزودن عکس روی + بزن · برای صحبت روی میکروفون بزن · حداکثر حجم عکس ۵ مگابایت</div>
+
+    <div class="composer-hint">
+      برای افزودن عکس روی + بزن · برای صحبت روی میکروفون بزن · حداکثر حجم عکس ۵ مگابایت
+    </div>
+
     <div class="footer">Nexus1 AI · ساخته شده توسط ehsanGGExE</div>
   </section>
 </main>
@@ -156,24 +506,31 @@ let isSending = false;
 let selectedImage = null;
 let recognition = null;
 let isListening = false;
+let voiceChatActive = false;
+let voiceChatRestartTimer = null;
 
 const input = document.getElementById("message");
 const statusText = document.getElementById("status");
 const messages = document.getElementById("messages");
 const sendButton = document.getElementById("sendButton");
-const imageInput = document.getElementById("imageInput");
+  const imageInput = document.getElementById("imageInput");
 const previewWrap = document.getElementById("previewWrap");
 const imagePreview = document.getElementById("imagePreview");
 const previewInfo = document.getElementById("previewInfo");
 const welcome = document.getElementById("welcome");
 const micButton = document.getElementById("micButton");
+const sideVoiceButton = document.getElementById("sideVoiceButton");
 
 function choose(mode, button) {
   currentMode = mode;
+
   document.querySelectorAll(".menu button").forEach(function(btn) {
     btn.classList.remove("active");
   });
-  const target = button || document.querySelector('.menu button[data-mode="' + mode + '"]');
+
+  const target = button ||
+    document.querySelector('.menu button[data-mode="' + mode + '"]');
+
   if (target) target.classList.add("active");
 
   if (mode === "عکس‌سازی") {
@@ -189,6 +546,7 @@ function choose(mode, button) {
     input.placeholder = "پیامت را برای Nexus1 AI بنویس...";
     statusText.textContent = "Nexus1 AI آماده پاسخ‌گویی است.";
   }
+
   input.focus();
 }
 
@@ -203,6 +561,7 @@ function addMessage(text, type, imageUrl) {
     img.className = "message-image";
     msg.appendChild(img);
   }
+
   if (text) {
     const content = document.createElement("div");
     content.textContent = text;
@@ -217,12 +576,15 @@ function getModeInstruction() {
   if (currentMode === "حالت درس") {
     return "مثل یک معلم صبور و دقیق، مطالب را ساده و مرحله‌به‌مرحله توضیح بده.\n\n";
   }
+
   if (currentMode === "برنامه‌نویسی") {
     return "مثل یک برنامه‌نویس حرفه‌ای عمل کن. کد دقیق بنویس و مراحل را ساده توضیح بده.\n\n";
   }
+
   if (currentMode === "عکس‌سازی") {
     return "تصویر ارسالی را با دقت بررسی کن و درباره درخواست کاربر پاسخ بده. اگر امکان ویرایش مستقیم تصویر را نداری، این موضوع را صادقانه بیان کن.\n\n";
   }
+
   return "";
 }
 
@@ -243,20 +605,24 @@ imageInput.addEventListener("change", function() {
   }
 
   const reader = new FileReader();
+
   reader.onload = function(event) {
     selectedImage = {
       mimeType: file.type,
       data: event.target.result
     };
+
     imagePreview.src = event.target.result;
     previewInfo.textContent = file.name;
     previewWrap.classList.add("show");
     choose("عکس‌سازی");
     statusText.textContent = "عکس آماده ارسال است. سؤال خود را بنویس.";
   };
+
   reader.onerror = function() {
     statusText.textContent = "خواندن عکس با خطا مواجه شد.";
   };
+
   reader.readAsDataURL(file);
 });
 
@@ -277,14 +643,19 @@ async function sendMessage() {
   sendButton.disabled = true;
 
   const imageForMessage = selectedImage ? selectedImage.data : null;
-  addMessage(userMessage || "لطفاً این عکس را بررسی کن.", "user", imageForMessage);
+
+  addMessage(
+    userMessage || "لطفاً این عکس را بررسی کن.",
+    "user",
+    imageForMessage
+  );
 
   input.value = "";
   selectedImage = null;
   imageInput.value = "";
   previewWrap.classList.remove("show");
-  if (welcome) welcome.style.display = "none";
 
+  if (welcome) welcome.style.display = "none";
   statusText.textContent = "Nexus1 AI در حال فکر کردن است...";
 
   const payload = {
@@ -312,42 +683,144 @@ async function sendMessage() {
     }
 
     const reply = data.reply || "پاسخی دریافت نشد.";
+
     addMessage(reply, "ai");
-    statusText.textContent = "پاسخ دریافت شد" + (data.provider ? " · " + data.provider : "");
-    speakReply(reply);
+
+    statusText.textContent =
+      "پاسخ دریافت شد" +
+      (data.provider ? " · " + data.provider : "");
+
+    // فقط در حالت گفت‌وگوی صوتی پاسخ با صدا پخش می‌شود.
+    if (voiceChatActive) {
+      speakReply(reply, true);
+    }
 
   } catch (error) {
-    addMessage("ارتباط با هوش مصنوعی برقرار نشد.\n" + error.message, "ai");
+    addMessage(
+      "ارتباط با هوش مصنوعی برقرار نشد.\n" + error.message,
+      "ai"
+    );
+
     statusText.textContent = "خطا در ارتباط با سرور";
+
+    // اگر مکالمه صوتی فعال است، پس از خطا دوباره گوش بده.
+    if (voiceChatActive) {
+      scheduleVoiceRestart();
+    }
+
   } finally {
     isSending = false;
     sendButton.disabled = false;
-    input.focus();
+
+    if (!voiceChatActive) input.focus();
   }
 }
 
-function speakReply(text) {
-  if (!("speechSynthesis" in window)) return;
+// خواندن پاسخ هوش مصنوعی با صدای مرورگر
+function speakReply(text, continueChat) {
+  if (!("speechSynthesis" in window)) {
+    statusText.textContent = "پخش صدای مرورگر پشتیبانی نمی‌شود.";
+    if (voiceChatActive) scheduleVoiceRestart();
+    return;
+  }
 
   window.speechSynthesis.cancel();
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "fa-IR";
   utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  utterance.onstart = function() {
+    statusText.textContent = "Nexus1 AI در حال صحبت است...";
+  };
+
+  utterance.onend = function() {
+    if (continueChat && voiceChatActive) {
+      scheduleVoiceRestart();
+    }
+  };
+
+  utterance.onerror = function() {
+    if (continueChat && voiceChatActive) {
+      statusText.textContent = "پخش صدا با مشکل روبه‌رو شد.";
+      scheduleVoiceRestart();
+    }
+  };
+
   window.speechSynthesis.speak(utterance);
 }
 
-function startVoice() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+function scheduleVoiceRestart() {
+  clearTimeout(voiceChatRestartTimer);
+
+  if (!voiceChatActive) return;
+
+  voiceChatRestartTimer = setTimeout(function() {
+    listenForVoiceChat();
+  }, 900);
+}
+
+// شروع یا توقف گفت‌وگوی صوتی جدید
+function startVoiceChat() {
+  if (voiceChatActive) {
+    stopVoiceChat();
+    return;
+  }
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
-    statusText.textContent = "تشخیص گفتار در این مرورگر پشتیبانی نمی‌شود. از Chrome استفاده کن.";
+    statusText.textContent =
+      "تشخیص گفتار در این مرورگر پشتیبانی نمی‌شود. Chrome را امتحان کن.";
     return;
   }
 
-  if (isListening && recognition) {
-    recognition.stop();
+  if (!("speechSynthesis" in window)) {
+    statusText.textContent =
+      "پخش صدای پاسخ در این مرورگر پشتیبانی نمی‌شود.";
     return;
   }
+
+  voiceChatActive = true;
+  sideVoiceButton.classList.add("voice-active");
+  statusText.textContent = "گفت‌وگوی صوتی فعال شد؛ صحبت کن.";
+
+  listenForVoiceChat();
+}
+
+function stopVoiceChat() {
+  voiceChatActive = false;
+
+  clearTimeout(voiceChatRestartTimer);
+
+  if (recognition) {
+    try {
+      recognition.stop();
+    } catch (error) {}
+  }
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+  isListening = false;
+  sideVoiceButton.classList.remove("voice-active");
+  statusText.textContent = "گفت‌وگوی صوتی متوقف شد.";
+}
+
+function listenForVoiceChat() {
+  if (!voiceChatActive ⠺⠺⠺⠵⠺⠞⠵⠟⠞⠞⠺ isListening) return;
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) return;
+
   recognition = new SpeechRecognition();
   recognition.lang = "fa-IR";
   recognition.continuous = false;
@@ -355,36 +828,7 @@ function startVoice() {
 
   recognition.onstart = function() {
     isListening = true;
-    micButton.textContent = "⏹";
-    statusText.textContent = "در حال گوش دادن... صحبت کن.";
+    statusText.textContent = "Nexus1 AI گوش می‌دهد... صحبت کن.";
   };
 
-  recognition.onresult = function(event) {
-    const spokenText = event.results[0][0].transcript;
-    input.value = spokenText;
-    statusText.textContent = "صدایت دریافت شد؛ در حال ارسال...";
-    sendMessage();
-  };
-
-  recognition.onerror = function() {
-    statusText.textContent = "دسترسی میکروفون یا تشخیص گفتار با مشکل مواجه شد.";
-  };
-
-  recognition.onend = function() {
-    isListening = false;
-    micButton.textContent = "🎙";
-  };
-
-  try {
-    recognition.start();
-  } catch (error) {
-    statusText.textContent = "شروع میکروفون ممکن نشد. دوباره تلاش کن.";
-  }
-}
-
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") sendMessage();
-});
-</script>
-</body>
-</html>
+  recognition.onresult = function
