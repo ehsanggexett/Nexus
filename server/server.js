@@ -118,7 +118,7 @@ async function askGemini(message, image) {
       lastError = error;
 
 console.error(
-  Gemini attempt $DIL0/3 failed:,
+  "Gemini attempt " + attempt + "/3 failed:",
   error.message
 );
 
