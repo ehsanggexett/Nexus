@@ -150,13 +150,9 @@ async function searchWeb(message) {
 
   const data = await response.json();
 
-  if (!response.ok) {
-throw new Error(
-  "Tavily API Error " +
-  response.status +
-  ": " +
-  "Search request failed"
-);
+if (!response.ok) {
+    throw new Error("Tavily API Error " + response.status);
+  }
 
   const results = (data.results || [])
     .filter(item => {
