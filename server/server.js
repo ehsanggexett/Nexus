@@ -157,8 +157,7 @@ async function askGroq(message, image) {
       {
         type: "image_url",
         image_url: {
-          url: data:${image.mimeType};base64,${image.data}
-        }
+url: "data:" + image.mimeType + ";base64," + image.data        }
       }
     ];
   }
