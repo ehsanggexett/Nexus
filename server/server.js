@@ -117,10 +117,10 @@ async function askGemini(message, image) {
     } catch (error) {
       lastError = error;
 
-      console.error(
-        Gemini attempt ${attempt}/3 failed:,
-        error.message
-      );
+console.error(
+  Gemini attempt $DIL0/3 failed:,
+  error.message
+);
 
       if (!isTemporaryError(error)) {
         break;
