@@ -176,26 +176,19 @@ throw new Error(
 
   return { results };
 }
-
-// ساخت متن کمکی از نتایج جست‌وجو
 function createSearchContext(results) {
   if (!results.length) {
     return "";
   }
-  return 
-نتایج واقعی جست‌وجوی اینترنت در ادامه آمده است.
-فقط از اطلاعات همین نتایج استفاده کن.
-آدرس لینک‌ها را تغییر نده و لینک جدید نساز.
-اگر قیمت در نتایج مشخص نیست، قیمت حدس نزن.
-اگر نتیجه مناسبی پیدا نشده، صادقانه بگو.
 
-${results.map((item, index) => 
-نتیجه ${index + 1}:
-عنوان: ${item.title}
-لینک واقعی: ${item.url}
-اطلاعات صفحه: ${item.content}
-).join("\n")}
-;
+  return results.map((item, index) => {
+    return (
+      "Result " + (index + 1) + "\n" +
+      "Title: " + item.title + "\n" +
+      "URL: " + item.url + "\n" +
+      "Content: " + item.content + "\n"
+    );
+  }).join("\n");
 }
 
 async function askGemini(message, image) {
