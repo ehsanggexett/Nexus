@@ -1,848 +1,897 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexus1 AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b10">
+  <title>Nexus1 AI</title>
 
-<style>
-:root {
-  --bg:#090b12;
-  --panel:#101420;
-  --panel2:#151b2a;
-  --line:#242b3b;
-  --text:#f3f4fa;
-  --muted:#9aa3b7;
-  --accent:#8875ff;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Tahoma,Arial,sans-serif;
-  height:100vh;
-  overflow:hidden;
-}
-button,textarea { font:inherit; }
-button { cursor:pointer; }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-.app { display:flex;height:100vh;width:100%; }
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #090b10;
+      color: #f4f4f7;
+      min-height: 100vh;
+    }
 
-.sidebar {
-  width:245px;
-  flex-shrink:0;
-  background:var(--panel);
-  border-left:1px solid var(--line);
-  padding:18px 13px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
-.brand {
-  font-size:23px;
-  font-weight:800;
-  color:#a99cff;
-  padding:8px 10px;
-  direction:ltr;
-  text-align:right;
-}
-.brand small {
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:400;
-  margin-top:7px;
-}
-.side-title { color:var(--muted);font-size:12px;padding:4px 10px; }
-.menu { display:flex;flex-direction:column;gap:7px; }
-.menu button {
-  border:1px solid transparent;
-  background:transparent;
-  color:#c9cede;
-  padding:12px 13px;
-  border-radius:11px;
-  text-align:right;
-}
-.menu button:hover,.menu button.active {
-  background:var(--panel2);
-  border-color:var(--line);
-  color:white;
-}
-.sidebar-footer {
-  margin-top:auto;
-  color:var(--muted);
-  font-size:11px;
-  text-align:center;
-}
-.main {
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  position:relative;
-}
-.topbar {
-  height:62px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  padding:0 22px;
-  justify-content:space-between;
-}
-.topbar strong { font-size:15px; }
-.status { font-size:11px;color:#8ed9a8; }
+    button, textarea {
+      font: inherit;
+    }
 
-.chat {
-  flex:1;
-  overflow-y:auto;
-  padding:28px 18px 160px;
-}
-.welcome {
-  max-width:760px;
-  margin:8vh auto 0;
-  text-align:center;
-}
-.welcome h1 { font-size:30px;margin:0 0 12px; }
-.welcome p { color:var(--muted);font-size:14px; }
-.tools {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-  margin-top:30px;
-}
-.tool-card {
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:18px;
-  text-align:right;
-  color:var(--text);
-}
-.tool-card:hover { border-color:var(--accent); }
-.tool-card b { display:block;margin-bottom:7px; }
-.tool-card span { font-size:12px;color:var(--muted); }
+    button {
+      cursor: pointer;
+    }
 
-.messages {
-  max-width:850px;
-  margin:0 auto;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
-.message {
-  max-width:88%;
-  padding:14px 16px;
-  border-radius:15px;
-  line-height:1.9;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-.message.user {
-  align-self:flex-start;
-  background:#24213c;
-  border:1px solid #39325e;
-}
-.message.assistant {
-  align-self:flex-end;
-  background:var(--panel);
-  border:1px solid var(--line);
-}
-.message img {
-  display:block;
-  max-width:min(280px,100%);
-  max-height:240px;
-  object-fit:contain;
-  border-radius:10px;
-  margin-top:10px;
-}
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
 
-.composer-wrap {
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:18px;
-  background:linear-gradient(transparent,var(--bg) 22%);
-}
-.composer {
-  max-width:850px;
-  margin:auto;
-  background:var(--panel);
-  border:1px solid #30384c;
-  border-radius:17px;
-  padding:10px;
-  display:flex;
-  align-items:flex-end;
-  gap:8px;
-}
-.composer textarea {
-  flex:1;
-  resize:none;
-  min-height:44px;
-  max-height:150px;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:var(--text);
-  padding:11px 8px;
-  line-height:1.7;
-}
-.icon-btn,.send-btn {
-  height:43px;
-  min-width:43px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#1a2030;
-  color:#e9e8ff;
-}
-.icon-btn:hover { border-color:var(--accent); }
-.send-btn {
-  background:#6e5be8;
-  border-color:#6e5be8;
-  font-size:18px;
-}
-.send-btn:disabled { opacity:.5;cursor:not-allowed; }
-#imageInput { display:none; }
- .preview {
-  max-width:850px;
-  margin:0 auto 8px;
-  display:none;
-  align-items:center;
-  gap:10px;
-  color:var(--muted);
-  font-size:12px;
-}
-.preview img {
-  width:55px;
-  height:55px;
-  object-fit:cover;
-  border-radius:8px;
-}
-.preview button {
-  background:transparent;
-  border:0;
-  color:#ff9b9b;
-  font-size:20px;
-}
-.hint {
-  text-align:center;
-  color:#737d91;
-  font-size:10px;
-  margin-top:9px;
-}
-.voice-active {
-  background:#493d91!important;
-  border-color:#a99cff!important;
-  box-shadow:0 0 0 2px #8875ff33;
-}
+    .sidebar {
+      width: 245px;
+      background: #10131c;
+      border-left: 1px solid #242735;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+    }
 
-@media(max-width:700px) {
-  .sidebar { width:64px;padding:12px 6px;align-items:center; }
-  .brand { font-size:0;padding:8px 0; }
-  .brand:after { content:"N";font-size:23px; }
-  .brand small,.side-title,.menu button .label,.sidebar-footer { display:none; }
-  .menu { width:100%; }
-  .menu button { text-align:center;padding:12px 3px;font-size:18px; }
-  .topbar { padding:0 13px; }
-  .chat { padding:18px 10px 150px; }
-  .welcome { margin-top:7vh; }
-  .welcome h1 { font-size:23px; }
-  .tools { gap:8px; }
-  .tool-card { padding:13px;font-size:13px; }
-  .tool-card span { font-size:10px; }
-  .composer-wrap { padding:10px 8px; }
-  .composer { gap:5px;padding:7px; }
-  .icon-btn,.send-btn { min-width:38px;height:40px; }
-  .message { max-width:95%;font-size:14px; }
-}
-</style>
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+      color: #9a8cff;
+      padding: 10px;
+      margin-bottom: 18px;
+    }
+
+    .creator {
+      color: #777d91;
+      font-size: 11px;
+      margin-right: 10px;
+      margin-top: -25px;
+      margin-bottom: 20px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      border: 1px solid transparent;
+      color: #c6c8d3;
+      background: transparent;
+      padding: 13px;
+      border-radius: 12px;
+      text-align: right;
+      transition: .2s;
+    }
+
+    .menu-btn:hover,
+    .menu-btn.active {
+      background: #1c2030;
+      border-color: #38334f;
+      color: white;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      color: #73798d;
+      font-size: 12px;
+      padding: 10px;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 65px;
+      border-bottom: 1px solid #202330;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      justify-content: space-between;
+    }
+
+    .top-title {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .status {
+      color: #72dba3;
+      font-size: 12px;
+    }
+
+    .messages {
+      flex: 1;
+      width: 100%;
+      max-width: 950px;
+      margin: auto;
+      padding: 28px 22px 150px;
+    }
+
+    .welcome {
+      text-align: center;
+      padding: 90px 10px 40px;
+    }
+
+    .welcome h1 {
+      font-size: 32px;
+      color: #a092ff;
+      margin-bottom: 12px;
+    }
+
+    .welcome p {
+      color: #9297a9;
+      line-height: 2;
+    }
+
+    .message {
+      display: flex;
+      margin: 20px 0;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: #242139;
+      color: #b4a8ff;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+
+    .user .avatar {
+      background: #26384a;
+      color: #9ed4ff;
+    }
+
+    .bubble {
+      max-width: 82%;
+      background: #151925;
+      border: 1px solid #282d3c;
+      border-radius: 15px;
+      padding: 13px 16px;
+      line-height: 2;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .user .bubble {
+      background: #24213a;
+      border-color: #393252;
+    }
+
+    .bubble a {
+      color: #a99bff;
+      text-decoration: underline;
+      word-break: break-word;
+    }
+
+    .bubble a:hover {
+      color: #d0c8ff;
+    }
+
+    .sources {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #34394a;
+    }
+
+    .sources-title {
+      color: #aaa1ff;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .source-item {
+      display: block;
+      padding: 9px 11px;
+      margin-top: 7px;
+      border: 1px solid #30354a;
+      background: #101522;
+      border-radius: 9px;
+      color: #c7c4ff;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .source-item:hover {
+      background: #20243a;
+      border-color: #7770bb;
+    }
+    .source-url {
+      display: block;
+      color: #858ba0;
+      font-size: 10px;
+      direction: ltr;
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    .composer-wrap {
+      position: fixed;
+      bottom: 0;
+      right: 245px;
+      left: 0;
+      padding: 18px 22px 22px;
+      background: linear-gradient(transparent, #090b10 22%);
+    }
+
+    .composer {
+      max-width: 850px;
+      margin: auto;
+      background: #151925;
+      border: 1px solid #34394b;
+      border-radius: 17px;
+      padding: 12px;
+    }
+
+    .composer textarea {
+      width: 100%;
+      min-height: 55px;
+      max-height: 170px;
+      resize: vertical;
+      border: none;
+      outline: none;
+      color: white;
+      background: transparent;
+      padding: 8px;
+      line-height: 1.8;
+    }
+
+    .composer textarea::placeholder {
+      color: #777e92;
+    }
+
+    .tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid #292e3d;
+      padding-top: 10px;
+    }
+
+    .tool-btn {
+      border: 1px solid #34394b;
+      background: #202536;
+      color: #c5c8d6;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+
+    .tool-btn:hover {
+      background: #303650;
+    }
+
+    .send-btn {
+      margin-right: auto;
+      background: #7968df;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 19px;
+      font-weight: bold;
+    }
+
+    .send-btn:hover {
+      background: #9182f2;
+    }
+
+    .send-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .image-preview {
+      display: none;
+      padding: 10px 5px;
+    }
+
+    .image-preview img {
+      max-width: 120px;
+      max-height: 100px;
+      border-radius: 10px;
+      border: 1px solid #48415f;
+    }
+
+    .image-preview button {
+      display: block;
+      margin-top: 5px;
+      background: #492b38;
+      border: none;
+      color: white;
+      border-radius: 7px;
+      padding: 5px 9px;
+    }
+
+    .message-image {
+      display: block;
+      max-width: 250px;
+      max-height: 250px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .mode-label {
+      color: #a89cff;
+      font-size: 12px;
+      margin-right: 5px;
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        width: 65px;
+        padding: 12px 6px;
+      }
+
+      .logo {
+        font-size: 12px;
+        padding: 8px 2px;
+        text-align: center;
+      }
+
+      .creator {
+        display: none;
+      }
+
+      .menu-btn {
+        font-size: 0;
+        text-align: center;
+        padding: 13px 2px;
+      }
+
+      .menu-btn::first-letter {
+        font-size: 18px;
+      }
+
+      .sidebar-bottom {
+        display: none;
+      }
+
+      .composer-wrap {
+        right: 65px;
+        padding: 10px;
+      }
+
+      .messages {
+        padding: 20px 12px 180px;
+      }
+
+      .welcome {
+        padding-top: 65px;
+      }
+
+      .welcome h1 {
+        font-size: 25px;
+      }
+
+      .bubble {
+        max-width: 90%;
+        font-size: 13px;
+      }
+
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .tool-btn {
+        padding: 8px;
+        font-size: 11px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 <div class="app">
 
-<aside class="sidebar">
-  <div class="brand">
-    Nexus1 AI
-    <small>ساخته شده توسط ehsanGGExE</small>
-  </div>
+  <aside class="sidebar">
+    <div class="logo">✦ Nexus1 AI</div>
+    <div class="creator">Created by ehsanGGExE</div>
 
-  <div class="side-title">منو</div>
+    <button class="menu-btn active" data-mode="chat" onclick="setMode('chat', this)">💬 چت هوشمند</button>
+    <button class="menu-btn" data-mode="study" onclick="setMode('study', this)">📚 حالت مطالعه</button>
+    <button class="menu-btn" data-mode="image" onclick="setMode('image', this)">🎨 تولید تصویر</button>
+    <button class="menu-btn" data-mode="code" onclick="setMode('code', this)">💻 برنامه‌نویسی</button>
 
-  <nav class="menu">
-    <button class="active" data-mode="دستیار هوشمند"
-      onclick="choose('دستیار هوشمند',this)">
-      💬 <span class="label">گفت‌وگوی جدید</span>
-    </button>
-
-    <button data-mode="حالت مطالعه"
-      onclick="choose('حالت مطالعه',this)">
-      📚 <span class="label">حالت مطالعه</span>
-    </button>
-
-    <button data-mode="تولید تصویر"
-      onclick="choose('تولید تصویر',this)">
-      🎨 <span class="label">ابزار تصویر</span>
-    </button>
-
-    <button data-mode="برنامه‌نویسی"
-      onclick="choose('برنامه‌نویسی',this)">
-      💻 <span class="label">برنامه‌نویسی</span>
-    </button>
-  </nav>
-
-  <div class="sidebar-footer">Nexus1 AI · نسخه آزمایشی</div>
-</aside>
-
-<main class="main">
-
-<header class="topbar">
-  <strong id="modeTitle">دستیار هوشمند</strong>
-  <span class="status">● آماده</span>
-</header>
-
-<section class="chat" id="chat">
-
-  <div class="welcome" id="welcome">
-    <h1>سلام! به Nexus1 AI خوش آمدی</h1>
-    <p>چه کاری می‌خواهی انجام بدهیم؟</p>
-
-    <div class="tools">
-      <button class="tool-card" onclick="choose('حالت مطالعه')">
-        <b>📚 حالت مطالعه</b>
-        <span>یادگیری و توضیح مطالب</span>
-      </button>
-
-      <button class="tool-card" onclick="choose('تولید تصویر')">
-        <b>🎨 ابزار تصویر</b>
-        <span>ارسال تصویر برای تحلیل</span>
-      </button>
-
-      <button class="tool-card" onclick="toggleVoiceChat()">
-        <b>🔊 گفت‌وگوی صوتی</b>
-        <span>صحبت کن و پاسخ را با صدا بشنو</span>
-      </button>
-
-      <button class="tool-card" onclick="choose('برنامه‌نویسی')">
-        <b>💻 برنامه‌نویسی</b>
-        <span>کمک در نوشتن و رفع خطای کد</span>
-      </button>
+    <div class="sidebar-bottom">
+      Nexus1 AI<br>
+      هوش مصنوعی چندمنظوره
     </div>
-  </div>
+  </aside>
 
-  <div class="messages" id="messages"></div>
-</section>
-
-<div class="composer-wrap">
-
-  <div class="preview" id="imagePreview">
-    <img id="previewImage" alt="پیش‌نمایش تصویر">
-    <span>تصویر انتخاب شد</span>
-    <button onclick="removeImage()" title="حذف تصویر">×</button>
-  </div>
-
-  <div class="composer">
-
-    <label class="icon-btn" for="imageInput"
-      title="انتخاب تصویر"
-      style="display:grid;place-items:center">＋</label>
-
-    <input id="imageInput" type="file"
-      accept="image/png,image/jpeg,image/webp,image/gif">
-
-    <button class="icon-btn" id="micButton"
-      onclick="startVoice()" title="تبدیل گفتار به متن">🎙️</button>
-
-    <button class="icon-btn" id="voiceChatButton"
-      onclick="toggleVoiceChat()" title="شروع گفت‌وگوی صوتی">🔊</button>
-
-    <textarea id="message" rows="1"
-      placeholder="پیامت را بنویس..."></textarea>
-      <button class="send-btn" id="sendButton"
-      onclick="sendMessage()" title="ارسال">➤</button>
-
-  </div>
-
-  <div class="hint">
-    Nexus1 AI ممکن است گاهی پاسخ نادرست بدهد؛ اطلاعات مهم را بررسی کن.
-  </div>
+  <main class="main">
+    <header class="topbar">
+      <div class="top-title">Nexus1 AI</div>
+      <div class="status">● آنلاین</div>
+    </header>
+    <section class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <h1>سلام! من Nexus1 AI هستم ✦</h1>
+        <p>
+          چطور می‌تونم کمکت کنم؟<br>
+          سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.
+        </p>
+      </div>
+    </section>
+  </main>
 </div>
 
-</main>
+<div class="composer-wrap">
+  <div class="composer">
+
+    <div class="image-preview" id="imagePreview">
+      <img id="previewImage" alt="پیش‌نمایش تصویر">
+      <button type="button" onclick="removeImage()">حذف تصویر ×</button>
+    </div>
+
+    <textarea
+      id="messageInput"
+      placeholder="پیامت رو برای Nexus1 AI بنویس..."
+      onkeydown="handleEnter(event)"
+    ></textarea>
+
+    <div class="tools">
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        hidden
+        onchange="handleImage(event)"
+      >
+
+      <button class="tool-btn" onclick="document.getElementById('imageInput').click()">🖼 عکس</button>
+      <button class="tool-btn" onclick="startVoice()">🎤 میکروفون</button>
+      <button class="tool-btn" id="voiceChatButton" onclick="toggleVoiceChat()">🔊 گفت‌وگوی صوتی</button>
+      <button class="tool-btn" onclick="insertSearch()">🌐 جست‌وجوی وب</button>
+      <span class="mode-label" id="modeLabel">حالت چت</span>
+      <button class="send-btn" id="sendButton" onclick="sendMessage()">ارسال ↑</button>
+    </div>
+  </div>
 </div>
 
 <script>
-"use strict";
+  let currentMode = "chat";
+  let selectedImage = null;
+  let recognition = null;
+  let voiceChatActive = false;
+  let isSpeaking = false;
 
-let currentMode = "دستیار هوشمند";
-let isSending = false;
-let selectedImage = null;
+  const messages = document.getElementById("messages");
+  const input = document.getElementById("messageInput");
+  const sendButton = document.getElementById("sendButton");
 
-let micRecognition = null;
-let isMicListening = false;
+  function setMode(mode, button) {
+    currentMode = mode;
 
-let voiceChatActive = false;
-let voiceTurnRecognition = null;
-let isVoiceChatListening = false;
-let voiceRestartTimer = null;
-
-const input = document.getElementById("message");
-const messages = document.getElementById("messages");
-const sendButton = document.getElementById("sendButton");
-const imageInput = document.getElementById("imageInput");
-const voiceChatButton = document.getElementById("voiceChatButton");
-
-function choose(mode, button) {
-  currentMode = mode;
-  document.getElementById("modeTitle").textContent = mode;
-
-  document.querySelectorAll(".menu button").forEach(function(item) {
-    item.classList.toggle("active", item.dataset.mode === mode);
-  });
-
-  if (button && button.dataset && button.dataset.mode) {
-    document.querySelectorAll(".menu button").forEach(function(item) {
-      item.classList.toggle("active", item === button);
-    });
-  }
-
-  if (mode === "تولید تصویر") {
-    input.placeholder = "درباره تصویر یا تصویری که می‌فرستی توضیح بده...";
-  } else if (mode === "حالت مطالعه") {
-    input.placeholder = "سؤال درسی‌ات را بنویس...";
-  } else if (mode === "برنامه‌نویسی") {
-    input.placeholder = "سؤال یا کدت را بنویس...";
-  } else {
-    input.placeholder = "پیامت را بنویس...";
-  }
-
-  input.focus();
-}
-
-function getModeInstruction() {
-  if (currentMode === "حالت مطالعه") {
-    return "در نقش یک معلم صبور و ساده‌گو پاسخ بده. مراحل را روشن توضیح بده.\n\n";
-  }
-
-  if (currentMode === "تولید تصویر") {
-    return "اگر تصویری فرستاده شده، آن را دقیق تحلیل کن.\n\n";
-  }
-
-  if (currentMode === "برنامه‌نویسی") {
-    return "در نقش یک دستیار برنامه‌نویسی پاسخ بده و کدها را کامل و قابل کپی ارائه کن.\n\n";
-  }
-
-  return "";
-}
-
-function addMessage(text, type, imageUrl) {
-  const item = document.createElement("div");
-  item.className = "message " + type;
-  item.textContent = text || (imageUrl ? "این تصویر را بررسی کن." : "");
-
-  if (imageUrl) {
-    const img = document.createElement("img");
-    img.src = imageUrl;
-    img.alt = "تصویر ارسال‌شده";
-    item.appendChild(img);
-  }
-
-  messages.appendChild(item);
-
-  const chat = document.getElementById("chat");
-  chat.scrollTop = chat.scrollHeight;
-
-  return item;
-}
-
-/* انتخاب و پیش‌نمایش تصویر */
-imageInput.addEventListener("change", function(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  const allowed = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif"
-  ];
-
-  if (!allowed.includes(file.type)) {
-    alert("لطفاً تصویر با فرمت JPG، PNG، WEBP یا GIF انتخاب کن.");
-    imageInput.value = "";
-    return;
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    alert("حجم تصویر باید کمتر از ۵ مگابایت باشد.");
-    imageInput.value = "";
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-    selectedImage = {
-      mimeType: file.type,
-      data: e.target.result
-    };
-
-    document.getElementById("previewImage").src = e.target.result;
-    document.getElementById("imagePreview").style.display = "flex";
-  };
-
-  reader.readAsDataURL(file);
-});
-
-function removeImage() {
-  selectedImage = null;
-  imageInput.value = "";
-
-  document.getElementById("imagePreview").style.display = "none";
-  document.getElementById("previewImage").removeAttribute("src");
-}
-
-function extractReply(data) {
-  if (typeof data === "string") return data;
-
-  return data.reply ||
-    data.text ||
-    data.response ||
-    data.message ||
-    data.output ||
-    "پاسخی از سرور دریافت نشد.";
-}
-
-/* ارسال پیام به سرور */
-async function sendMessage(options) {
-  options = options || {};
-
-  const userMessage = input.value.trim();
-
-  if ((!userMessage && !selectedImage) || isSending) return;
-
-  isSending = true;
-  sendButton.disabled = true;
- const imageForRequest = selectedImage;
-  const imageForDisplay = imageForRequest
-    ? imageForRequest.data
-    : null;
-
-  addMessage(userMessage, "user", imageForDisplay);
-
-  input.value = "";
-  input.style.height = "44px";
-
-  removeImage();
-
-  document.getElementById("welcome").style.display = "none";
-
-  const waiting = addMessage("در حال دریافت پاسخ...", "assistant");
-
-  try {
-    const payload = {
-      message: getModeInstruction() + userMessage,
-      image: imageForRequest ? {
-        mimeType: imageForRequest.mimeType,
-        data: imageForRequest.data
-      } : null
-    };
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+    document.querySelectorAll(".menu-btn").forEach(btn => {
+      btn.classList.remove("active");
     });
 
-    let data;
+    if (button) button.classList.add("active");
+
+    const labels = {
+      chat: "حالت چت",
+      study: "حالت مطالعه",
+      image: "حالت تولید تصویر",
+      code: "حالت برنامه‌نویسی"
+    };
+
+    document.getElementById("modeLabel").textContent = labels[mode];
+
+    const placeholders = {
+      chat: "پیامت رو برای Nexus1 AI بنویس...",
+      study: "سؤال درسی‌ات رو بنویس...",
+      image: "توضیح بده چه تصویری می‌خوای...",
+      code: "سؤال یا کدت رو اینجا بنویس..."
+    };
+
+    input.placeholder = placeholders[mode];
+
+    const prompts = {
+      chat: "",
+      study: "در حالت مطالعه، این درخواست را مرحله‌به‌مرحله و ساده توضیح بده:\n",
+      image: "درخواست من درباره تولید تصویر است. اگر امکان تولید تصویر در این نسخه فعال نیست، صادقانه توضیح بده:\n",
+      code: "در نقش دستیار برنامه‌نویسی، ساده و مرحله‌به‌مرحله کمکم کن:\n"
+    };
+
+    input.dataset.prefix = prompts[mode];
+  }
+
+  function insertSearch() {
+    input.value = "در اینترنت جست‌وجو کن و لینک منابع معتبر را هم بده: ";
+    input.focus();
+  }
+
+  function hideWelcome() {
+    const welcome = document.getElementById("welcome");
+    if (welcome) welcome.remove();
+  }
+
+  function addMessage(role, text, imageData = null, sources = []) {
+    hideWelcome();
+
+    const row = document.createElement("div");
+    row.className = "message " + role;
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = role === "user" ? "شما" : "AI";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    // متن پاسخ با حفظ امنیت نمایش داده می‌شود
+    bubble.textContent = text || "";
+
+    if (imageData) {
+      const img = document.createElement("img");
+      img.src = imageData;
+      img.className = "message-image";
+      img.alt = "تصویر ارسال‌شده";
+      bubble.appendChild(img);
+    }
+
+    if (role === "assistant" && sources.length) {
+      const sourceBox = document.createElement("div");
+      sourceBox.className = "sources";
+
+      const title = document.createElement("div");
+      title.className = "sources-title";
+      title.textContent = "🌐 منابع پیدا شده در اینترنت";
+      sourceBox.appendChild(title);
+      sources.forEach(source => {
+        try {
+          const url = new URL(source.url);
+
+          if (!["http:", "https:"].includes(url.protocol)) return;
+
+          const link = document.createElement("a");
+          link.className = "source-item";
+          link.href = url.href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+
+          const name = document.createElement("span");
+          name.textContent = source.title || "مشاهده منبع";
+
+          const address = document.createElement("span");
+          address.className = "source-url";
+          address.textContent = url.hostname;
+
+          link.appendChild(name);
+          link.appendChild(address);
+          sourceBox.appendChild(link);
+        } catch {
+          // لینک نامعتبر نمایش داده نمی‌شود
+        }
+      });
+
+      bubble.appendChild(sourceBox);
+    }
+
+    row.appendChild(avatar);
+    row.appendChild(bubble);
+    messages.appendChild(row);
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
+
+    return bubble;
+  }
+
+  function handleImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif"
+    ];
+
+    if (!allowed.includes(file.type)) {
+      alert("فرمت تصویر پشتیبانی نمی‌شود.");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("حجم تصویر باید حداکثر ۵ مگابایت باشد.");
+      event.target.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      selectedImage = {
+        mimeType: file.type,
+        data: reader.result.split(",")[1],
+        preview: reader.result
+      };
+
+      document.getElementById("previewImage").src = reader.result;
+      document.getElementById("imagePreview").style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function removeImage() {
+    selectedImage = null;
+    document.getElementById("imageInput").value = "";
+    document.getElementById("imagePreview").style.display = "none";
+  }
+
+  function handleEnter(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+
+  async function sendMessage() {
+    let message = input.value.trim();
+    const image = selectedImage;
+
+    if (!message && !image) return;
+
+    if (input.dataset.prefix) {
+      message = input.dataset.prefix + message;
+    }
+
+    const preview = image ? image.preview : null;
+
+    addMessage("user", message || "لطفاً این تصویر را بررسی کن.", preview);
+
+    input.value = "";
+    removeImage();
+
+    const waiting = addMessage("assistant", "در حال فکر کردن...");
+
+    sendButton.disabled = true;
 
     try {
-      data = await response.json();
-    } catch (_) {
-      throw new Error("پاسخ سرور قابل خواندن نیست.");
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message,
+          image: image ? {
+            mimeType: image.mimeType,
+            data: image.data
+          } : null
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "ارتباط با هوش مصنوعی با مشکل مواجه شد.");
+      }
+
+      waiting.textContent = data.reply || "پاسخی دریافت نشد.";
+
+      // نمایش لینک‌های جست‌وجوی واقعی برگشتی از سرور
+      if (Array.isArray(data.sources) && data.sources.length) {
+        const sourceBox = document.createElement("div");
+        sourceBox.className = "sources";
+
+        const title = document.createElement("div");
+        title.className = "sources-title";
+        title.textContent = "🌐 منابع جست‌وجو";
+        sourceBox.appendChild(title);
+
+        data.sources.forEach(source => {
+          try {
+            const url = new URL(source.url);
+
+            if (!["https:", "http:"].includes(url.protocol)) return;
+            const link = document.createElement("a");
+            link.className = "source-item";
+            link.href = url.href;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+
+            const name = document.createElement("span");
+            name.textContent = source.title || "مشاهده نتیجه";
+
+            const host = document.createElement("span");
+            host.className = "source-url";
+            host.textContent = url.hostname;
+
+            link.append(name, host);
+            sourceBox.appendChild(link);
+          } catch {
+            // لینک نامعتبر نادیده گرفته می‌شود
+          }
+        });
+
+        waiting.appendChild(sourceBox);
+      }
+
+      if (voiceChatActive) {
+        speakVoiceReply(data.reply || "");
+      }
+
+    } catch (error) {
+      waiting.textContent = "خطا: " + error.message;
+    } finally {
+      sendButton.disabled = false;
+      input.focus();
+    }
+  }
+
+  function getSpeechRecognition() {
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.");
+      return null;
     }
 
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        data.message ||
-        ("خطای سرور: " + response.status)
-      );
-    }
+    const rec = new SpeechRecognition();
+    rec.lang = "fa-IR";
+    rec.interimResults = false;
+    rec.continuous = false;
 
-    const reply = extractReply(data);
-    waiting.textContent = reply;
-
-    if (options.fromVoice && voiceChatActive) {
-      speakVoiceReply(reply);
-    }
-
-  } catch (error) {
-    waiting.textContent =
-      "ارتباط با هوش مصنوعی با مشکل مواجه شد: " + error.message;
-
-    if (options.fromVoice && voiceChatActive) {
-      scheduleVoiceListen(1800);
-    }
-
-  } finally {
-    isSending = false;
-    sendButton.disabled = false;
-
-    if (voiceChatActive && !options.fromVoice) {
-      scheduleVoiceListen(700);
-    }
-  }
-}
-
-/* میکروفون معمولی؛ تبدیل صدا به متن */
-function startVoice() {
-  if (voiceChatActive) {
-    stopVoiceChat();
+    return rec;
   }
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+  function startVoice() {
+    const rec = getSpeechRecognition();
+    if (!rec) return;
 
-  if (!SpeechRecognition) {
-    alert("مرورگر شما از تبدیل گفتار به متن پشتیبانی نمی‌کند. از Chrome استفاده کن.");
-    return;
+    recognition = rec;
+
+    rec.onresult = event => {
+      const text = event.results[0][0].transcript;
+      input.value = (input.value + " " + text).trim();
+      input.focus();
+    };
+
+    rec.onerror = () => {
+      console.log("Speech recognition error");
+    };
+
+    rec.start();
   }
 
-  if (isMicListening) {
-    try {
-      micRecognition.stop();
-    } catch (_) {}
-    return;
-  }
-
-  micRecognition = new SpeechRecognition();
-  micRecognition.lang = "fa-IR";
-  micRecognition.continuous = false;
-  micRecognition.interimResults = false;
-
-  isMicListening = true;
-  document.getElementById("micButton").classList.add("voice-active");
-
-  micRecognition.onresult = function(event) {
-    const transcript = event.results[0][0].transcript;
-    input.value = (input.value + " " + transcript).trim();
-    sendMessage();
-  };
-
-  micRecognition.onerror = function() {
-    isMicListening = false;
-    document.getElementById("micButton").classList.remove("voice-active");
-  };
-
-  micRecognition.onend = function() {
-    isMicListening = false;
-    document.getElementById("micButton").classList.remove("voice-active");
-  };
-
-  try {
-    micRecognition.start();
-  } catch (_) {
-    isMicListening = false;
-    document.getElementById("micButton").classList.remove("voice-active");
-    alert("میکروفون شروع نشد. مجوز میکروفون مرورگر را بررسی کن.");
-  }
-}
-
-/* شروع و توقف گفت‌وگوی صوتی دوطرفه */
-function toggleVoiceChat() {
-  if (voiceChatActive) {
-    stopVoiceChat();
-    return;
-  }
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition || !("speechSynthesis" in window)) {
-    alert("گفت‌وگوی صوتی در این مرورگر پشتیبانی نمی‌شود. آخرین نسخه Chrome را امتحان کن.");
-    return;
-  }
-
-  if (isMicListening && micRecognition) {
-    try {
-      micRecognition.abort();
-    } catch (_) {}
-    isMicListening = false;
-  }
-
-  voiceChatActive = true;
-
-  voiceChatButton.classList.add("voice-active");
-  voiceChatButton.textContent = "⏹";
-  voiceChatButton.title = "توقف گفت‌وگوی صوتی";
-
-  listenForVoiceTurn();
-}
-
-function stopVoiceChat() {
-  voiceChatActive = false;
-
-  clearTimeout(voiceRestartTimer);
-
-  if (voiceTurnRecognition) {
-    try {
-      voiceTurnRecognition.abort();
-    } catch (_) {}
-  }
-
-  if (micRecognition && isMicListening) {
-    try {
-      micRecognition.abort();
-    } catch (_) {}
-  }
-
-  isVoiceChatListening = false;
-  isMicListening = false;
- window.speechSynthesis.cancel();
-
-  voiceChatButton.classList.remove("voice-active");
-  voiceChatButton.textContent = "🔊";
-  voiceChatButton.title = "شروع گفت‌وگوی صوتی";
-
-  document.getElementById("micButton").classList.remove("voice-active");
-}
-
-function scheduleVoiceListen(delay) {
-  clearTimeout(voiceRestartTimer);
-
-  if (!voiceChatActive) return;
-
-  voiceRestartTimer = setTimeout(function() {
-    if (
-      voiceChatActive &&
-      !isSending &&
-      !isVoiceChatListening &&
-      !window.speechSynthesis.speaking
-    ) {
-      listenForVoiceTurn();
-    }
-  }, delay);
-}
-
-/* شنیدن صحبت کاربر در حالت مکالمه */
-function listenForVoiceTurn() {
-  if (
-    !voiceChatActive ||
-    isSending ||
-    isVoiceChatListening ||
-    window.speechSynthesis.speaking
-  ) {
-    return;
-  }
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) return;
-
-  voiceTurnRecognition = new SpeechRecognition();
-  voiceTurnRecognition.lang = "fa-IR";
-  voiceTurnRecognition.continuous = false;
-  voiceTurnRecognition.interimResults = false;
-
-  isVoiceChatListening = true;
-
-  voiceTurnRecognition.onresult = function(event) {
-    const transcript =
-      event.results &&
-      event.results[0] &&
-      event.results[0][0]
-        ? event.results[0][0].transcript.trim()
-        : "";
-
-    isVoiceChatListening = false;
-
-    if (transcript && voiceChatActive) {
-      input.value = transcript;
-      sendMessage({ fromVoice: true });
-    }
-  };
-
-  voiceTurnRecognition.onerror = function(event) {
-    isVoiceChatListening = false;
-
-    if (
-      event.error === "not-allowed" ||
-      event.error === "service-not-allowed"
-    ) {
+  function toggleVoiceChat() {
+    if (voiceChatActive) {
       stopVoiceChat();
-      alert("اجازه دسترسی به میکروفون داده نشده است.");
+      return;
     }
-  };
 
-  voiceTurnRecognition.onend = function() {
-    isVoiceChatListening = false;
+    const rec = getSpeechRecognition();
+    if (!rec) return;
 
-    if (
-      voiceChatActive &&
-      !isSending &&
-      !window.speechSynthesis.speaking
-    ) {
-      scheduleVoiceListen(500);
-    }
-  };
+    voiceChatActive = true;
+    recognition = rec;
 
-  try {
-    voiceTurnRecognition.start();
-  } catch (_) {
-    isVoiceChatListening = false;
-    scheduleVoiceListen(1200);
+    document.getElementById("voiceChatButton").textContent =
+      "⏹ توقف گفت‌وگوی صوتی";
+
+    listenForVoiceTurn();
   }
-}
 
-/* خواندن پاسخ هوش مصنوعی با صدا */
-function speakVoiceReply(text) {
-  if (!voiceChatActive || !text) return;
+  function stopVoiceChat() {
+    voiceChatActive = false;
+    isSpeaking = false;
 
-  window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-
-  utterance.lang = "fa-IR";
-  utterance.rate = 1;
-  utterance.pitch = 1;
-
-  utterance.onend = function() {
-    if (voiceChatActive) {
-      scheduleVoiceListen(500);
+    if (recognition) {
+      try {
+        recognition.abort();
+      } catch {}
     }
-  };
 
-  utterance.onerror = function() {
-    if (voiceChatActive) {
-      scheduleVoiceListen(1000);
-    }
-  };
+    window.speechSynthesis.cancel();
 
-  window.speechSynthesis.speak(utterance);
-}
-
-/* ارسال با Enter و تنظیم ارتفاع کادر */
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage();
+    document.getElementById("voiceChatButton").textContent =
+      "🔊 گفت‌وگوی صوتی";
   }
-});
 
-input.addEventListener("input", function() {
-  input.style.height = "44px";
-  input.style.height =
-    Math.min(input.scrollHeight, 150) + "px";
-});
+  function listenForVoiceTurn() {
+    if (!voiceChatActive || isSpeaking) return;
+
+    const rec = getSpeechRecognition();
+    if (!rec) {
+      stopVoiceChat();
+      return;
+    }
+
+    recognition = rec;
+
+    rec.onresult = async event => {
+      const spokenText = event.results[0][0].transcript;
+      input.value = spokenText;
+      await sendMessage();
+    };
+
+    rec.onerror = () => {
+      if (voiceChatActive && !isSpeaking) {
+        stopVoiceChat();
+      }
+    };
+
+    rec.onend = () => {
+      if (voiceChatActive && !isSpeaking) {
+        // شروع دوباره شنیدن در صورت پایان طبیعی
+        setTimeout(() => {
+          if (voiceChatActive && !isSpeaking) {
+            listenForVoiceTurn();
+          }
+        }, 500);
+      }
+    };
+
+    try {
+      rec.start();
+    } catch {
+      stopVoiceChat();
+    }
+  }
+
+  function speakVoiceReply(text) {
+    if (!voiceChatActive || !("speechSynthesis" in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "fa-IR";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+
+    isSpeaking = true;
+
+    utterance.onend = () => {
+      isSpeaking = false;
+
+      if (voiceChatActive) {
+        listenForVoiceTurn();
+      }
+    };
+
+    utterance.onerror = () => {
+      isSpeaking = false;
+
+      if (voiceChatActive) {
+        listenForVoiceTurn();
+      }
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
 </script>
-
 </body>
 </html>
