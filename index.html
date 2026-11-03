@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090b10">
-<meta name="description" content="Nexus1 AI؛ دستیار هوشمند">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#101c2b">
+<meta name="description" content="Nexus1 AI - دستیار هوشمند شما">
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <title>Nexus1 AI</title>
@@ -14,99 +12,352 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
 
-:root{--p:#963cff;--glass:#0b0b22ed;--line:#8756cf66;--safe:env(safe-area-inset-bottom,0px)}
+:root{
+ --bg:#0b1420;
+ --panel:#111f30;
+ --panel2:#17283b;
+ --gold:#e6b653;
+ --gold2:#f5cf79;
+ --cyan:#39cbbd;
+ --text:#e7edf2;
+ --muted:#91a2b4;
+ --line:#34475b;
+}
 *{box-sizing:border-box}
-html{min-height:100%;background:#080817}
-body{margin:0;min-height:100vh;background:#080817 url('nexus-bg.png') center/cover fixed;color:#fff;font-family:Vazirmatn,Tahoma,sans-serif}
-button,textarea,input{font:inherit;color:inherit}
+body{
+ margin:0;
+ min-height:100vh;
+ background:
+ radial-gradient(ellipse at 50% -15%,#24465b 0%,transparent 50%),
+ linear-gradient(145deg,#09131f,#101c2b 55%,#0b1723);
+ color:var(--text);
+ font-family:Vazirmatn,Tahoma,sans-serif;
+}
+button,input,textarea{font:inherit}
 button{cursor:pointer;touch-action:manipulation}
-button:disabled{opacity:.55;cursor:wait}
-
-.app{min-height:100vh;padding:12px;display:grid;grid-template-columns:280px minmax(0,1fr) 260px;gap:12px}
-.panel,.top,.composer,.tile,.toolcard{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);box-shadow:0 0 20px #6925bd22}
-.panel{border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:12px;min-height:calc(100vh - 24px)}
-.brand{display:flex;align-items:center;gap:10px;padding-bottom:15px;border-bottom:1px solid var(--line)}
-.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#5315e9,#bd2cff);display:grid;place-items:center;font-size:28px}
-.brand strong{font-size:23px;color:#d9baff}
-.brand small{display:block;color:#aaa;font-size:10px}
-.primary,.send{border:0;border-radius:13px;padding:12px 17px;font-weight:bold;background:linear-gradient(110deg,#5014e8,#a51cff);box-shadow:0 0 18px #782dff66}
-.primary{width:100%}
-.search{width:100%;padding:11px;border-radius:12px;border:1px solid var(--line);background:#171631;outline:none}
-.history{display:flex;flex-direction:column;gap:7px;overflow:auto;max-height:55vh}
-.hist{display:flex;align-items:center;gap:5px;padding:7px;background:#171631;border-radius:11px}
-.hist button{background:none;border:0}
-.hist .open{flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
-.promo{margin-top:auto;text-align:center;padding:14px;border:1px solid var(--p);border-radius:15px;background:linear-gradient(130deg,#25105a,#7024c7)}
-.foot{text-align:center;color:#aaa;font-size:11px}
-.main{min-width:0;display:flex;flex-direction:column;gap:12px}
-.top{min-height:60px;border-radius:16px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.online{color:#6ff0b4;font-size:12px}
-.iconbtn,.tool{border:1px solid var(--line);background:#201b3b;border-radius:11px;padding:8px 12px}
-.hero{flex:1;min-height:320px;border-radius:20px;padding:25px;display:flex;align-items:center;justify-content:flex-end;background:linear-gradient(90deg,#07071622,#070716aa),url('nexus-bg.png') center/cover}
-.hero-copy{text-align:right;max-width:500px;text-shadow:0 2px 12px #000}
-.hero h1{font-size:clamp(38px,5vw,64px);margin:10px 0;line-height:1.2}
-.hero-note{display:inline-block;padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:#0b0b2bdc;line-height:2}
-.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
-.tile{min-height:85px;border-radius:16px;padding:8px 3px;font-size:11px}
-.tile .ico{display:block;font-size:25px;margin-bottom:5px;color:#bd8bff}
-.tile.active,.tile:hover{border-color:#b78cff;background:#2d155e}
-.messages{max-height:34vh;overflow:auto;padding:4px 7px;overscroll-behavior:contain}
-  .hint{text-align:center;color:#c4badf;padding:12px}
-.msg{display:flex;gap:8px;margin:12px 0}
+button:disabled{opacity:.5;cursor:wait}
+button:focus-visible,input:focus-visible,textarea:focus-visible{
+ outline:2px solid var(--cyan);
+ outline-offset:2px;
+}
+.app{
+ display:grid;
+ grid-template-columns:260px minmax(0,1fr) 245px;
+ gap:15px;
+ padding:15px;
+ min-height:100vh;
+}
+.panel,.topbar,.composer,.card,.toolcard{
+ background:#111f30eF;
+ border:1px solid var(--line);
+ box-shadow:0 12px 35px #0003;
+}
+.panel{
+ border-radius:19px;
+ padding:16px;
+ display:flex;
+ flex-direction:column;
+ gap:13px;
+ min-height:calc(100vh - 30px);
+}
+.brand{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding-bottom:16px;
+ border-bottom:1px solid var(--line);
+}
+.logo{
+ width:48px;
+ height:48px;
+ border-radius:15px;
+ display:grid;
+ place-items:center;
+ background:linear-gradient(145deg,#f5d17c,#b77c24);
+ color:#172332;
+ font-size:27px;
+ font-weight:900;
+ box-shadow:0 5px 20px #e6b65344;
+}
+.brand strong{font-size:21px;color:var(--gold2)}
+.brand small{display:block;color:var(--muted);font-size:10px}
+.gold{
+ border:0;
+ border-radius:12px;
+ padding:12px 16px;
+ color:#172332;
+ font-weight:800;
+ background:linear-gradient(120deg,#f5d17c,#d49a35);
+ box-shadow:0 5px 18px #d49a3530;
+}
+.gold:hover{filter:brightness(1.08)}
+.secondary{
+ border:1px solid var(--line);
+ background:#1a2c40;
+ border-radius:11px;
+ padding:9px 12px;
+ color:var(--text);
+}
+.search{
+ width:100%;
+ background:#0b1725;
+ border:1px solid var(--line);
+ border-radius:11px;
+ padding:11px;
+ color:var(--text);
+ outline:none;
+}
+.history{
+ display:flex;
+ flex-direction:column;
+ gap:7px;
+ overflow:auto;
+ max-height:55vh;
+}
+.hist{
+ display:flex;
+ align-items:center;
+ gap:5px;
+ padding:7px;
+ background:#192a3d;
+ border-radius:10px;
+}
+.hist button{
+ background:none;
+ border:0;
+ color:var(--text);
+}
+.hist .open{
+ flex:1;
+ text-align:right;
+ overflow:hidden;
+ white-space:nowrap;
+ text-overflow:ellipsis;
+ font-size:12px;
+}
+.main{
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ gap:13px;
+}
+.topbar{
+ min-height:58px;
+ border-radius:16px;
+ padding:8px 13px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+.status{color:var(--cyan);font-size:12px}
+.hero{
+ min-height:245px;
+ border:1px solid #52677c;
+ border-radius:20px;
+ padding:30px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ background:
+ radial-gradient(circle at 20% 50%,#1b4c59 0%,transparent 38%),
+ linear-gradient(120deg,#142b3b,#172638 55%,#273d4c);
+ overflow:hidden;
+}
+.hero h1{
+ font-size:clamp(35px,5vw,62px);
+ margin:8px 0;
+ line-height:1.25;
+ color:var(--gold2);
+}
+.hero p{color:#b7c8d5;line-height:2}
+.hero-symbol{
+ font-size:clamp(75px,12vw,140px);
+ color:var(--gold);
+ text-shadow:0 0 45px #e6b65355;
+}
+.tiles{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:9px;
+}
+.tile{
+ background:#17283b;
+  border:1px solid #344b60;
+ color:var(--text);
+ border-radius:14px;
+ padding:13px 5px;
+ min-height:83px;
+ font-size:12px;
+}
+.tile .ico{
+ display:block;
+ font-size:24px;
+ margin-bottom:6px;
+}
+.tile.active{
+ background:#49391e;
+ border-color:var(--gold);
+ color:var(--gold2);
+}
+.messages{
+ min-height:100px;
+ max-height:40vh;
+ overflow:auto;
+ padding:5px;
+}
+.hint{
+ text-align:center;
+ color:var(--muted);
+ padding:25px 10px;
+}
+.msg{
+ display:flex;
+ gap:9px;
+ margin:12px 0;
+}
 .msg.user{flex-direction:row-reverse}
-.avatar{width:35px;height:35px;flex:none;border-radius:11px;background:#382365;display:grid;place-items:center}
-.bubble{max-width:88%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9;background:#11132c;border:1px solid var(--line);border-radius:14px;padding:11px}
-.msg.user .bubble{background:#282047}
-.bubble img{display:block;max-width:min(230px,65vw);max-height:200px;border-radius:10px;margin-top:8px}
-.sources{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
-.sources a{display:block;color:#cbb4ff;font-size:12px;margin:5px}
-.composer{border-radius:18px;padding:12px;position:sticky;bottom:8px;z-index:2}
-textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:transparent;border:0;outline:0;padding:8px;line-height:1.8}
-.bar{border-top:1px solid var(--line);padding-top:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.avatar{
+ width:36px;
+ height:36px;
+ flex:none;
+ display:grid;
+ place-items:center;
+ border-radius:12px;
+ background:#244052;
+ color:var(--cyan);
+}
+.msg.user .avatar{
+ background:#60491f;
+ color:var(--gold2);
+}
+.bubble{
+ max-width:88%;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ line-height:1.9;
+ padding:12px;
+ border-radius:14px;
+ background:#17283b;
+ border:1px solid #34475b;
+}
+.msg.user .bubble{background:#26374a}
+.bubble img{
+ display:block;
+ max-width:min(240px,65vw);
+ max-height:210px;
+ border-radius:10px;
+ margin-top:8px;
+}
+.sources{
+ border-top:1px solid var(--line);
+ margin-top:9px;
+ padding-top:8px;
+}
+.sources a{
+ display:block;
+ color:var(--cyan);
+ font-size:12px;
+ margin:5px;
+}
+.composer{
+ border-radius:17px;
+ padding:12px;
+ position:sticky;
+ bottom:8px;
+ z-index:3;
+}
+textarea{
+ width:100%;
+ min-height:65px;
+ max-height:150px;
+ resize:vertical;
+ background:transparent;
+ border:0;
+ outline:0;
+ padding:9px;
+ color:var(--text);
+ line-height:1.9;
+}
+textarea::placeholder{color:#8497a9}
+.bar{
+ border-top:1px solid var(--line);
+ padding-top:10px;
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:7px;
+}
 .send{margin-right:auto}
 .preview{display:none;padding:6px}
-.preview img{width:70px;height:55px;object-fit:cover;border-radius:8px}
-.right h3{font-size:14px}
-.toolcard{width:100%;border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;text-align:right}
-.toolcard .ico{font-size:24px;color:#bd8bff}
+.preview img{
+ width:75px;
+ height:55px;
+ object-fit:cover;
+ border-radius:9px;
+}
+.toolcard{
+ width:100%;
+ border-radius:13px;
+ padding:12px;
+ display:flex;
+ align-items:center;
+ gap:10px;
+ color:var(--text);
+ text-align:right;
+}
+.toolcard .ico{font-size:23px;color:var(--gold)}
 .toolcard b{display:block;font-size:12px}
-.toolcard small{display:block;color:#aaa;font-size:10px}
+.toolcard small{display:block;color:var(--muted);font-size:10px}
 .mobile{display:none}
 #installBtn{display:none}
-
-@media(max-width:1100px){
- .app{grid-template-columns:245px minmax(0,1fr)}
- .right{display:none}
- .tiles{grid-template-columns:repeat(4,1fr)}
+.foot{
+ text-align:center;
+ color:var(--muted);
+ font-size:11px;
+ margin-top:auto;
 }
-@media(max-width:720px){
- body{background-attachment:scroll}
- .app{display:flex;flex-direction:column;min-height:100vh;padding:7px;gap:9px}
- .left{display:none;position:fixed;z-index:20;top:5px;bottom:5px;right:5px;width:min(300px,88vw);min-height:0;box-shadow:0 0 0 100vmax #000b;overflow:auto}
- .left.open{display:flex}
+@media(max-width:1050px){
+ .app{grid-template-columns:230px minmax(0,1fr)}
+ .right{display:none}
+}
+@media(max-width:700px){
+ .app{display:flex;flex-direction:column;padding:7px;gap:9px}
+ .panel.left{
+  display:none;
+  position:fixed;
+  z-index:20;
+  top:5px;
+  bottom:5px;
+  right:5px;
+  width:min(290px,88vw);
+  min-height:0;
+  overflow:auto;
+  box-shadow:0 0 0 100vmax #000b;
+ }
+ .panel.left.open{display:flex}
  .mobile{display:inline-block}
- .top{min-height:54px;padding:7px 10px}
- .hero{min-height:290px;padding:12px;background-position:38% center}
- .hero-copy{max-width:95%;padding:10px;background:#08081777;border-radius:12px}
- .hero h1{font-size:36px}
+ .topbar{min-height:52px}
+ .hero{min-height:210px;padding:17px}
+ .hero-symbol{font-size:75px}
+ .hero h1{font-size:37px}
+ .hero p{font-size:12px}
  .tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
- .tile{min-height:75px;font-size:10px}
- .tile .ico{font-size:22px}
- .messages{max-height:36vh}
- .composer{position:sticky;bottom:calc(5px + var(--safe));padding:9px}
- textarea{min-height:58px;font-size:16px}
- .bar{gap:5px}
- .tool{padding:8px 9px;font-size:12px}
- .send{padding:10px 13px}
+ .tile{min-height:72px;font-size:10px}
+ .tile .ico{font-size:21px}
+ .messages{max-height:37vh}
+ .composer{
+  position:sticky;
+  bottom:calc(5px + env(safe-area-inset-bottom));
+  padding:9px;
+ }
+ textarea{font-size:16px;min-height:58px}
+ .secondary{padding:8px;font-size:11px}
+ .gold{padding:10px 12px}
  .bubble{max-width:calc(100vw - 75px)}
 }
-@media(max-width:380px){
- .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
- .hero h1{font-size:31px}
-}
-@media(prefers-reduced-motion:no-preference){
- button,.tile{transition:background .18s ease,border-color .18s ease,transform .18s ease}
- button:active{transform:scale(.98)}
+@media(max-width:370px){
+ .tiles{grid-template-columns:repeat(3,1fr)}
+ .hero-symbol{display:none}
 }
 </style>
 </head>
@@ -116,83 +367,93 @@ textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:
 
 <aside class="panel left" id="sidebar">
  <div class="brand">
-  <div class="logo">✥</div>
-  <div><strong>Nexus1 AI</strong><small>One AI. Endless Possibilities.</small></div>
+  <div class="logo">N</div>
+  <div><strong>Nexus1 AI</strong><small>SMART AI ASSISTANT</small></div>
  </div>
- <button class="primary" onclick="newChat()">＋ چت جدید</button>
- <b style="font-size:13px">◷ تاریخچه چت‌ها</b>
- <input class="search" id="historySearch" placeholder="جست‌وجو در چت‌ها..." oninput="drawHistory()">
+
+ <button class="gold" onclick="newChat()">＋ چت جدید</button>
+ <b>◷ تاریخچه گفتگوها</b>
+ <input class="search" id="historySearch" placeholder="جست‌وجوی گفتگو..." oninput="drawHistory()">
  <div class="history" id="history"></div>
- <div class="promo">♛ <b>Nexus1 AI</b><br>هوش مصنوعی نسل جدید</div>
- <div class="foot">Created by ehsanGGExE 💜</div>
+
+ <div class="foot">Nexus1 AI · Created by Ehsan</div>
 </aside>
 
 <main class="main">
- <header class="top">
-  <div style="display:flex;align-items:center;gap:8px">
-   <button class="iconbtn mobile" onclick="toggleMenu()" aria-label="باز کردن تاریخچه">☰</button>
-   <span class="online">● آنلاین</span>
-  </div>
-  <div style="display:flex;gap:7px">
-   <button class="iconbtn" id="installBtn" onclick="installApp()">＋ نصب برنامه</button>
-   <button class="iconbtn" onclick="fullScreen()" aria-label="تمام صفحه">⛶</button>
-  </div>
- </header>
- <section class="hero" id="hero">
-  <div class="hero-copy">
-   سلام! من
-   <h1>Nexus1 AI<br>هستم ✨</h1>
-   <div class="hero-note"><b>چطور می‌تونم کمکت کنم؟</b><br>سؤال بپرس، عکس بفرست یا از من بخواه جست‌وجو کنم.</div>
-  </div>
- </section>
+  <header class="topbar">
+ <div style="display:flex;align-items:center;gap:10px">
+  <button class="secondary mobile" onclick="toggleMenu()">☰</button>
+  <span class="status">● آماده به کار</span>
+ </div>
+ <div style="display:flex;gap:7px">
+  <button class="secondary" id="installBtn" onclick="installApp()">＋ نصب برنامه</button>
+  <button class="secondary" onclick="fullScreen()">⛶</button>
+ </div>
+</header>
 
- <section class="tiles">
-  <button class="tile active" data-mode="chat" onclick="setMode('chat')"><span class="ico">💬</span>چت هوشمند</button>
-  <button class="tile" data-mode="study" onclick="setMode('study')"><span class="ico">📖</span>حالت مطالعه</button>
-  <button class="tile" data-mode="image" onclick="setMode('image')"><span class="ico">🎨</span>تولید تصویر</button>
-  <button class="tile" data-mode="code" onclick="setMode('code')"><span class="ico">‹/›</span>برنامه‌نویسی</button>
-  <button class="tile" data-mode="web" onclick="webSearch()"><span class="ico">🌐</span>جست‌وجوی وب</button>
-  <button class="tile" onclick="voice()"><span class="ico">🎙</span>میکروفون</button>
-  <button class="tile" onclick="document.getElementById('message').focus()"><span class="ico">▦</span>سایر ابزارها</button>
- </section>
+<section class="hero" id="hero">
+ <div>
+  <span style="color:var(--cyan)">WELCOME TO NEXUS</span>
+  <h1>Nexus1 AI</h1>
+  <p>دستیار هوشمند تو برای یادگیری، خلاقیت و برنامه‌نویسی.</p>
+  <p>امروز چه کاری انجام بدیم؟</p>
+ </div>
+ <div class="hero-symbol">N</div>
+</section>
 
- <section class="messages" id="messages">
-  <div class="hint" id="hint">گفتگوی تازه شما اینجا نمایش داده می‌شود ✨</div>
- </section>
+<section class="tiles">
+ <button class="tile active" data-mode="chat" onclick="setMode('chat')"><span class="ico">💬</span>چت هوشمند</button>
+ <button class="tile" data-mode="study" onclick="setMode('study')"><span class="ico">📚</span>مطالعه</button>
+ <button class="tile" data-mode="image" onclick="setMode('image')"><span class="ico">🎨</span>تصویر</button>
+ <button class="tile" data-mode="code" onclick="setMode('code')"><span class="ico">⌨️</span>برنامه‌نویسی</button>
+ <button class="tile" data-mode="web" onclick="webSearch()"><span class="ico">🌐</span>جست‌وجوی وب</button>
+ <button class="tile" onclick="voice()"><span class="ico">🎙️</span>میکروفون</button>
+ <button class="tile" onclick="document.getElementById('textFile').click()"><span class="ico">📄</span>فایل متنی</button>
+ <button class="tile" onclick="document.getElementById('message').focus()"><span class="ico">✍️</span>نوشتن پیام</button>
+</section>
 
- <section class="composer">
-  <div class="preview" id="preview">
-   <img id="previewImg" alt="پیش‌نمایش">
-   <button class="tool" onclick="removeImage()">حذف ×</button>
-  </div>
-  <textarea id="message" placeholder="پیامت رو برای Nexus1 AI بنویس..." onkeydown="enterSend(event)"></textarea>
-  <div class="bar">
-   <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" hidden onchange="pickImage(event)">
-   <input id="textFile" type="file" accept=".txt,.md,.csv" hidden onchange="pickTextFile(event)">
-   <button class="tool" onclick="document.getElementById('imageFile').click()">▧ عکس</button>
-   <button class="tool" onclick="voice()">🎙 صدا</button>
-   <button class="tool" onclick="webSearch()">🌐 وب</button>
-   <button class="tool" onclick="document.getElementById('textFile').click()">▱ فایل</button>
-   <span id="modeLabel" style="font-size:11px;color:#c6aaff">حالت چت</span>
-   <button class="send" id="send" onclick="sendMessage()">ارسال ➤</button>
-  </div>
- </section>
+<section class="messages" id="messages">
+ <div class="hint" id="hint">گفتگوی جدید را شروع کن ✨</div>
+</section>
+
+<section class="composer">
+ <div class="preview" id="preview">
+  <img id="previewImg" alt="پیش‌نمایش عکس">
+  <button class="secondary" onclick="removeImage()">حذف عکس ×</button>
+ </div>
+
+ <textarea id="message" placeholder="پیامت رو برای Nexus1 AI بنویس..." onkeydown="enterSend(event)"></textarea>
+
+ <div class="bar">
+  <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" hidden onchange="pickImage(event)">
+  <input id="textFile" type="file" accept=".txt,.md,.csv" hidden onchange="pickTextFile(event)">
+  <button class="secondary" onclick="document.getElementById('imageFile').click()">▧ عکس</button>
+  <button class="secondary" onclick="voice()">🎙 صدا</button>
+  <button class="secondary" onclick="webSearch()">🌐 وب</button>
+  <button class="secondary" onclick="document.getElementById('textFile').click()">▱ فایل</button>
+  <span id="modeLabel" style="font-size:11px;color:var(--gold2)">حالت چت</span>
+  <button class="gold send" id="send" onclick="sendMessage()">ارسال ➤</button>
+ </div>
+</section>
+
 </main>
 
 <aside class="panel right">
- <h3>ابزارهای پیشرفته ✨</h3>
- <button class="toolcard" onclick="setMode('image')"><span class="ico">🎨</span><span><b>تولید تصویر</b><small>ساخت تصاویر با هوش مصنوعی</small></span></button>
- <button class="toolcard" onclick="setMode('code')"><span class="ico">‹/›</span><span><b>برنامه‌نویسی</b><small>کمک در نوشتن کد</small></span></button>
- <button class="toolcard" onclick="setMode('study')"><span class="ico">🎓</span><span><b>حالت مطالعه</b><small>یادگیری و توضیح درس</small></span></button>
- <button class="toolcard" onclick="webSearch()"><span class="ico">🌐</span><span><b>جست‌وجوی وب</b><small>جست‌وجوی اطلاعات به‌روز</small></span></button>
- <button class="toolcard" onclick="voice()"><span class="ico">🎙</span><span><b>گفت‌وگوی صوتی</b><small>ورودی صوتی فارسی</small></span></button>
- <button class="toolcard" onclick="fullScreen()"><span class="ico">⚙</span><span><b>تمام‌صفحه</b><small>گسترش محیط برنامه</small></span></button>
- <div class="promo">◇<br><b>Nexus1 AI</b><p>آینده در دستان توست</p><button class="tool" onclick="newChat()">شروع کن 🚀</button></div>
+ <h3 style="color:var(--gold2)">ابزارهای Nexus ✦</h3>
+ <button class="toolcard" onclick="setMode('image')"><span class="ico">🎨</span><span><b>تولید تصویر</b><small>درخواست ساخت تصویر</small></span></button>
+ <button class="toolcard" onclick="setMode('code')"><span class="ico">⌨️</span><span><b>برنامه‌نویسی</b><small>کمک در نوشتن کد</small></span></button>
+ <button class="toolcard" onclick="setMode('study')"><span class="ico">📚</span><span><b>حالت مطالعه</b><small>توضیح قدم‌به‌قدم</small></span></button>
+ <button class="toolcard" onclick="webSearch()"><span class="ico">🌐</span><span><b>جست‌وجوی وب</b><small>جست‌وجوی آنلاین</small></span></button>
+ <button class="toolcard" onclick="voice()"><span class="ico">🎙️</span><span><b>ورودی صوتی</b><small>تشخیص گفتار فارسی</small></span></button>
+ <button class="toolcard" onclick="fullScreen()"><span class="ico">⛶</span><span><b>تمام صفحه</b><small>نمایش بزرگ‌تر</small></span></button>
+ <div class="foot">Nexus1 AI</div>
 </aside>
+
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
+
 let modeNow = 'chat';
 let imageData = null;
 let active = null;
@@ -205,19 +466,19 @@ try {
 } catch {
  chats = [];
 }
-
-function persist(){
- try {
+  function persist(){
+ try{
   localStorage.setItem('nexus1_chats',JSON.stringify(chats));
- } catch {
-  alert('حافظه مرورگر پر شده؛ چند گفتگوی قدیمی را حذف کن.');
+ }catch{
+  alert('فضای ذخیره‌سازی مرورگر پر شده است.');
  }
 }
 
 function current(){
  return chats.find(c => c.id === active);
 }
-  function ensure(title){
+
+function ensure(title){
  let c = current();
  if(!c){
   c = {
@@ -250,8 +511,7 @@ function drawHistory(){
  box.replaceChildren();
  const q = $('historySearch').value.toLowerCase();
 
- [...chats]
- .sort((a,b) => b.time-a.time)
+ [...chats].sort((a,b) => b.time-a.time)
  .filter(c => (c.title || '').toLowerCase().includes(q))
  .forEach(c => {
   const row = document.createElement('div');
@@ -264,8 +524,6 @@ function drawHistory(){
 
   const del = document.createElement('button');
   del.textContent = '🗑';
-  del.title = 'حذف گفتگو';
-
   del.onclick = () => {
    if(!confirm('این گفتگو حذف شود؟')) return;
    chats = chats.filter(x => x.id !== c.id);
@@ -286,7 +544,7 @@ function newChat(){
  const h = document.createElement('div');
  h.className = 'hint';
  h.id = 'hint';
- h.textContent = 'گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';
+ h.textContent = 'گفتگوی جدید را شروع کن ✨';
 
  $('messages').append(h);
  $('hero').style.display = '';
@@ -303,10 +561,7 @@ function openChat(id){
  $('messages').replaceChildren();
  $('hero').style.display = 'none';
 
- c.items.forEach(m => {
-  addMessage(m.role,m.text,m.img,m.sources,false);
- });
-
+ c.items.forEach(m => addMessage(m.role,m.text,m.img,m.sources,false));
  $('sidebar').classList.remove('open');
 }
 
@@ -337,9 +592,9 @@ function addMessage(role,text,img=null,sources=[],save=true){
   box.className = 'sources';
 
   sources.forEach(s => {
-   try {
+   try{
     const u = new URL(s.url);
-    if(!['https:','http:'].includes(u.protocol)) return;
+    if(!['http:','https:'].includes(u.protocol)) return;
 
     const a = document.createElement('a');
     a.href = u.href;
@@ -347,7 +602,7 @@ function addMessage(role,text,img=null,sources=[],save=true){
     a.rel = 'noopener noreferrer';
     a.textContent = s.title || u.hostname;
     box.append(a);
-   } catch {}
+   }catch{}
   });
 
   bubble.append(box);
@@ -380,20 +635,19 @@ function setMode(m){
  });
 
  const placeholders = {
-  chat:'پیامت را بنویس...',
-  study:'سؤال درسی‌ات را بنویس...',
-  image:'درخواست تصویرت را توضیح بده...',
-  code:'سؤال برنامه‌نویسی‌ات را بنویس...',
-  web:'موضوع جست‌وجو را بنویس...'
+  chat:'پیامت رو بنویس...',
+  study:'سؤال درسی‌ات رو بنویس...',
+  image:'توضیح بده چه تصویری می‌خوای...',
+  code:'سؤال برنامه‌نویسی‌ات رو بنویس...',
+  web:'موضوع جست‌وجو رو بنویس...'
  };
 
  $('message').placeholder = placeholders[m] || placeholders.chat;
  $('message').focus();
 }
-
-function webSearch(){
+  function webSearch(){
  setMode('web');
- $('message').value = 'در وب جست‌وجو کن و منابع و لینک‌ها را ارائه بده: ';
+ $('message').value = 'در وب جست‌وجو کن و منابع را ارائه بده: ';
  $('message').focus();
 }
 
@@ -403,15 +657,185 @@ function enterSend(e){
   sendMessage();
  }
 }
+
+async function sendMessage(){
+ let text = $('message').value.trim();
+ const im = imageData;
+
+ if(!text && !im) return;
+
+ const prefixes = {
+  study:'در حالت مطالعه، قدم‌به‌قدم و ساده توضیح بده:\n',
+  code:'در نقش دستیار برنامه‌نویسی کمک کن:\n',
+  web:'این درخواست را با جست‌وجوی وب و ذکر منابع پاسخ بده:\n',
+  image:'درخواست من درباره تصویر است. اگر سرویس تولید تصویر در سرور فعال نیست، صادقانه اعلام کن:\n'
+ };
+
+ if(prefixes[modeNow]) text = prefixes[modeNow] + text;
+
+ let userText = text;
+ if(!userText) userText = 'لطفاً این تصویر را بررسی کن.';
+
+ const preview = im ? im.preview : null;
+ addMessage('user',userText,preview);
+
+ $('message').value = '';
+ removeImage();
+
+ const wait = addMessage('assistant','در حال دریافت پاسخ...');
+ $('send').disabled = true;
+
+ try{
+  const response = await fetch('/api/chat',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({
+    message:text,
+    image:im ? {mimeType:im.mimeType,data:im.data} : null
+   })
+  });
+
+  const data = await response.json();
+
+  if(!response.ok){
+   throw new Error(data.error || 'خطا در ارتباط با سرور');
+  }
+
+  const reply = data.reply || 'پاسخی دریافت نشد.';
+  wait.textContent = reply;
+
+  const sources = Array.isArray(data.sources) ? data.sources : [];
+
+  if(sources.length){
+   const box = document.createElement('div');
+   box.className = 'sources';
+
+   sources.forEach(s => {
+    try{
+     const u = new URL(s.url);
+     if(!['http:','https:'].includes(u.protocol)) return;
+
+     const a = document.createElement('a');
+     a.href = u.href;
+     a.target = '_blank';
+     a.rel = 'noopener noreferrer';
+     a.textContent = s.title || u.hostname;
+     box.append(a);
+    }catch{}
+   });
+
+   wait.append(box);
+  }
+
+  const c = current();
+  const last = c?.items[c.items.length-1];
+
+  if(last?.role === 'assistant' && last.text === 'در حال دریافت پاسخ...'){
+   last.text = reply;
+   last.sources = sources;
+   persist();
+  }
+
+ }catch(e){
+  wait.textContent = 'خطا: ' + e.message;
+
+  const c = current();
+  const last = c?.items[c.items.length-1];
+
+  if(last?.role === 'assistant'){
+   last.text = 'خطا: ' + e.message;
+   persist();
+  }
+
+ }finally{
+  $('send').disabled = false;
+ }
+}
+
+function pickImage(e){
+ const f = e.target.files[0];
+ if(!f) return;
+
+ if(!['image/jpeg','image/png','image/webp'].includes(f.type) || f.size > 5*1024*1024){
+  alert('فقط JPG، PNG یا WEBP تا ۵ مگابایت مجاز است.');
+  e.target.value = '';
+  return;
+ }
+
+ const reader = new FileReader();
+
+ reader.onload = () => {
+  imageData = {
+   mimeType:f.type,
+   data:reader.result.split(',')[1],
+   preview:reader.result
+  };
+
+  $('previewImg').src = reader.result;
+  $('preview').style.display = 'block';
+ };
+
+ reader.readAsDataURL(f);
+}
+
+function removeImage(){
+ imageData = null;
+ $('imageFile').value = '';
+ $('preview').style.display = 'none';
+}
+
+function pickTextFile(e){
+ const f = e.target.files[0];
+ if(!f) return;
+
+ if(f.size > 500000){
+  alert('فایل باید کمتر از ۵۰۰ کیلوبایت باشد.');
+  e.target.value = '';
+  return;
+ }
+
+ const reader = new FileReader();
+
+ reader.onload = () => {
+  $('message').value += '\n\nمحتوای فایل ' + f.name + ':\n' + reader.result;
+  $('message').focus();
+ };
+
+ reader.readAsText(f);
+ e.target.value = '';
+}
+
+function voice(){
+ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+ if(!SR){
+  alert('این مرورگر تشخیص گفتار را پشتیبانی نمی‌کند. Chrome را امتحان کن.');
+  return;
+ }
+
+ const rec = new SR();
+ rec.lang = 'fa-IR';
+ rec.interimResults = false;
+
+ rec.onresult = e => {
+  $('message').value = ($('message').value + ' ' + e.results[0][0].transcript).trim();
+  $('message').focus();
+ };
+
+ rec.onerror = () => alert('میکروفون فعال نشد. اجازه دسترسی مرورگر را بررسی کن.');
+ rec.start();
+}
+
+function toggleMenu(){
+ $('sidebar').classList.toggle('open');
+}
   function fullScreen(){
  if(!document.fullscreenElement){
   document.documentElement.requestFullscreen?.();
- } else {
+ }else{
   document.exitFullscreen?.();
  }
 }
 
-/* نصب برنامه روی گوشی و کامپیوتر */
-window.addEventListener('beforeinstallprompt',event => {
- event.preventDefault();
- deferredInstallPrompt = event;
+/* نصب برنامه */
+window.addEventListener('beforeinstallprompt
