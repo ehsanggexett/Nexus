@@ -1,1068 +1,968 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080817">
 <title>Nexus1 AI</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --bg:#080817;
-  --panel:#10122c;
-  --panel2:#19183c;
-  --purple:#914cff;
-  --blue:#42aaff;
-  --text:#f7f3ff;
-  --muted:#aaa5c9;
-  --border:rgba(151,119,255,.28);
-  --glow:0 0 25px rgba(125,65,255,.28);
+  --p:#8c35ff;
+  --line:#7652bd66;
+  --glass:#0b0b22dd;
+  --muted:#aaa4c7;
 }
 
 * { box-sizing:border-box; }
 
 body {
   margin:0;
+  background:#070716;
+  color:#f8f4ff;
+  font-family:Vazirmatn,Tahoma,sans-serif;
+  background-image:linear-gradient(90deg,#07071666,#070716a8),url('nexus-bg.png');
+  background-position:center;
+  background-size:cover;
+  background-attachment:fixed;
   min-height:100vh;
-  font-family:"Vazirmatn",Tahoma,sans-serif;
-  color:var(--text);
-  background:var(--bg);
 }
 
-button,textarea,input { font:inherit; }
-button { cursor:pointer; color:inherit; }
+button,textarea { font:inherit;color:inherit; }
+button { cursor:pointer; }
 
 .app {
-  height:100vh;
-  min-height:600px;
+  min-height:100vh;
+  padding:12px;
   display:grid;
-  grid-template-columns:280px minmax(0,1fr) 270px;
-  direction:ltr;
-  background:
-    radial-gradient(ellipse at center,#171044,#080817 75%);
-  overflow:hidden;
+  grid-template-columns:260px minmax(0,1fr) 230px;
+  gap:12px;
 }
 
-/* SIDEBAR */
+.panel,.top,.hero,.composer,.tile {
+  background:var(--glass);
+  border:1px solid var(--line);
+  backdrop-filter:blur(15px);
+  box-shadow:0 0 25px #6122ba20;
+}
 
-.sidebar,.rightbar {
-  direction:rtl;
+.panel {
+  border-radius:20px;
+  padding:16px;
   display:flex;
   flex-direction:column;
-  min-height:0;
-  background:rgba(8,10,29,.96);
-  backdrop-filter:blur(18px);
-  padding:18px 14px;
-  z-index:5;
+  gap:10px;
 }
-
-.sidebar { border-left:1px solid var(--border); }
-.rightbar { border-right:1px solid var(--border); }
 
 .brand {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:5px 7px 20px;
-}
-
-.brand-icon {
-  width:44px;
-  height:44px;
-  display:grid;
-  place-items:center;
-  border-radius:14px;
-  font-size:25px;
-  background:linear-gradient(135deg,#a64dff,#3920bd);
-  box-shadow:var(--glow);
-}
-
-.brand-name {
-  font-size:21px;
+  font-size:22px;
   font-weight:800;
-  color:#d8c4ff;
-  text-shadow:0 0 15px var(--purple);
+  color:#d6baff;
+  padding:10px;
 }
 
-.brand-sub {
+.brand small {
+  display:block;
   font-size:10px;
   color:var(--muted);
-  direction:ltr;
+  font-weight:400;
 }
 
-.primary-btn {
-  width:100%;
-  padding:13px;
-  border:1px solid #a77aff;
-  border-radius:13px;
-  background:linear-gradient(110deg,#601cff,#9842ff);
-  box-shadow:var(--glow);
-  font-weight:bold;
-  margin-bottom:17px;
+button.primary,.send {
+  border:0;
+  background:linear-gradient(110deg,#5114e8,#a51cff);
+  border-radius:12px;
+  padding:12px 15px;
+  font-weight:700;
+  box-shadow:0 0 18px #782dff66;
 }
 
-.section-title {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:#d1c5f5;
-  font-size:13px;
-  margin:8px 4px 12px;
+.menu,.histbtn,.tile {
+  border:1px solid transparent;
+  background:#171631bb;
+  border-radius:12px;
+  padding:12px;
+  text-align:right;
 }
 
-.search-box {
-  width:100%;
-  padding:11px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:#151633;
-  color:white;
-  outline:none;
-  margin-bottom:10px;
+.menu:hover,.menu.active,.tile:hover {
+  border-color:#a779ff;
+  background:#29204b;
+}
+
+.label {
+  font-size:12px;
+  color:var(--muted);
+  padding:8px;
 }
 
 .history {
-  flex:1;
-  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  max-height:50vh;
   overflow:auto;
 }
 
-.history-item {
+.hist {
   display:flex;
+  gap:5px;
   align-items:center;
-  gap:7px;
-  padding:10px;
-  border-radius:11px;
-  margin:5px 0;
-  background:rgba(255,255,255,.025);
-  border:1px solid transparent;
+  background:#171631;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:7px;
 }
 
-.history-item.active,
-.history-item:hover {
-  background:#25204a;
-  border-color:var(--border);
-}
-
-.history-open {
+.hist button:first-child {
   flex:1;
   min-width:0;
-  border:0;
-  background:none;
   text-align:right;
-  font-size:12px;
+  white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.delete-btn {
   background:none;
   border:0;
-  color:#d0a8ff;
-  font-size:17px;
-}
-
-.empty-history {
-  color:var(--muted);
-  text-align:center;
   font-size:12px;
-  padding:20px 5px;
 }
 
-.sidebar-footer {
-  border-top:1px solid var(--border);
-  margin-top:12px;
-  padding-top:15px;
+.del {
+  background:none;
+  border:0;
+  color:#d2b5ff;
+  font-size:18px;
+}
+
+.foot {
+  margin-top:auto;
   text-align:center;
   color:var(--muted);
   font-size:11px;
+  padding:10px;
 }
-
-/* MAIN */
 
 .main {
-  direction:rtl;
-  min-width:0;
   display:flex;
   flex-direction:column;
-  position:relative;
+  gap:12px;
+  min-width:0;
 }
 
-.topbar {
-  height:60px;
-  flex-shrink:0;
+.top {
+  height:58px;
+  border-radius:16px;
+  padding:8px 14px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:0 18px;
-  border-bottom:1px solid rgba(151,119,255,.17);
-  background:rgba(5,7,22,.4);
-}
-
-.top-actions {
-  display:flex;
-  align-items:center;
-  gap:9px;
-}
-
-.icon-btn {
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  background:#171735;
-  color:#d6c5ff;
 }
 
 .online {
-  color:#65eeb9;
+  color:#6ff0b4;
   font-size:12px;
 }
 
-.content {
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  padding:17px 22px;
+.icon {
+  border:1px solid var(--line);
+  background:#20183e;
+  border-radius:11px;
+  padding:9px 13px;
+  font-size:18px;
 }
 
-/* HERO */
-  .hero {
-  max-width:1100px;
-  min-height:340px;
-  margin:0 auto 16px;
-  border:1px solid var(--border);
+.hero {
+  min-height:360px;
   border-radius:22px;
-  overflow:hidden;
-  position:relative;
+  padding:30px;
   display:flex;
   align-items:center;
-  padding:30px;
-  background:
-    linear-gradient(90deg,rgba(5,6,24,.15),rgba(5,6,24,.72)),
-    url("nexus1-hero.jpg") center 44%/cover no-repeat;
-  box-shadow:var(--glow);
+  justify-content:flex-end;
+  background-image:linear-gradient(90deg,#07071616,#070716d9 60%),url('nexus-bg.png');
+  background-position:center;
+  background-size:cover;
 }
 
-.hero:after {
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(0deg,rgba(5,6,22,.55),transparent 60%);
-  pointer-events:none;
-}
-
-.hero-text {
-  position:relative;
-  z-index:1;
-  max-width:490px;
-  margin-right:auto;
+.hero-copy {
+  max-width:540px;
   text-align:right;
-  text-shadow:0 2px 12px #050515;
-}
-
-.hero-small {
-  color:#c8a9ff;
-  font-size:13px;
 }
 
 .hero h1 {
-  font-size:clamp(32px,4vw,55px);
-  line-height:1.25;
-  margin:10px 0;
-  text-shadow:0 0 22px #854cff;
+  font-size:clamp(34px,5vw,58px);
+  line-height:1.3;
+  margin:12px 0;
 }
 
 .hero p {
-  color:#e4dcff;
   line-height:2;
-  font-size:14px;
+  color:#e1d9f6;
 }
 
-.hero-buttons {
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:15px;
-}
-
-.hero-buttons button {
-  border:1px solid var(--border);
-  border-radius:11px;
-  padding:9px 13px;
-  background:rgba(17,16,49,.9);
-  font-size:12px;
-}
-
-.hero-buttons button:hover {
-  border-color:#b38aff;
-  box-shadow:var(--glow);
-}
-
-/* TOOLS */
-
-.tools-grid {
-  max-width:1100px;
-  margin:0 auto 17px;
+.tools {
   display:grid;
   grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:10px;
-}
-
-.tool-card {
-  min-height:78px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:rgba(16,18,49,.9);
-  transition:.2s;
-}
-
-.tool-card:hover {
-  transform:translateY(-3px);
-  border-color:#a77aff;
-  box-shadow:var(--glow);
-}
-
-.tool-icon {
-  font-size:23px;
-  color:#a984ff;
-}
-
-.tool-card span:last-child {
-  font-size:11px;
-}
-
-/* CHAT */
-
-.chat-area {
-  display:none;
-  max-width:1100px;
-  margin:0 auto;
-}
-
-.chat-area.visible { display:block; }
-
-.message {
-  display:flex;
-  align-items:flex-start;
   gap:9px;
-  margin:16px 0;
 }
 
-.message.user {
+.tile {
+  text-align:center;
+  min-height:88px;
+  font-size:13px;
+}
+
+.tile b {
+  display:block;
+  font-size:25px;
+  color:#b88aff;
+  margin-bottom:5px;
+}
+
+.messages {
+  padding:5px 8px 15px;
+  min-height:100px;
+}
+
+.hint {
+  text-align:center;
+  color:var(--muted);
+  padding:12px;
+}
+
+.msg {
+  display:flex;
+  gap:8px;
+  margin:14px 0;
+}
+
+.msg.user {
   flex-direction:row-reverse;
 }
 
 .avatar {
   width:34px;
   height:34px;
+  flex:none;
+  border-radius:10px;
+  background:#382365;
   display:grid;
   place-items:center;
-  border-radius:11px;
-  flex-shrink:0;
-  background:#322366;
-  color:#e0cfff;
   font-size:11px;
 }
-
-.bubble {
+  .bubble {
   max-width:85%;
-  padding:12px 15px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:#151832;
-  line-height:1.9;
-  font-size:13px;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
+  line-height:1.9;
+  background:#11132c;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
 }
 
-.user .bubble {
-  background:#28204a;
+.msg.user .bubble {
+  background:#282047;
 }
 
-.bubble a {
-  color:#c5a5ff;
-}
-
-.message-image {
+.bubble img {
   display:block;
-  max-width:220px;
-  max-height:200px;
-  border-radius:10px;
+  max-width:230px;
+  max-height:220px;
+  border-radius:9px;
   margin-top:8px;
 }
 
 .sources {
-  border-top:1px solid var(--border);
-  margin-top:12px;
-  padding-top:9px;
+  border-top:1px solid var(--line);
+  margin-top:8px;
+  padding-top:8px;
 }
 
-.sources-title {
-  color:#c7aaff;
-  font-size:12px;
-  margin-bottom:7px;
-}
-
-.source-item {
+.sources a {
   display:block;
-  padding:6px 0;
-  font-size:11px;
-  color:#c9bcff;
-  text-decoration:none;
-  overflow-wrap:anywhere;
-}
-
-/* COMPOSER */
-
-.composer-wrap {
-  flex-shrink:0;
-  padding:10px 20px 17px;
-  background:linear-gradient(0deg,#080817 65%,transparent);
+  color:#cbb4ff;
+  font-size:12px;
+  margin:5px;
 }
 
 .composer {
-  max-width:1100px;
-  margin:auto;
-  padding:11px 13px;
-  border:1px solid rgba(159,119,255,.55);
-  border-radius:19px;
-  background:#10132d;
-  box-shadow:var(--glow);
+  position:sticky;
+  bottom:8px;
+  border-radius:18px;
+  padding:12px;
 }
 
 .composer textarea {
   width:100%;
-  min-height:48px;
-  max-height:140px;
+  min-height:62px;
+  max-height:150px;
   resize:vertical;
+  background:transparent;
   border:0;
   outline:0;
-  background:transparent;
   color:white;
   padding:8px;
   line-height:1.8;
 }
 
 .composer textarea::placeholder {
-  color:#938cae;
+  color:#aaa4c7;
 }
 
-.composer-tools {
+.bar {
+  border-top:1px solid var(--line);
+  padding-top:9px;
   display:flex;
   align-items:center;
   gap:7px;
   flex-wrap:wrap;
-  border-top:1px solid rgba(151,119,255,.18);
-  padding-top:9px;
 }
 
-.tool-btn {
-  border:1px solid var(--border);
+.tool {
+  background:#201b3b;
+  border:1px solid var(--line);
   border-radius:9px;
-  background:#191a3a;
-  padding:8px 11px;
-  font-size:11px;
+  padding:8px 10px;
+  font-size:12px;
 }
 
-.tool-btn:hover { background:#30225e; }
-
-.send-btn {
+.send {
   margin-right:auto;
-  padding:10px 20px;
-  border:1px solid #a77aff;
-  border-radius:11px;
-  background:linear-gradient(110deg,#681cff,#9842ff);
-  box-shadow:var(--glow);
-  font-weight:bold;
-}
-  .send-btn:disabled {
-  opacity:.5;
-  cursor:not-allowed;
 }
 
-.mode-label {
-  font-size:11px;
-  color:#c3a7ff;
-}
-
-.image-preview {
+.preview {
   display:none;
   padding:7px;
 }
 
-.image-preview img {
-  max-width:95px;
-  max-height:75px;
-  border-radius:9px;
+.preview img {
+  width:70px;
+  height:60px;
+  object-fit:cover;
+  border-radius:8px;
 }
 
-.image-preview button {
-  border:0;
-  border-radius:7px;
-  background:#4b254d;
-  padding:5px 9px;
-  margin-right:7px;
-}
-
-.hidden-input { display:none; }
-
-/* RIGHT PANEL */
-
-.rightbar {
-  gap:10px;
-}
-
-.right-heading {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-weight:bold;
-  font-size:14px;
-  margin:5px 2px 12px;
-}
-
-.advanced-btn {
-  display:flex;
-  align-items:center;
-  gap:11px;
-  width:100%;
+.right .menu {
+  border-color:var(--line);
   text-align:right;
-  padding:12px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:linear-gradient(110deg,#1b1a43,#11132d);
 }
 
-.advanced-btn:hover {
-  border-color:#a77aff;
-  box-shadow:var(--glow);
-}
-
-.advanced-icon {
-  font-size:23px;
-  color:#ae8aff;
-  width:30px;
-  text-align:center;
-}
-
-.advanced-btn strong {
-  display:block;
-  font-size:12px;
-}
-
-.advanced-btn small {
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-top:4px;
+.right h3 {
+  font-size:15px;
 }
 
 .promo {
   margin-top:auto;
   text-align:center;
+  border-radius:14px;
   padding:15px;
-  border:1px solid #7544d5;
-  border-radius:16px;
-  background:radial-gradient(circle at top,#5225a5,#171039 75%);
-  box-shadow:var(--glow);
+  background:linear-gradient(130deg,#25105a,#7024c7);
 }
 
-.promo strong { color:#dec5ff; }
-.promo p { color:#c5b7e5;font-size:11px; }
-
-.promo button {
-  border:1px solid #a77aff;
-  border-radius:20px;
-  background:#5120b4;
-  padding:8px 19px;
-}
-
-/* COLLAPSIBLE PANELS */
-
-.collapsed-left {
-  grid-template-columns:72px minmax(0,1fr) 270px;
-}
-
-.collapsed-left .sidebar {
-  padding:15px 7px;
-}
-
-.collapsed-left .brand-name,
-.collapsed-left .brand-sub,
-.collapsed-left .primary-btn,
-.collapsed-left .section-title,
-.collapsed-left .search-box,
-.collapsed-left .history,
-.collapsed-left .sidebar-footer {
+.mobile {
   display:none;
 }
 
-.collapsed-left .brand {
-  justify-content:center;
-}
-
-.collapsed-right {
-  grid-template-columns:280px minmax(0,1fr) 65px;
-}
-
-.collapsed-right .rightbar {
-  padding:15px 6px;
-}
-
-.collapsed-right .right-heading,
-.collapsed-right .advanced-btn div,
-.collapsed-right .promo {
-  display:none;
-}
-
-.collapsed-right .advanced-btn {
-  justify-content:center;
-  padding:12px 3px;
-}
-
-/* MOBILE */
-
-.mobile-overlay {
-  display:none;
-}
-
-@media(max-width:1100px) {
+@media(max-width:1050px) {
   .app {
-    grid-template-columns:245px minmax(0,1fr);
+    grid-template-columns:230px minmax(0,1fr);
   }
 
-  .rightbar { display:none; }
+  .right { display:none; }
 
-  .tools-grid {
+  .tools {
     grid-template-columns:repeat(3,1fr);
   }
 }
 
 @media(max-width:700px) {
-  body { overflow:hidden; }
+  body { background-attachment:scroll; }
 
   .app {
-    display:block;
-    height:100dvh;
-    min-height:550px;
+    display:flex;
+    flex-direction:column;
+    padding:7px;
+    gap:9px;
   }
 
-  .sidebar {
+  .left {
+    display:none;
     position:fixed;
-    top:0;
-    bottom:0;
-    right:0;
-    width:min(290px,85vw);
-    transform:translateX(110%);
-    transition:.25s;
-    box-shadow:0 0 35px #000;
-    z-index:20;
+    z-index:30;
+    top:7px;
+    bottom:7px;
+    right:7px;
+    width:min(290px,86vw);
+    box-shadow:0 0 0 100vmax #000a;
   }
 
-  .app.mobile-menu .sidebar {
-    transform:translateX(0);
-  }
-
-  .mobile-overlay {
-    position:fixed;
-    inset:0;
-    background:#0009;
-    z-index:19;
-  }
-
-  .app.mobile-menu + .mobile-overlay {
-    display:block;
-  }
-
-  .main { height:100dvh; }
-
-  .topbar { padding:0 10px; }
-
-  .content { padding:10px; }
+  .left.open { display:flex; }
+  .mobile { display:inline-block; }
+  .top { height:54px; }
 
   .hero {
-    min-height:260px;
-    padding:17px;
+    min-height:370px;
+    padding:16px;
     background-position:35% center;
   }
 
-  .hero-text { max-width:75%; }
-
-  .hero h1 { font-size:32px; }
-
-  .hero p { font-size:12px; }
-
-  .tools-grid {
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
+  .hero-copy {
+    background:#08081775;
+    border-radius:12px;
+    padding:12px;
   }
 
-  .tool-card { min-height:68px; }
+  .hero h1 { font-size:36px; }
+  .hero p { font-size:13px; }
 
-  .composer-wrap { padding:8px 9px 12px; }
+  .tools {
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+  }
 
-  .bubble { max-width:89%;font-size:12px; }
+  .tile {
+    min-height:80px;
+    padding:8px 3px;
+    font-size:11px;
+  }
+
+  .tile b { font-size:22px; }
+  .composer { padding:8px; }
+
+  .tool {
+    font-size:11px;
+    padding:7px;
+  }
+
+  .messages { padding-bottom:5px; }
+  .bubble { font-size:13px; }
 }
-
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<div class="app" id="app">
-
-<!-- LEFT SIDEBAR -->
-
-<aside class="sidebar">
-
+<aside class="panel left" id="sidebar">
   <div class="brand">
-    <div class="brand-icon">✦</div>
-    <div>
-      <div class="brand-name">Nexus1 AI</div>
-      <div class="brand-sub">One AI. Endless Possibilities.</div>
-    </div>
+    ✦ Nexus1 AI
+    <small>One AI. Endless Possibilities.</small>
   </div>
 
-  <button class="primary-btn" onclick="newChat()">＋ چت جدید</button>
+  <button class="primary" onclick="newChat()">＋ چت جدید</button>
 
-  <div class="section-title">
-    <span>◷ تاریخچه چت‌ها</span>
-    <span id="historyCount">۰</span>
-  </div>
-  <input
-    class="search-box"
-    id="historySearch"
-    placeholder="⌕ جست‌وجو در چت‌ها..."
-    oninput="renderHistory()"
-  >
+  <div class="label">◷ تاریخچه گفتگوها</div>
+  <div class="history" id="history"></div>
 
-  <div class="history" id="historyList"></div>
-
-  <div class="sidebar-footer">
+  <div class="foot">
     Nexus1 AI<br>
-    هوش مصنوعی چندمنظوره<br><br>
     Created by ehsanGGExE 💜
   </div>
-
 </aside>
-
-<!-- MAIN -->
 
 <main class="main">
 
-  <header class="topbar">
-
-    <div class="top-actions">
-      <button class="icon-btn" onclick="toggleSidebar()" title="منو">☰</button>
-      <button class="icon-btn" onclick="toggleFullscreen()" title="تمام صفحه">⛶</button>
-      <button class="icon-btn" onclick="toggleRightbar()" title="ابزارها">✧</button>
-    </div>
-
-    <div class="top-actions">
-      <span class="online">● آنلاین</span>
-      <button class="icon-btn">N</button>
-    </div>
-
-  </header>
-
-  <section class="content" id="content">
-
-    <!-- WELCOME -->
-
-    <section class="hero" id="welcome">
-
-      <div class="hero-text">
-
-        <div class="hero-small">✦ دستیار هوشمند نسل جدید</div>
-
-        <h1>سلام! من<br>Nexus1 AI هستم</h1>
-
-        <p>
-          چطور می‌تونم کمکت کنم؟<br>
-          سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.
-        </p>
-
-        <div class="hero-buttons">
-          <button onclick="quickPrompt('سلام Nexus1 AI!')">✨ شروع گفتگو</button>
-          <button onclick="insertSearch()">🌐 جست‌وجوی وب</button>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- TOOLS -->
-
-    <section class="tools-grid" id="toolsGrid">
-
-      <button class="tool-card" onclick="setMode('chat')">
-        <span class="tool-icon">◉</span>
-        <span>چت هوشمند</span>
-      </button>
-
-      <button class="tool-card" onclick="setMode('study')">
-        <span class="tool-icon">▤</span>
-        <span>حالت مطالعه</span>
-      </button>
-
-      <button class="tool-card" onclick="setMode('image')">
-        <span class="tool-icon">▧</span>
-        <span>تولید تصویر</span>
-      </button>
-
-      <button class="tool-card" onclick="setMode('code')">
-        <span class="tool-icon">‹/›</span>
-        <span>برنامه‌نویسی</span>
-      </button>
-
-      <button class="tool-card" onclick="insertSearch()">
-        <span class="tool-icon">◎</span>
-        <span>جست‌وجوی وب</span>
-      </button>
-
-      <button class="tool-card" onclick="startVoice()">
-        <span class="tool-icon">♩</span>
-        <span>میکروفون</span>
-      </button>
-
-    </section>
-
-    <!-- CHAT MESSAGES -->
-
-    <section class="chat-area" id="chatArea"></section>
-
-  </section>
-
-  <!-- COMPOSER -->
-
-  <div class="composer-wrap">
-
-    <div class="composer">
-
-      <div class="image-preview" id="imagePreview">
-        <img id="previewImage" alt="پیش‌نمایش تصویر">
-        <button onclick="removeImage()">حذف تصویر ×</button>
-      </div>
-
-      <textarea
-        id="messageInput"
-        placeholder="پیامت رو برای Nexus1 AI بنویس..."
-        onkeydown="handleEnter(event)"
-      ></textarea>
-
-      <div class="composer-tools">
-
-        <input
-          class="hidden-input"
-          type="file"
-          id="imageInput"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          onchange="handleImage(event)"
-        >
-
-        <button class="tool-btn" onclick="document.getElementById('imageInput').click()">▧ عکس</button>
-
-        <button class="tool-btn" onclick="startVoice()">♩ صدا</button>
-
-        <button class="tool-btn" onclick="insertSearch()">◎ وب</button>
-
-        <span class="mode-label" id="modeLabel">حالت چت</span>
-
-        <button class="send-btn" id="sendButton" onclick="sendMessage()">ارسال ↑</button>
-
-      </div>
-
-    </div>
-
+<header class="top">
+  <div>
+    <button class="icon mobile" onclick="toggleMenu()">☰</button>
+    <span class="online">● آنلاین</span>
   </div>
+
+  <div>
+    <button class="icon" onclick="fullscreen()">⛶</button>
+    <b>Nexus1 AI</b>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-copy">
+    <div style="color:#d4b5ff">✦ دستیار هوشمند نسل جدید</div>
+
+    <h1>سلام! من<br>Nexus1 AI هستم</h1>
+
+    <p>
+      چطور می‌تونم کمکت کنم؟<br>
+      سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.
+    </p>
+
+    <button class="primary" onclick="document.getElementById('message').focus()">
+      ✨ شروع گفتگو
+    </button>
+
+    <button class="tool" onclick="searchPrompt()">
+      🌐 جست‌وجوی وب
+    </button>
+  </div>
+</section>
+<section class="tools">
+  <button class="tile" onclick="mode('chat')"><b>💬</b>چت هوشمند</button>
+  <button class="tile" onclick="mode('study')"><b>📖</b>حالت مطالعه</button>
+  <button class="tile" onclick="mode('image')"><b>🎨</b>تولید تصویر</button>
+  <button class="tile" onclick="mode('code')"><b>⌨️</b>برنامه‌نویسی</button>
+  <button class="tile" onclick="searchPrompt()"><b>🌐</b>جست‌وجوی وب</button>
+  <button class="tile" onclick="voice()"><b>🎙️</b>میکروفون</button>
+</section>
+
+<section class="messages" id="messages">
+  <div class="hint" id="hint">
+    گفتگوی تازه شما اینجا نمایش داده می‌شود ✨
+  </div>
+</section>
+
+<div class="composer">
+  <div class="preview" id="preview">
+    <img id="previewImg" alt="پیش‌نمایش">
+    <button class="tool" onclick="removeImage()">حذف تصویر ×</button>
+  </div>
+
+  <textarea
+    id="message"
+    placeholder="پیامت رو برای Nexus1 AI بنویس..."
+    onkeydown="enterSend(event)"
+  ></textarea>
+
+  <div class="bar">
+    <input
+      id="imageFile"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      hidden
+      onchange="pickImage(event)"
+    >
+
+    <button class="tool" onclick="imageFile.click()">🖼 عکس</button>
+    <button class="tool" onclick="voice()">🎤 صدا</button>
+    <button class="tool" onclick="searchPrompt()">🌐 وب</button>
+
+    <span id="modeLabel" style="color:#c6aaff;font-size:11px">
+      حالت چت
+    </span>
+
+    <button class="send" id="send" onclick="sendMessage()">ارسال ↑</button>
+  </div>
+</div>
 
 </main>
 
-<!-- RIGHT SIDEBAR -->
+<aside class="panel right">
+  <h3>✨ ابزارهای پیشرفته</h3>
 
-<aside class="rightbar" id="rightbar">
-
-  <div class="right-heading">
-    <span>✦ ابزارهای پیشرفته</span>
-    <button class="icon-btn" onclick="toggleRightbar()">×</button>
-  </div>
-
-  <button class="advanced-btn" onclick="setMode('image')">
-    <span class="advanced-icon">🎨</span>
-    <div>
-      <strong>تولید تصویر با هوش مصنوعی</strong>
-      <small>تصاویر خلاقانه بسازید</small>
-    </div>
-  </button>
-  <button class="advanced-btn" onclick="setMode('code')">
-    <span class="advanced-icon">⌘</span>
-    <div>
-      <strong>کمک در برنامه‌نویسی</strong>
-      <small>کدنویسی حرفه‌ای و سریع</small>
-    </div>
+  <button class="menu" onclick="mode('image')">
+    🎨 تولید تصویر با هوش مصنوعی
   </button>
 
-  <button class="advanced-btn" onclick="setMode('study')">
-    <span class="advanced-icon">🎓</span>
-    <div>
-      <strong>حالت مطالعه</strong>
-      <small>یادگیری ساده و عمیق</small>
-    </div>
+  <button class="menu" onclick="mode('code')">
+    ⌨️ کمک در برنامه‌نویسی
   </button>
 
-  <button class="advanced-btn" onclick="insertSearch()">
-    <span class="advanced-icon">◎</span>
-    <div>
-      <strong>جست‌وجوی وب</strong>
-      <small>پیدا کردن اطلاعات به‌روز</small>
-    </div>
+  <button class="menu" onclick="mode('study')">
+    🎓 حالت مطالعه
   </button>
 
-  <button class="advanced-btn" onclick="toggleVoiceChat()">
-    <span class="advanced-icon">♫</span>
-    <div>
-      <strong>گفت‌وگوی صوتی</strong>
-      <small>صحبت کنید و بشنوید</small>
-    </div>
+  <button class="menu" onclick="searchPrompt()">
+    🌐 جست‌وجوی وب
+  </button>
+
+  <button class="menu" onclick="voice()">
+    🎙️ میکروفون
   </button>
 
   <div class="promo">
-    <strong>✧ Nexus1 AI</strong>
+    💎 <b>Nexus1 AI</b>
     <p>آینده در دستان توست...</p>
-    <button onclick="quickPrompt('سلام Nexus1 AI!')">شروع کن 🚀</button>
+    <button class="tool" onclick="newChat()">🚀 شروع کن</button>
   </div>
-
 </aside>
 
 </div>
 
-<div class="mobile-overlay" onclick="toggleSidebar()"></div>
-
 <script>
+const $ = id => document.getElementById(id);
 
-/* ==================================
-   NEXUS1 AI
-   ================================== */
+let modeNow = 'chat';
+let picked = null;
+let active = null;
 
-let currentMode = "chat";
-let selectedImage = null;
-let recognition = null;
-let voiceChatActive = false;
-let isSpeaking = false;
+let chats = [];
 
-let conversations = [];
-let activeConversationId = null;
-
-const STORAGE_KEY = "nexus1_conversations_v1";
-
-const app = document.getElementById("app");
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const chatArea = document.getElementById("chatArea");
-
-/* ==================================
-   HISTORY STORAGE
-   ================================== */
-
-function uid() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+try {
+  chats = JSON.parse(localStorage.getItem('nexus1_chats') || '[]');
+} catch {
+  chats = [];
 }
 
-function loadConversations() {
+function store() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const parsed = saved ? JSON.parse(saved) : [];
-
-    conversations = Array.isArray(parsed) ? parsed : [];
-
+    localStorage.setItem('nexus1_chats', JSON.stringify(chats));
   } catch {
-    conversations = [];
-  }
-
-  renderHistory();
-}
-
-function saveConversations() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
-    renderHistory();
-  } catch (error) {
-    console.error("History storage error:", error);
-    alert("فضای ذخیره مرورگر پر شده است. ممکن است لازم باشد چند گفت‌وگوی قدیمی را حذف کنید.");
+    alert('فضای ذخیره مرورگر پر شده است. چند گفتگوی قدیمی را حذف کن.');
   }
 }
 
-function getActiveConversation() {
-  return conversations.find(c => c.id === activeConversationId) || null;
+function current() {
+  return chats.find(c => c.id === active);
 }
 
-function ensureConversation(firstText) {
+function ensure(title) {
+  let c = current();
 
-  let conversation = getActiveConversation();
-
-  if (!conversation) {
-
-    conversation = {
-      id: uid(),
-      title: (firstText || "گفت‌وگوی جدید").slice(0,34),
-      messages: [],
-      updatedAt: Date.now()
+  if (!c) {
+    c = {
+      id: Date.now() + '-' + Math.random(),
+      title: (title || 'گفتگوی جدید').slice(0, 32),
+      items: [],
+      time: Date.now()
     };
 
-    conversations.unshift(conversation);
-    activeConversationId = conversation.id;
+    chats.unshift(c);
+    active = c.id;
   }
 
-  return conversation;
+  return c;
 }
 
-function renderHistory() {
+function save(role, text, img = null, sources = []) {
+  let c = ensure(text);
 
-  const box = document.getElementById("historyList");
-  const search = document.getElementById("historySearch");
+  c.items.push({ role, text, img, sources });
+  c.time = Date.now();
 
-  const query = (search.value || "").trim().toLowerCase();
+  if (
+    role === 'user' &&
+    c.items.filter(x => x.role === 'user').length === 1
+  ) {
+    c.title = (text || 'گفتگوی تصویری').slice(0, 32);
+  }
 
+  store();
+  drawHistory();
+}
+
+function drawHistory() {
+  let box = $('history');
   box.replaceChildren();
 
-  const filtered = conversations.filter(c =>
-    c.title.toLowerCase().includes(query)
-  );
+  [...chats]
+    .sort((a,b) => b.time - a.time)
+    .forEach(c => {
+      let row = document.createElement('div');
+      row.className = 'hist';
 
-  document.getElementById("historyCount").textContent =
-    conversations.length.toLocaleString("fa-IR");
+      let b = document.createElement('button');
+      b.textContent = '▣ ' + c.title;
+      b.onclick = () => openChat(c.id);
 
-  if (!filtered.length) {
+      let d = document.createElement('button');
+      d.className = 'del';
+      d.textContent = '×';
+      d.title = 'حذف';
 
-    const empty = document.createElement("div");
-    empty.className = "empty-history";
+      d.onclick = () => {
+        chats = chats.filter(x => x.id !== c.id);
 
-    empty.textContent = conversations.length
-      ? "گفت‌وگویی پیدا نشد"
-      : "هنوز گفت‌وگویی ذخیره نشده است";
+        if (active === c.id) {
+          newChat();
+        }
 
-    box.appendChild(empty);
+        store();
+        drawHistory();
+      };
+
+      row.append(b,d);
+      box.append(row);
+    });
+}
+
+function clear() {
+  $('messages').replaceChildren();
+}
+
+function newChat() {
+  active = null;
+  clear();
+  let h = document.createElement('div');
+  h.className = 'hint';
+  h.id = 'hint';
+  h.textContent = 'گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';
+
+  $('messages').append(h);
+  $('hero').style.display = '';
+  $('message').value = '';
+
+  removeImage();
+  $('sidebar').classList.remove('open');
+}
+
+function openChat(id) {
+  let c = chats.find(x => x.id === id);
+  if (!c) return;
+
+  active = id;
+  clear();
+
+  $('hero').style.display = 'none';
+
+  c.items.forEach(m => {
+    add(m.role,m.text,m.img,m.sources,false);
+  });
+
+  $('sidebar').classList.remove('open');
+}
+
+function add(role,text,img = null,sources = [],saveIt = true) {
+  $('hint')?.remove();
+
+  let row = document.createElement('div');
+  row.className = 'msg ' + role;
+
+  let av = document.createElement('div');
+  av.className = 'avatar';
+  av.textContent = role === 'user' ? 'شما' : 'AI';
+
+  let b = document.createElement('div');
+  b.className = 'bubble';
+  b.textContent = text || '';
+
+  if (img) {
+    let im = document.createElement('img');
+    im.src = img;
+    im.alt = 'تصویر ارسال‌شده';
+    b.append(im);
+  }
+
+  if (sources?.length) {
+    let box = document.createElement('div');
+    box.className = 'sources';
+
+    sources.forEach(s => {
+      try {
+        let u = new URL(s.url);
+
+        if (!['http:','https:'].includes(u.protocol)) return;
+
+        let a = document.createElement('a');
+        a.href = u.href;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = s.title || u.hostname;
+
+        box.append(a);
+      } catch {}
+    });
+
+    b.append(box);
+  }
+
+  row.append(av,b);
+  $('messages').append(row);
+
+  if (saveIt) save(role,text,img,sources);
+
+  return b;
+}
+
+function mode(m) {
+  modeNow = m;
+
+  let names = {
+    chat:'حالت چت',
+    study:'حالت مطالعه',
+    image:'تولید تصویر',
+    code:'برنامه‌نویسی'
+  };
+
+  let pre = {
+    chat:'',
+    study:'در حالت مطالعه، ساده و مرحله‌به‌مرحله توضیح بده:\n',
+    image:'درخواست من درباره تولید تصویر است. اگر تولید تصویر در این نسخه فعال نیست، صادقانه بگو:\n',
+    code:'در نقش دستیار برنامه‌نویسی، ساده و مرحله‌به‌مرحله کمکم کن:\n'
+  };
+
+  $('modeLabel').textContent = names[m];
+  $('message').dataset.prefix = pre[m];
+
+  $('message').placeholder =
+    m === 'study' ? 'سؤال درسی‌ات را بنویس...' :
+    m === 'code' ? 'سؤال یا کدت را بنویس...' :
+    m === 'image' ? 'تصویر موردنظرت را توصیف کن...' :
+    'پیامت را بنویس...';
+
+  $('message').focus();
+}
+
+function searchPrompt() {
+  $('message').value = 'در اینترنت جست‌وجو کن و لینک منابع معتبر را هم بده: ';
+  $('message').focus();
+}
+
+function enterSend(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+async function sendMessage() {
+  let text = $('message').value.trim();
+  let im = picked;
+
+  if (!text && !im) return;
+
+  if ($('message').dataset.prefix) {
+    text = $('message').dataset.prefix + text;
+  }
+let userText = text || 'لطفاً این تصویر را بررسی کن.';
+add('user', userText, im ? im.preview : null);
+  $('message').value = '';
+  removeImage();
+
+  let wait = add('assistant','در حال فکر کردن...');
+  $('send').disabled = true;
+
+  try {
+    let r = await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        message:text,
+        image:im ? {
+          mimeType:im.mimeType,
+          data:im.data
+        } : null
+      })
+    });
+
+    let data = await r.json();
+
+    if (!r.ok) {
+      throw Error(data.error || 'ارتباط با هوش مصنوعی با مشکل مواجه شد.');
+    }
+
+    let reply = data.reply || 'پاسخی دریافت نشد.';
+    wait.textContent = reply;
+
+    let src = Array.isArray(data.sources) ? data.sources : [];
+
+    if (src.length) {
+      let box = document.createElement('div');
+      box.className = 'sources';
+
+      src.forEach(s => {
+        try {
+          let u = new URL(s.url);
+
+          if (!['https:','http:'].includes(u.protocol)) return;
+
+          let a = document.createElement('a');
+          a.href = u.href;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = s.title || u.hostname;
+          box.append(a);
+        } catch {}
+      });
+
+      wait.append(box);
+    }
+
+    let c = current();
+    let last = c?.items.at(-1);
+
+    if (last?.role === 'assistant' && last.text === 'در حال فکر کردن...') {
+      last.text = reply;
+      last.sources = src;
+      store();
+    }
+
+  } catch(e) {
+    wait.textContent = 'خطا: ' + e.message;
+
+    let c = current();
+    let last = c?.items.at(-1);
+
+    if (last?.role === 'assistant') {
+      last.text = 'خطا: ' + e.message;
+      store();
+    }
+
+  } finally {
+    $('send').disabled = false;
+    $('message').focus();
+  }
+}
+
+function pickImage(e) {
+  let f = e.target.files[0];
+  if (!f) return;
+
+  if (
+    !['image/jpeg','image/png','image/webp'].includes(f.type) ||
+    f.size > 5 * 1024 * 1024
+  ) {
+    alert('فقط JPG، PNG یا WEBP تا حجم ۵ مگابایت مجاز است.');
+    e.target.value = '';
     return;
   }
 
-  filtered.forEach(c => {
+  let rd = new FileReader();
 
-    const row = document.createElement("div");
+  rd.onload = () => {
+    picked = {
+      mimeType:f.type,
+      data:rd.result.split(',')[1],
+      preview:rd.result
+    };
 
-    row.className =
-      "history-item" +
-      (c.id === activeConversationId ? " active" : "");
+    $('previewImg').src = rd.result;
+    $('preview').style.display = 'block';
+  };
 
-    const open = document.crea
+  rd.readAsDataURL(f);
+}
+
+function removeImage() {
+  picked = null;
+  $('imageFile').value = '';
+  $('preview').style.display = 'none';
+}
+
+function toggleMenu() {
+  $('sidebar').classList.toggle('open');
+}
+
+function fullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+}
+
+function voice() {
+  let SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SR) {
+    alert('مرورگر شما تشخیص گفتار را پشتیبانی نمی‌کند.');
+    return;
+  }
+
+  let r = new SR();
+  r.lang = 'fa-IR';
+
+  r.onresult = e => {
+    $('message').value =
+      ($('message').value + ' ' + e.results[0][0].transcript).trim();
+  };
+
+  r.start();
+}
+
+drawHistory();
+
+if (!chats.length) {
+  newChat();
+}
+</script>
+</body>
+</html>
