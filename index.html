@@ -2,17 +2,28 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b10">
+<meta name="description" content="Nexus1 AI؛ دستیار هوشمند">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>Nexus1 AI</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
-:root{--p:#963cff;--glass:#0b0b22ed;--line:#8756cf66}
+
+:root{--p:#963cff;--glass:#0b0b22ed;--line:#8756cf66;--safe:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:#080817 url('nexus-bg.png') center/cover fixed;color:#fff;font-family:Vazirmatn,Tahoma,sans-serif}
+html{min-height:100%;background:#080817}
+body{margin:0;min-height:100vh;background:#080817 url('nexus-bg.png') center/cover fixed;color:#fff;font-family:Vazirmatn,Tahoma,sans-serif}
 button,textarea,input{font:inherit;color:inherit}
-button{cursor:pointer}
+button{cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.55;cursor:wait}
+
 .app{min-height:100vh;padding:12px;display:grid;grid-template-columns:280px minmax(0,1fr) 260px;gap:12px}
-.panel,.top,.composer,.tile,.toolcard{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(15px);box-shadow:0 0 20px #6925bd22}
+.panel,.top,.composer,.tile,.toolcard{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);box-shadow:0 0 20px #6925bd22}
 .panel{border-radius:20px;padding:15px;display:flex;flex-direction:column;gap:12px;min-height:calc(100vh - 24px)}
 .brand{display:flex;align-items:center;gap:10px;padding-bottom:15px;border-bottom:1px solid var(--line)}
 .logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#5315e9,#bd2cff);display:grid;place-items:center;font-size:28px}
@@ -28,7 +39,7 @@ button{cursor:pointer}
 .promo{margin-top:auto;text-align:center;padding:14px;border:1px solid var(--p);border-radius:15px;background:linear-gradient(130deg,#25105a,#7024c7)}
 .foot{text-align:center;color:#aaa;font-size:11px}
 .main{min-width:0;display:flex;flex-direction:column;gap:12px}
-.top{height:60px;border-radius:16px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.top{min-height:60px;border-radius:16px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .online{color:#6ff0b4;font-size:12px}
 .iconbtn,.tool{border:1px solid var(--line);background:#201b3b;border-radius:11px;padding:8px 12px}
 .hero{flex:1;min-height:320px;border-radius:20px;padding:25px;display:flex;align-items:center;justify-content:flex-end;background:linear-gradient(90deg,#07071622,#070716aa),url('nexus-bg.png') center/cover}
@@ -39,17 +50,17 @@ button{cursor:pointer}
 .tile{min-height:85px;border-radius:16px;padding:8px 3px;font-size:11px}
 .tile .ico{display:block;font-size:25px;margin-bottom:5px;color:#bd8bff}
 .tile.active,.tile:hover{border-color:#b78cff;background:#2d155e}
-.messages{max-height:34vh;overflow:auto;padding:4px 7px}
-.hint{text-align:center;color:#c4badf;padding:12px}
+.messages{max-height:34vh;overflow:auto;padding:4px 7px;overscroll-behavior:contain}
+  .hint{text-align:center;color:#c4badf;padding:12px}
 .msg{display:flex;gap:8px;margin:12px 0}
 .msg.user{flex-direction:row-reverse}
 .avatar{width:35px;height:35px;flex:none;border-radius:11px;background:#382365;display:grid;place-items:center}
 .bubble{max-width:88%;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.9;background:#11132c;border:1px solid var(--line);border-radius:14px;padding:11px}
 .msg.user .bubble{background:#282047}
-.bubble img{display:block;max-width:230px;max-height:200px;border-radius:10px;margin-top:8px}
+.bubble img{display:block;max-width:min(230px,65vw);max-height:200px;border-radius:10px;margin-top:8px}
 .sources{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
-  .sources a{display:block;color:#cbb4ff;font-size:12px;margin:5px}
-.composer{border-radius:18px;padding:12px;position:sticky;bottom:8px}
+.sources a{display:block;color:#cbb4ff;font-size:12px;margin:5px}
+.composer{border-radius:18px;padding:12px;position:sticky;bottom:8px;z-index:2}
 textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:transparent;border:0;outline:0;padding:8px;line-height:1.8}
 .bar{border-top:1px solid var(--line);padding-top:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .send{margin-right:auto}
@@ -61,24 +72,53 @@ textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:
 .toolcard b{display:block;font-size:12px}
 .toolcard small{display:block;color:#aaa;font-size:10px}
 .mobile{display:none}
-@media(max-width:1100px){.app{grid-template-columns:245px minmax(0,1fr)}.right{display:none}.tiles{grid-template-columns:repeat(4,1fr)}}
+#installBtn{display:none}
+
+@media(max-width:1100px){
+ .app{grid-template-columns:245px minmax(0,1fr)}
+ .right{display:none}
+ .tiles{grid-template-columns:repeat(4,1fr)}
+}
 @media(max-width:720px){
- .app{display:flex;flex-direction:column;padding:7px}
- .left{display:none;position:fixed;z-index:20;top:5px;bottom:5px;right:5px;width:min(300px,88vw);box-shadow:0 0 0 100vmax #000b;overflow:auto}
- .left.open{display:flex}.mobile{display:inline-block}
- .hero{min-height:350px;padding:12px;background-position:38% center}
- .hero-copy{max-width:90%;padding:10px;background:#08081777;border-radius:12px}
- .hero h1{font-size:36px}.tiles{grid-template-columns:repeat(4,1fr)}
- .tile{min-height:75px;font-size:10px}.tile .ico{font-size:22px}
- .messages{max-height:30vh}
+ body{background-attachment:scroll}
+ .app{display:flex;flex-direction:column;min-height:100vh;padding:7px;gap:9px}
+ .left{display:none;position:fixed;z-index:20;top:5px;bottom:5px;right:5px;width:min(300px,88vw);min-height:0;box-shadow:0 0 0 100vmax #000b;overflow:auto}
+ .left.open{display:flex}
+ .mobile{display:inline-block}
+ .top{min-height:54px;padding:7px 10px}
+ .hero{min-height:290px;padding:12px;background-position:38% center}
+ .hero-copy{max-width:95%;padding:10px;background:#08081777;border-radius:12px}
+ .hero h1{font-size:36px}
+ .tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ .tile{min-height:75px;font-size:10px}
+ .tile .ico{font-size:22px}
+ .messages{max-height:36vh}
+ .composer{position:sticky;bottom:calc(5px + var(--safe));padding:9px}
+ textarea{min-height:58px;font-size:16px}
+ .bar{gap:5px}
+ .tool{padding:8px 9px;font-size:12px}
+ .send{padding:10px 13px}
+ .bubble{max-width:calc(100vw - 75px)}
+}
+@media(max-width:380px){
+ .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .hero h1{font-size:31px}
+}
+@media(prefers-reduced-motion:no-preference){
+ button,.tile{transition:background .18s ease,border-color .18s ease,transform .18s ease}
+ button:active{transform:scale(.98)}
 }
 </style>
 </head>
+
 <body>
 <div class="app">
 
 <aside class="panel left" id="sidebar">
- <div class="brand"><div class="logo">✥</div><div><strong>Nexus1 AI</strong><small>One AI. Endless Possibilities.</small></div></div>
+ <div class="brand">
+  <div class="logo">✥</div>
+  <div><strong>Nexus1 AI</strong><small>One AI. Endless Possibilities.</small></div>
+ </div>
  <button class="primary" onclick="newChat()">＋ چت جدید</button>
  <b style="font-size:13px">◷ تاریخچه چت‌ها</b>
  <input class="search" id="historySearch" placeholder="جست‌وجو در چت‌ها..." oninput="drawHistory()">
@@ -89,10 +129,15 @@ textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:
 
 <main class="main">
  <header class="top">
-  <button class="iconbtn mobile" onclick="toggleMenu()">☰</button>
-  <div><span class="online">● آنلاین</span>　<button class="iconbtn" onclick="fullScreen()">⛶</button></div>
+  <div style="display:flex;align-items:center;gap:8px">
+   <button class="iconbtn mobile" onclick="toggleMenu()" aria-label="باز کردن تاریخچه">☰</button>
+   <span class="online">● آنلاین</span>
+  </div>
+  <div style="display:flex;gap:7px">
+   <button class="iconbtn" id="installBtn" onclick="installApp()">＋ نصب برنامه</button>
+   <button class="iconbtn" onclick="fullScreen()" aria-label="تمام صفحه">⛶</button>
+  </div>
  </header>
-
  <section class="hero" id="hero">
   <div class="hero-copy">
    سلام! من
@@ -106,17 +151,22 @@ textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:
   <button class="tile" data-mode="study" onclick="setMode('study')"><span class="ico">📖</span>حالت مطالعه</button>
   <button class="tile" data-mode="image" onclick="setMode('image')"><span class="ico">🎨</span>تولید تصویر</button>
   <button class="tile" data-mode="code" onclick="setMode('code')"><span class="ico">‹/›</span>برنامه‌نویسی</button>
-  <button class="tile" onclick="webSearch()"><span class="ico">🌐</span>جست‌وجوی وب</button>
+  <button class="tile" data-mode="web" onclick="webSearch()"><span class="ico">🌐</span>جست‌وجوی وب</button>
   <button class="tile" onclick="voice()"><span class="ico">🎙</span>میکروفون</button>
   <button class="tile" onclick="document.getElementById('message').focus()"><span class="ico">▦</span>سایر ابزارها</button>
  </section>
 
- <section class="messages" id="messages"><div class="hint" id="hint">گفتگوی تازه شما اینجا نمایش داده می‌شود ✨</div></section>
+ <section class="messages" id="messages">
+  <div class="hint" id="hint">گفتگوی تازه شما اینجا نمایش داده می‌شود ✨</div>
+ </section>
 
  <section class="composer">
-  <div class="preview" id="preview"><img id="previewImg" alt="پیش‌نمایش"><button class="tool" onclick="removeImage()">حذف ×</button></div>
+  <div class="preview" id="preview">
+   <img id="previewImg" alt="پیش‌نمایش">
+   <button class="tool" onclick="removeImage()">حذف ×</button>
+  </div>
   <textarea id="message" placeholder="پیامت رو برای Nexus1 AI بنویس..." onkeydown="enterSend(event)"></textarea>
-   <div class="bar">
+  <div class="bar">
    <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" hidden onchange="pickImage(event)">
    <input id="textFile" type="file" accept=".txt,.md,.csv" hidden onchange="pickTextFile(event)">
    <button class="tool" onclick="document.getElementById('imageFile').click()">▧ عکس</button>
@@ -142,127 +192,226 @@ textarea{width:100%;min-height:65px;max-height:150px;resize:vertical;background:
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-let modeNow='chat',imageData=null,active=null,chats=[];
-try{chats=JSON.parse(localStorage.getItem('nexus1_chats')||'[]');if(!Array.isArray(chats))chats=[]}catch{chats=[]}
+const $ = id => document.getElementById(id);
+let modeNow = 'chat';
+let imageData = null;
+let active = null;
+let chats = [];
+let deferredInstallPrompt = null;
+
+try {
+ chats = JSON.parse(localStorage.getItem('nexus1_chats') || '[]');
+ if (!Array.isArray(chats)) chats = [];
+} catch {
+ chats = [];
+}
 
 function persist(){
- try{localStorage.setItem('nexus1_chats',JSON.stringify(chats))}
- catch{alert('حافظه مرورگر پر شده؛ چند گفتگوی قدیمی را حذف کن.')}
+ try {
+  localStorage.setItem('nexus1_chats',JSON.stringify(chats));
+ } catch {
+  alert('حافظه مرورگر پر شده؛ چند گفتگوی قدیمی را حذف کن.');
+ }
 }
-function current(){return chats.find(c=>c.id===active)}
-function ensure(title){
- let c=current();
- if(!c){c={id:String(Date.now())+Math.random(),title:(title||'گفتگوی جدید').slice(0,35),items:[],time:Date.now()};chats.unshift(c);active=c.id}
+
+function current(){
+ return chats.find(c => c.id === active);
+}
+  function ensure(title){
+ let c = current();
+ if(!c){
+  c = {
+   id:String(Date.now()) + Math.random(),
+   title:(title || 'گفتگوی جدید').slice(0,35),
+   items:[],
+   time:Date.now()
+  };
+  chats.unshift(c);
+  active = c.id;
+ }
  return c;
 }
+
 function saveItem(role,text,img=null,sources=[]){
- let c=ensure(text);c.items.push({role,text,img,sources});c.time=Date.now();
- if(role==='user'&&c.items.filter(x=>x.role==='user').length===1)c.title=(text||'گفتگوی تصویری').slice(0,35);
- persist();drawHistory();
+ const c = ensure(text);
+ c.items.push({role,text,img,sources});
+ c.time = Date.now();
+
+ if(role === 'user' && c.items.filter(x => x.role === 'user').length === 1){
+  c.title = (text || 'گفتگوی تصویری').slice(0,35);
+ }
+
+ persist();
+ drawHistory();
 }
+
 function drawHistory(){
- const box=$('history');box.replaceChildren();
- const q=$('historySearch').value.toLowerCase();
- [...chats].sort((a,b)=>b.time-a.time).filter(c=>c.title.toLowerCase().includes(q)).forEach(c=>{
-  const row=document.createElement('div');row.className='hist';
-  const open=document.createElement('button');open.className='open';open.textContent='▣ '+c.title;open.onclick=()=>openChat(c.id);
-  const del=document.createElement('button');del.textContent='🗑';del.title='حذف گفتگو';
-  del.onclick=()=>{if(!confirm('این گفتگو حذف شود؟'))return;chats=chats.filter(x=>x.id!==c.id);if(active===c.id)newChat();persist();drawHistory()};
-  row.append(open,del);box.append(row);
+ const box = $('history');
+ box.replaceChildren();
+ const q = $('historySearch').value.toLowerCase();
+
+ [...chats]
+ .sort((a,b) => b.time-a.time)
+ .filter(c => (c.title || '').toLowerCase().includes(q))
+ .forEach(c => {
+  const row = document.createElement('div');
+  row.className = 'hist';
+
+  const open = document.createElement('button');
+  open.className = 'open';
+  open.textContent = '▣ ' + c.title;
+  open.onclick = () => openChat(c.id);
+
+  const del = document.createElement('button');
+  del.textContent = '🗑';
+  del.title = 'حذف گفتگو';
+
+  del.onclick = () => {
+   if(!confirm('این گفتگو حذف شود؟')) return;
+   chats = chats.filter(x => x.id !== c.id);
+   if(active === c.id) newChat();
+   persist();
+   drawHistory();
+  };
+
+  row.append(open,del);
+  box.append(row);
  });
 }
+
 function newChat(){
- active=null;$('messages').replaceChildren();
- const h=document.createElement('div');h.className='hint';h.id='hint';h.textContent='گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';$('messages').append(h);
- $('hero').style.display='';$('message').value='';removeImage();$('sidebar').classList.remove('open');
-}
-function openChat(id){
- const c=chats.find(x=>x.id===id);if(!c)return;
-  active=id;$('messages').replaceChildren();$('hero').style.display='none';
- c.items.forEach(m=>addMessage(m.role,m.text,m.img,m.sources,false));
+ active = null;
+ $('messages').replaceChildren();
+
+ const h = document.createElement('div');
+ h.className = 'hint';
+ h.id = 'hint';
+ h.textContent = 'گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';
+
+ $('messages').append(h);
+ $('hero').style.display = '';
+ $('message').value = '';
+ removeImage();
  $('sidebar').classList.remove('open');
 }
+
+function openChat(id){
+ const c = chats.find(x => x.id === id);
+ if(!c) return;
+
+ active = id;
+ $('messages').replaceChildren();
+ $('hero').style.display = 'none';
+
+ c.items.forEach(m => {
+  addMessage(m.role,m.text,m.img,m.sources,false);
+ });
+
+ $('sidebar').classList.remove('open');
+}
+
 function addMessage(role,text,img=null,sources=[],save=true){
- $('hint')?.remove();$('hero').style.display='none';
- const row=document.createElement('div');row.className='msg '+role;
- const av=document.createElement('div');av.className='avatar';av.textContent=role==='user'?'شما':'AI';
- const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=text||'';
- if(img){const im=document.createElement('img');im.src=img;im.alt='تصویر ارسال‌شده';bubble.append(im)}
- if(sources.length){
-  const box=document.createElement('div');box.className='sources';
-  sources.forEach(s=>{try{const u=new URL(s.url);if(!['https:','http:'].includes(u.protocol))return;const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.title||u.hostname;box.append(a)}catch{}});
+ $('hint')?.remove();
+ $('hero').style.display = 'none';
+
+ const row = document.createElement('div');
+ row.className = 'msg ' + role;
+
+ const av = document.createElement('div');
+ av.className = 'avatar';
+ av.textContent = role === 'user' ? 'شما' : 'AI';
+
+ const bubble = document.createElement('div');
+ bubble.className = 'bubble';
+ bubble.textContent = text || '';
+
+ if(img){
+  const im = document.createElement('img');
+  im.src = img;
+  im.alt = 'تصویر ارسال‌شده';
+  bubble.append(im);
+ }
+
+ if(Array.isArray(sources) && sources.length){
+  const box = document.createElement('div');
+  box.className = 'sources';
+
+  sources.forEach(s => {
+   try {
+    const u = new URL(s.url);
+    if(!['https:','http:'].includes(u.protocol)) return;
+
+    const a = document.createElement('a');
+    a.href = u.href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = s.title || u.hostname;
+    box.append(a);
+   } catch {}
+  });
+
   bubble.append(box);
  }
- row.append(av,bubble);$('messages').append(row);
- if(save)saveItem(role,text,img,sources);
- $('messages').scrollTop=$('messages').scrollHeight;return bubble;
+
+ row.append(av,bubble);
+ $('messages').append(row);
+
+ if(save) saveItem(role,text,img,sources);
+
+ $('messages').scrollTop = $('messages').scrollHeight;
+ return bubble;
 }
+
 function setMode(m){
- modeNow=m;
- const names={chat:'حالت چت',study:'حالت مطالعه',image:'تولید تصویر',code:'برنامه‌نویسی',web:'جست‌وجوی وب'};
- $('modeLabel').textContent=names[m];
- document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
- const placeholders={chat:'پیامت را بنویس...',study:'سؤال درسی‌ات را بنویس...',image:'درخواست تصویرت را توضیح بده...',code:'سؤال برنامه‌نویسی‌ات را بنویس...',web:'موضوع جست‌وجو را بنویس...'};
- $('message').placeholder=placeholders[m]||placeholders.chat;$('message').focus();
+ modeNow = m;
+
+ const names = {
+  chat:'حالت چت',
+  study:'حالت مطالعه',
+  image:'تولید تصویر',
+  code:'برنامه‌نویسی',
+  web:'جست‌وجوی وب'
+ };
+
+ $('modeLabel').textContent = names[m] || names.chat;
+
+ document.querySelectorAll('[data-mode]').forEach(b => {
+  b.classList.toggle('active',b.dataset.mode === m);
+ });
+
+ const placeholders = {
+  chat:'پیامت را بنویس...',
+  study:'سؤال درسی‌ات را بنویس...',
+  image:'درخواست تصویرت را توضیح بده...',
+  code:'سؤال برنامه‌نویسی‌ات را بنویس...',
+  web:'موضوع جست‌وجو را بنویس...'
+ };
+
+ $('message').placeholder = placeholders[m] || placeholders.chat;
+ $('message').focus();
 }
-function webSearch(){setMode('web');$('message').value='در وب جست‌وجو کن و منابع و لینک‌ها را ارائه بده: ';$('message').focus()}
-function enterSend(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
-async function sendMessage(){
- let text=$('message').value.trim(),im=imageData;
- if(!text&&!im)return;
- const prefixes={study:'در حالت مطالعه، قدم‌به‌قدم و ساده توضیح بده:\n',code:'در نقش دستیار برنامه‌نویسی کمک کن:\n',web:'این درخواست را با جست‌وجوی وب و ذکر منابع پاسخ بده:\n',image:'درخواست من درباره تصویر است. اگر تولید تصویر در سرور فعال نیست، صادقانه اعلام کن:\n'};
- if(prefixes[modeNow])text=prefixes[modeNow]+text;
-let userText = text;
-if (!userText) {
-  userText = 'لطفاً این تصویر را بررسی کن.';
+
+function webSearch(){
+ setMode('web');
+ $('message').value = 'در وب جست‌وجو کن و منابع و لینک‌ها را ارائه بده: ';
+ $('message').focus();
 }
-addMessage('user', userText, im ? im.preview : null);
- $('message').value='';removeImage();
- const wait=addMessage('assistant','در حال دریافت پاسخ...');
- $('send').disabled=true;
- try{
-  const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,image:im?{mimeType:im.mimeType,data:im.data}:null})});
-  const data=await response.json();
-  if(!response.ok)throw new Error(data.error||'خطا در ارتباط با سرور');
-  const reply=data.reply||'پاسخی دریافت نشد.';
-  wait.textContent=reply;
-  const sources=Array.isArray(data.sources)?data.sources:[];
-  if(sources.length){const box=document.createElement('div');box.className='sources';sources.forEach(s=>{try{const u=new URL(s.url);if(!['http:','https:'].includes(u.protocol))return;const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.title||u.hostname;box.append(a)}catch{}});wait.append(box)}
-  const c=current(),last=c?.items[c.items.length-1];
-  if(last?.role==='assistant'&&last.text==='در حال دریافت پاسخ...'){last.text=reply;last.sources=sources;persist()}
- }catch(e){
-  wait.textContent='خطا: '+e.message;
-  const c=current(),last=c?.items[c.items.length-1];
-  if(last?.role==='assistant'){last.text='خطا: '+e.message;persist()}
- }finally{$('send').disabled=false}
+
+function enterSend(e){
+ if(e.key === 'Enter' && !e.shiftKey){
+  e.preventDefault();
+  sendMessage();
+ }
 }
-function pickImage(e){
-  const f=e.target.files[0];if(!f)return;
- if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5*1024*1024){alert('فقط JPG، PNG یا WEBP تا ۵ مگابایت مجاز است.');e.target.value='';return}
- const reader=new FileReader();
- reader.onload=()=>{imageData={mimeType:f.type,data:reader.result.split(',')[1],preview:reader.result};$('previewImg').src=reader.result;$('preview').style.display='block'};
- reader.readAsDataURL(f);
+  function fullScreen(){
+ if(!document.fullscreenElement){
+  document.documentElement.requestFullscreen?.();
+ } else {
+  document.exitFullscreen?.();
+ }
 }
-function removeImage(){imageData=null;if($('imageFile'))$('imageFile').value='';$('preview').style.display='none'}
-function pickTextFile(e){
- const f=e.target.files[0];if(!f)return;
- if(f.size>500000){alert('فایل باید کمتر از ۵۰۰ کیلوبایت باشد.');e.target.value='';return}
- const reader=new FileReader();
- reader.onload=()=>{$('message').value+='\n\nمحتوای فایل '+f.name+':\n'+reader.result;$('message').focus()};
- reader.readAsText(f);e.target.value='';
-}
-function voice(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){alert('این مرورگر تشخیص گفتار را پشتیبانی نمی‌کند. در Chrome امتحان کن.');return}
- const rec=new SR();rec.lang='fa-IR';rec.interimResults=false;
- rec.onresult=e=>{$('message').value=($('message').value+' '+e.results[0][0].transcript).trim();$('message').focus()};
- rec.onerror=()=>alert('میکروفون فعال نشد. اجازه دسترسی مرورگر را بررسی کن.');
- rec.start();
-}
-function toggleMenu(){$('sidebar').classList.toggle('open')}
-function fullScreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
-drawHistory();if(!chats.length)newChat();
-</script>
-</body>
-</html>
+
+/* نصب برنامه روی گوشی و کامپیوتر */
+window.addEventListener('beforeinstallprompt',event => {
+ event.preventDefault();
+ deferredInstallPrompt = event;
