@@ -1,897 +1,1068 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090b10">
-  <title>Nexus1 AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080817">
+<title>Nexus1 AI</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    body {
-      margin: 0;
-      font-family: Tahoma, Arial, sans-serif;
-      background: #090b10;
-      color: #f4f4f7;
-      min-height: 100vh;
-    }
+<style>
+:root {
+  --bg:#080817;
+  --panel:#10122c;
+  --panel2:#19183c;
+  --purple:#914cff;
+  --blue:#42aaff;
+  --text:#f7f3ff;
+  --muted:#aaa5c9;
+  --border:rgba(151,119,255,.28);
+  --glow:0 0 25px rgba(125,65,255,.28);
+}
 
-    button, textarea {
-      font: inherit;
-    }
+* { box-sizing:border-box; }
 
-    button {
-      cursor: pointer;
-    }
+body {
+  margin:0;
+  min-height:100vh;
+  font-family:"Vazirmatn",Tahoma,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
 
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
+button,textarea,input { font:inherit; }
+button { cursor:pointer; color:inherit; }
 
-    .sidebar {
-      width: 245px;
-      background: #10131c;
-      border-left: 1px solid #242735;
-      padding: 20px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      flex-shrink: 0;
-    }
+.app {
+  height:100vh;
+  min-height:600px;
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr) 270px;
+  direction:ltr;
+  background:
+    radial-gradient(ellipse at center,#171044,#080817 75%);
+  overflow:hidden;
+}
 
-    .logo {
-      font-size: 23px;
-      font-weight: bold;
-      color: #9a8cff;
-      padding: 10px;
-      margin-bottom: 18px;
-    }
+/* SIDEBAR */
 
-    .creator {
-      color: #777d91;
-      font-size: 11px;
-      margin-right: 10px;
-      margin-top: -25px;
-      margin-bottom: 20px;
-    }
+.sidebar,.rightbar {
+  direction:rtl;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  background:rgba(8,10,29,.96);
+  backdrop-filter:blur(18px);
+  padding:18px 14px;
+  z-index:5;
+}
 
-    .menu-btn {
-      width: 100%;
-      border: 1px solid transparent;
-      color: #c6c8d3;
-      background: transparent;
-      padding: 13px;
-      border-radius: 12px;
-      text-align: right;
-      transition: .2s;
-    }
+.sidebar { border-left:1px solid var(--border); }
+.rightbar { border-right:1px solid var(--border); }
 
-    .menu-btn:hover,
-    .menu-btn.active {
-      background: #1c2030;
-      border-color: #38334f;
-      color: white;
-    }
+.brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:5px 7px 20px;
+}
 
-    .sidebar-bottom {
-      margin-top: auto;
-      color: #73798d;
-      font-size: 12px;
-      padding: 10px;
-    }
+.brand-icon {
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  font-size:25px;
+  background:linear-gradient(135deg,#a64dff,#3920bd);
+  box-shadow:var(--glow);
+}
 
-    .main {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+.brand-name {
+  font-size:21px;
+  font-weight:800;
+  color:#d8c4ff;
+  text-shadow:0 0 15px var(--purple);
+}
 
-    .topbar {
-      height: 65px;
-      border-bottom: 1px solid #202330;
-      display: flex;
-      align-items: center;
-      padding: 0 22px;
-      justify-content: space-between;
-    }
+.brand-sub {
+  font-size:10px;
+  color:var(--muted);
+  direction:ltr;
+}
 
-    .top-title {
-      font-size: 15px;
-      font-weight: bold;
-    }
+.primary-btn {
+  width:100%;
+  padding:13px;
+  border:1px solid #a77aff;
+  border-radius:13px;
+  background:linear-gradient(110deg,#601cff,#9842ff);
+  box-shadow:var(--glow);
+  font-weight:bold;
+  margin-bottom:17px;
+}
 
-    .status {
-      color: #72dba3;
-      font-size: 12px;
-    }
+.section-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#d1c5f5;
+  font-size:13px;
+  margin:8px 4px 12px;
+}
 
-    .messages {
-      flex: 1;
-      width: 100%;
-      max-width: 950px;
-      margin: auto;
-      padding: 28px 22px 150px;
-    }
+.search-box {
+  width:100%;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#151633;
+  color:white;
+  outline:none;
+  margin-bottom:10px;
+}
 
-    .welcome {
-      text-align: center;
-      padding: 90px 10px 40px;
-    }
+.history {
+  flex:1;
+  min-height:0;
+  overflow:auto;
+}
 
-    .welcome h1 {
-      font-size: 32px;
-      color: #a092ff;
-      margin-bottom: 12px;
-    }
+.history-item {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:10px;
+  border-radius:11px;
+  margin:5px 0;
+  background:rgba(255,255,255,.025);
+  border:1px solid transparent;
+}
 
-    .welcome p {
-      color: #9297a9;
-      line-height: 2;
-    }
+.history-item.active,
+.history-item:hover {
+  background:#25204a;
+  border-color:var(--border);
+}
 
-    .message {
-      display: flex;
-      margin: 20px 0;
-      gap: 10px;
-      align-items: flex-start;
-    }
+.history-open {
+  flex:1;
+  min-width:0;
+  border:0;
+  background:none;
+  text-align:right;
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 
-    .message.user {
-      flex-direction: row-reverse;
-    }
+.delete-btn {
+  background:none;
+  border:0;
+  color:#d0a8ff;
+  font-size:17px;
+}
 
-    .avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: #242139;
-      color: #b4a8ff;
-      flex-shrink: 0;
-      font-size: 13px;
-    }
+.empty-history {
+  color:var(--muted);
+  text-align:center;
+  font-size:12px;
+  padding:20px 5px;
+}
 
-    .user .avatar {
-      background: #26384a;
-      color: #9ed4ff;
-    }
+.sidebar-footer {
+  border-top:1px solid var(--border);
+  margin-top:12px;
+  padding-top:15px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+}
 
-    .bubble {
-      max-width: 82%;
-      background: #151925;
-      border: 1px solid #282d3c;
-      border-radius: 15px;
-      padding: 13px 16px;
-      line-height: 2;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
+/* MAIN */
 
-    .user .bubble {
-      background: #24213a;
-      border-color: #393252;
-    }
+.main {
+  direction:rtl;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
 
-    .bubble a {
-      color: #a99bff;
-      text-decoration: underline;
-      word-break: break-word;
-    }
+.topbar {
+  height:60px;
+  flex-shrink:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 18px;
+  border-bottom:1px solid rgba(151,119,255,.17);
+  background:rgba(5,7,22,.4);
+}
 
-    .bubble a:hover {
-      color: #d0c8ff;
-    }
+.top-actions {
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
 
-    .sources {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid #34394a;
-    }
+.icon-btn {
+  width:38px;
+  height:38px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#171735;
+  color:#d6c5ff;
+}
 
-    .sources-title {
-      color: #aaa1ff;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+.online {
+  color:#65eeb9;
+  font-size:12px;
+}
 
-    .source-item {
-      display: block;
-      padding: 9px 11px;
-      margin-top: 7px;
-      border: 1px solid #30354a;
-      background: #101522;
-      border-radius: 9px;
-      color: #c7c4ff;
-      text-decoration: none;
-      font-size: 13px;
-      line-height: 1.8;
-    }
+.content {
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:17px 22px;
+}
 
-    .source-item:hover {
-      background: #20243a;
-      border-color: #7770bb;
-    }
-    .source-url {
-      display: block;
-      color: #858ba0;
-      font-size: 10px;
-      direction: ltr;
-      text-align: left;
-      overflow-wrap: anywhere;
-    }
+/* HERO */
+  .hero {
+  max-width:1100px;
+  min-height:340px;
+  margin:0 auto 16px;
+  border:1px solid var(--border);
+  border-radius:22px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  align-items:center;
+  padding:30px;
+  background:
+    linear-gradient(90deg,rgba(5,6,24,.15),rgba(5,6,24,.72)),
+    url("nexus1-hero.jpg") center 44%/cover no-repeat;
+  box-shadow:var(--glow);
+}
 
-    .composer-wrap {
-      position: fixed;
-      bottom: 0;
-      right: 245px;
-      left: 0;
-      padding: 18px 22px 22px;
-      background: linear-gradient(transparent, #090b10 22%);
-    }
+.hero:after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(5,6,22,.55),transparent 60%);
+  pointer-events:none;
+}
 
-    .composer {
-      max-width: 850px;
-      margin: auto;
-      background: #151925;
-      border: 1px solid #34394b;
-      border-radius: 17px;
-      padding: 12px;
-    }
+.hero-text {
+  position:relative;
+  z-index:1;
+  max-width:490px;
+  margin-right:auto;
+  text-align:right;
+  text-shadow:0 2px 12px #050515;
+}
 
-    .composer textarea {
-      width: 100%;
-      min-height: 55px;
-      max-height: 170px;
-      resize: vertical;
-      border: none;
-      outline: none;
-      color: white;
-      background: transparent;
-      padding: 8px;
-      line-height: 1.8;
-    }
+.hero-small {
+  color:#c8a9ff;
+  font-size:13px;
+}
 
-    .composer textarea::placeholder {
-      color: #777e92;
-    }
+.hero h1 {
+  font-size:clamp(32px,4vw,55px);
+  line-height:1.25;
+  margin:10px 0;
+  text-shadow:0 0 22px #854cff;
+}
 
-    .tools {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      border-top: 1px solid #292e3d;
-      padding-top: 10px;
-    }
+.hero p {
+  color:#e4dcff;
+  line-height:2;
+  font-size:14px;
+}
 
-    .tool-btn {
-      border: 1px solid #34394b;
-      background: #202536;
-      color: #c5c8d6;
-      padding: 9px 12px;
-      border-radius: 9px;
-      font-size: 12px;
-    }
+.hero-buttons {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:15px;
+}
 
-    .tool-btn:hover {
-      background: #303650;
-    }
+.hero-buttons button {
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:9px 13px;
+  background:rgba(17,16,49,.9);
+  font-size:12px;
+}
 
-    .send-btn {
-      margin-right: auto;
-      background: #7968df;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 19px;
-      font-weight: bold;
-    }
+.hero-buttons button:hover {
+  border-color:#b38aff;
+  box-shadow:var(--glow);
+}
 
-    .send-btn:hover {
-      background: #9182f2;
-    }
+/* TOOLS */
 
-    .send-btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
+.tools-grid {
+  max-width:1100px;
+  margin:0 auto 17px;
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
+}
 
-    .image-preview {
-      display: none;
-      padding: 10px 5px;
-    }
+.tool-card {
+  min-height:78px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:rgba(16,18,49,.9);
+  transition:.2s;
+}
 
-    .image-preview img {
-      max-width: 120px;
-      max-height: 100px;
-      border-radius: 10px;
-      border: 1px solid #48415f;
-    }
+.tool-card:hover {
+  transform:translateY(-3px);
+  border-color:#a77aff;
+  box-shadow:var(--glow);
+}
 
-    .image-preview button {
-      display: block;
-      margin-top: 5px;
-      background: #492b38;
-      border: none;
-      color: white;
-      border-radius: 7px;
-      padding: 5px 9px;
-    }
+.tool-icon {
+  font-size:23px;
+  color:#a984ff;
+}
 
-    .message-image {
-      display: block;
-      max-width: 250px;
-      max-height: 250px;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
+.tool-card span:last-child {
+  font-size:11px;
+}
 
-    .mode-label {
-      color: #a89cff;
-      font-size: 12px;
-      margin-right: 5px;
-    }
+/* CHAT */
 
-    @media (max-width: 760px) {
-      .sidebar {
-        width: 65px;
-        padding: 12px 6px;
-      }
+.chat-area {
+  display:none;
+  max-width:1100px;
+  margin:0 auto;
+}
 
-      .logo {
-        font-size: 12px;
-        padding: 8px 2px;
-        text-align: center;
-      }
+.chat-area.visible { display:block; }
 
-      .creator {
-        display: none;
-      }
+.message {
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin:16px 0;
+}
 
-      .menu-btn {
-        font-size: 0;
-        text-align: center;
-        padding: 13px 2px;
-      }
+.message.user {
+  flex-direction:row-reverse;
+}
 
-      .menu-btn::first-letter {
-        font-size: 18px;
-      }
+.avatar {
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  flex-shrink:0;
+  background:#322366;
+  color:#e0cfff;
+  font-size:11px;
+}
 
-      .sidebar-bottom {
-        display: none;
-      }
+.bubble {
+  max-width:85%;
+  padding:12px 15px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#151832;
+  line-height:1.9;
+  font-size:13px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
 
-      .composer-wrap {
-        right: 65px;
-        padding: 10px;
-      }
+.user .bubble {
+  background:#28204a;
+}
 
-      .messages {
-        padding: 20px 12px 180px;
-      }
+.bubble a {
+  color:#c5a5ff;
+}
 
-      .welcome {
-        padding-top: 65px;
-      }
+.message-image {
+  display:block;
+  max-width:220px;
+  max-height:200px;
+  border-radius:10px;
+  margin-top:8px;
+}
 
-      .welcome h1 {
-        font-size: 25px;
-      }
+.sources {
+  border-top:1px solid var(--border);
+  margin-top:12px;
+  padding-top:9px;
+}
 
-      .bubble {
-        max-width: 90%;
-        font-size: 13px;
-      }
+.sources-title {
+  color:#c7aaff;
+  font-size:12px;
+  margin-bottom:7px;
+}
 
-      .topbar {
-        padding: 0 12px;
-      }
+.source-item {
+  display:block;
+  padding:6px 0;
+  font-size:11px;
+  color:#c9bcff;
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
 
-      .tool-btn {
-        padding: 8px;
-        font-size: 11px;
-      }
-    }
-  </style>
+/* COMPOSER */
+
+.composer-wrap {
+  flex-shrink:0;
+  padding:10px 20px 17px;
+  background:linear-gradient(0deg,#080817 65%,transparent);
+}
+
+.composer {
+  max-width:1100px;
+  margin:auto;
+  padding:11px 13px;
+  border:1px solid rgba(159,119,255,.55);
+  border-radius:19px;
+  background:#10132d;
+  box-shadow:var(--glow);
+}
+
+.composer textarea {
+  width:100%;
+  min-height:48px;
+  max-height:140px;
+  resize:vertical;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:white;
+  padding:8px;
+  line-height:1.8;
+}
+
+.composer textarea::placeholder {
+  color:#938cae;
+}
+
+.composer-tools {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+  border-top:1px solid rgba(151,119,255,.18);
+  padding-top:9px;
+}
+
+.tool-btn {
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#191a3a;
+  padding:8px 11px;
+  font-size:11px;
+}
+
+.tool-btn:hover { background:#30225e; }
+
+.send-btn {
+  margin-right:auto;
+  padding:10px 20px;
+  border:1px solid #a77aff;
+  border-radius:11px;
+  background:linear-gradient(110deg,#681cff,#9842ff);
+  box-shadow:var(--glow);
+  font-weight:bold;
+}
+  .send-btn:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.mode-label {
+  font-size:11px;
+  color:#c3a7ff;
+}
+
+.image-preview {
+  display:none;
+  padding:7px;
+}
+
+.image-preview img {
+  max-width:95px;
+  max-height:75px;
+  border-radius:9px;
+}
+
+.image-preview button {
+  border:0;
+  border-radius:7px;
+  background:#4b254d;
+  padding:5px 9px;
+  margin-right:7px;
+}
+
+.hidden-input { display:none; }
+
+/* RIGHT PANEL */
+
+.rightbar {
+  gap:10px;
+}
+
+.right-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:bold;
+  font-size:14px;
+  margin:5px 2px 12px;
+}
+
+.advanced-btn {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  width:100%;
+  text-align:right;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:linear-gradient(110deg,#1b1a43,#11132d);
+}
+
+.advanced-btn:hover {
+  border-color:#a77aff;
+  box-shadow:var(--glow);
+}
+
+.advanced-icon {
+  font-size:23px;
+  color:#ae8aff;
+  width:30px;
+  text-align:center;
+}
+
+.advanced-btn strong {
+  display:block;
+  font-size:12px;
+}
+
+.advanced-btn small {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.promo {
+  margin-top:auto;
+  text-align:center;
+  padding:15px;
+  border:1px solid #7544d5;
+  border-radius:16px;
+  background:radial-gradient(circle at top,#5225a5,#171039 75%);
+  box-shadow:var(--glow);
+}
+
+.promo strong { color:#dec5ff; }
+.promo p { color:#c5b7e5;font-size:11px; }
+
+.promo button {
+  border:1px solid #a77aff;
+  border-radius:20px;
+  background:#5120b4;
+  padding:8px 19px;
+}
+
+/* COLLAPSIBLE PANELS */
+
+.collapsed-left {
+  grid-template-columns:72px minmax(0,1fr) 270px;
+}
+
+.collapsed-left .sidebar {
+  padding:15px 7px;
+}
+
+.collapsed-left .brand-name,
+.collapsed-left .brand-sub,
+.collapsed-left .primary-btn,
+.collapsed-left .section-title,
+.collapsed-left .search-box,
+.collapsed-left .history,
+.collapsed-left .sidebar-footer {
+  display:none;
+}
+
+.collapsed-left .brand {
+  justify-content:center;
+}
+
+.collapsed-right {
+  grid-template-columns:280px minmax(0,1fr) 65px;
+}
+
+.collapsed-right .rightbar {
+  padding:15px 6px;
+}
+
+.collapsed-right .right-heading,
+.collapsed-right .advanced-btn div,
+.collapsed-right .promo {
+  display:none;
+}
+
+.collapsed-right .advanced-btn {
+  justify-content:center;
+  padding:12px 3px;
+}
+
+/* MOBILE */
+
+.mobile-overlay {
+  display:none;
+}
+
+@media(max-width:1100px) {
+  .app {
+    grid-template-columns:245px minmax(0,1fr);
+  }
+
+  .rightbar { display:none; }
+
+  .tools-grid {
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:700px) {
+  body { overflow:hidden; }
+
+  .app {
+    display:block;
+    height:100dvh;
+    min-height:550px;
+  }
+
+  .sidebar {
+    position:fixed;
+    top:0;
+    bottom:0;
+    right:0;
+    width:min(290px,85vw);
+    transform:translateX(110%);
+    transition:.25s;
+    box-shadow:0 0 35px #000;
+    z-index:20;
+  }
+
+  .app.mobile-menu .sidebar {
+    transform:translateX(0);
+  }
+
+  .mobile-overlay {
+    position:fixed;
+    inset:0;
+    background:#0009;
+    z-index:19;
+  }
+
+  .app.mobile-menu + .mobile-overlay {
+    display:block;
+  }
+
+  .main { height:100dvh; }
+
+  .topbar { padding:0 10px; }
+
+  .content { padding:10px; }
+
+  .hero {
+    min-height:260px;
+    padding:17px;
+    background-position:35% center;
+  }
+
+  .hero-text { max-width:75%; }
+
+  .hero h1 { font-size:32px; }
+
+  .hero p { font-size:12px; }
+
+  .tools-grid {
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+  }
+
+  .tool-card { min-height:68px; }
+
+  .composer-wrap { padding:8px 9px 12px; }
+
+  .bubble { max-width:89%;font-size:12px; }
+}
+
+</style>
 </head>
 
 <body>
-<div class="app">
 
-  <aside class="sidebar">
-    <div class="logo">✦ Nexus1 AI</div>
-    <div class="creator">Created by ehsanGGExE</div>
+<div class="app" id="app">
 
-    <button class="menu-btn active" data-mode="chat" onclick="setMode('chat', this)">💬 چت هوشمند</button>
-    <button class="menu-btn" data-mode="study" onclick="setMode('study', this)">📚 حالت مطالعه</button>
-    <button class="menu-btn" data-mode="image" onclick="setMode('image', this)">🎨 تولید تصویر</button>
-    <button class="menu-btn" data-mode="code" onclick="setMode('code', this)">💻 برنامه‌نویسی</button>
+<!-- LEFT SIDEBAR -->
 
-    <div class="sidebar-bottom">
-      Nexus1 AI<br>
-      هوش مصنوعی چندمنظوره
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-icon">✦</div>
+    <div>
+      <div class="brand-name">Nexus1 AI</div>
+      <div class="brand-sub">One AI. Endless Possibilities.</div>
     </div>
-  </aside>
+  </div>
 
-  <main class="main">
-    <header class="topbar">
-      <div class="top-title">Nexus1 AI</div>
-      <div class="status">● آنلاین</div>
-    </header>
-    <section class="messages" id="messages">
-      <div class="welcome" id="welcome">
-        <h1>سلام! من Nexus1 AI هستم ✦</h1>
+  <button class="primary-btn" onclick="newChat()">＋ چت جدید</button>
+
+  <div class="section-title">
+    <span>◷ تاریخچه چت‌ها</span>
+    <span id="historyCount">۰</span>
+  </div>
+  <input
+    class="search-box"
+    id="historySearch"
+    placeholder="⌕ جست‌وجو در چت‌ها..."
+    oninput="renderHistory()"
+  >
+
+  <div class="history" id="historyList"></div>
+
+  <div class="sidebar-footer">
+    Nexus1 AI<br>
+    هوش مصنوعی چندمنظوره<br><br>
+    Created by ehsanGGExE 💜
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="main">
+
+  <header class="topbar">
+
+    <div class="top-actions">
+      <button class="icon-btn" onclick="toggleSidebar()" title="منو">☰</button>
+      <button class="icon-btn" onclick="toggleFullscreen()" title="تمام صفحه">⛶</button>
+      <button class="icon-btn" onclick="toggleRightbar()" title="ابزارها">✧</button>
+    </div>
+
+    <div class="top-actions">
+      <span class="online">● آنلاین</span>
+      <button class="icon-btn">N</button>
+    </div>
+
+  </header>
+
+  <section class="content" id="content">
+
+    <!-- WELCOME -->
+
+    <section class="hero" id="welcome">
+
+      <div class="hero-text">
+
+        <div class="hero-small">✦ دستیار هوشمند نسل جدید</div>
+
+        <h1>سلام! من<br>Nexus1 AI هستم</h1>
+
         <p>
           چطور می‌تونم کمکت کنم؟<br>
           سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.
         </p>
+
+        <div class="hero-buttons">
+          <button onclick="quickPrompt('سلام Nexus1 AI!')">✨ شروع گفتگو</button>
+          <button onclick="insertSearch()">🌐 جست‌وجوی وب</button>
+        </div>
+
       </div>
+
     </section>
-  </main>
-</div>
 
-<div class="composer-wrap">
-  <div class="composer">
+    <!-- TOOLS -->
 
-    <div class="image-preview" id="imagePreview">
-      <img id="previewImage" alt="پیش‌نمایش تصویر">
-      <button type="button" onclick="removeImage()">حذف تصویر ×</button>
+    <section class="tools-grid" id="toolsGrid">
+
+      <button class="tool-card" onclick="setMode('chat')">
+        <span class="tool-icon">◉</span>
+        <span>چت هوشمند</span>
+      </button>
+
+      <button class="tool-card" onclick="setMode('study')">
+        <span class="tool-icon">▤</span>
+        <span>حالت مطالعه</span>
+      </button>
+
+      <button class="tool-card" onclick="setMode('image')">
+        <span class="tool-icon">▧</span>
+        <span>تولید تصویر</span>
+      </button>
+
+      <button class="tool-card" onclick="setMode('code')">
+        <span class="tool-icon">‹/›</span>
+        <span>برنامه‌نویسی</span>
+      </button>
+
+      <button class="tool-card" onclick="insertSearch()">
+        <span class="tool-icon">◎</span>
+        <span>جست‌وجوی وب</span>
+      </button>
+
+      <button class="tool-card" onclick="startVoice()">
+        <span class="tool-icon">♩</span>
+        <span>میکروفون</span>
+      </button>
+
+    </section>
+
+    <!-- CHAT MESSAGES -->
+
+    <section class="chat-area" id="chatArea"></section>
+
+  </section>
+
+  <!-- COMPOSER -->
+
+  <div class="composer-wrap">
+
+    <div class="composer">
+
+      <div class="image-preview" id="imagePreview">
+        <img id="previewImage" alt="پیش‌نمایش تصویر">
+        <button onclick="removeImage()">حذف تصویر ×</button>
+      </div>
+
+      <textarea
+        id="messageInput"
+        placeholder="پیامت رو برای Nexus1 AI بنویس..."
+        onkeydown="handleEnter(event)"
+      ></textarea>
+
+      <div class="composer-tools">
+
+        <input
+          class="hidden-input"
+          type="file"
+          id="imageInput"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onchange="handleImage(event)"
+        >
+
+        <button class="tool-btn" onclick="document.getElementById('imageInput').click()">▧ عکس</button>
+
+        <button class="tool-btn" onclick="startVoice()">♩ صدا</button>
+
+        <button class="tool-btn" onclick="insertSearch()">◎ وب</button>
+
+        <span class="mode-label" id="modeLabel">حالت چت</span>
+
+        <button class="send-btn" id="sendButton" onclick="sendMessage()">ارسال ↑</button>
+
+      </div>
+
     </div>
 
-    <textarea
-      id="messageInput"
-      placeholder="پیامت رو برای Nexus1 AI بنویس..."
-      onkeydown="handleEnter(event)"
-    ></textarea>
-
-    <div class="tools">
-      <input
-        type="file"
-        id="imageInput"
-        accept="image/jpeg,image/png,image/webp,image/gif"
-        hidden
-        onchange="handleImage(event)"
-      >
-
-      <button class="tool-btn" onclick="document.getElementById('imageInput').click()">🖼 عکس</button>
-      <button class="tool-btn" onclick="startVoice()">🎤 میکروفون</button>
-      <button class="tool-btn" id="voiceChatButton" onclick="toggleVoiceChat()">🔊 گفت‌وگوی صوتی</button>
-      <button class="tool-btn" onclick="insertSearch()">🌐 جست‌وجوی وب</button>
-      <span class="mode-label" id="modeLabel">حالت چت</span>
-      <button class="send-btn" id="sendButton" onclick="sendMessage()">ارسال ↑</button>
-    </div>
   </div>
+
+</main>
+
+<!-- RIGHT SIDEBAR -->
+
+<aside class="rightbar" id="rightbar">
+
+  <div class="right-heading">
+    <span>✦ ابزارهای پیشرفته</span>
+    <button class="icon-btn" onclick="toggleRightbar()">×</button>
+  </div>
+
+  <button class="advanced-btn" onclick="setMode('image')">
+    <span class="advanced-icon">🎨</span>
+    <div>
+      <strong>تولید تصویر با هوش مصنوعی</strong>
+      <small>تصاویر خلاقانه بسازید</small>
+    </div>
+  </button>
+  <button class="advanced-btn" onclick="setMode('code')">
+    <span class="advanced-icon">⌘</span>
+    <div>
+      <strong>کمک در برنامه‌نویسی</strong>
+      <small>کدنویسی حرفه‌ای و سریع</small>
+    </div>
+  </button>
+
+  <button class="advanced-btn" onclick="setMode('study')">
+    <span class="advanced-icon">🎓</span>
+    <div>
+      <strong>حالت مطالعه</strong>
+      <small>یادگیری ساده و عمیق</small>
+    </div>
+  </button>
+
+  <button class="advanced-btn" onclick="insertSearch()">
+    <span class="advanced-icon">◎</span>
+    <div>
+      <strong>جست‌وجوی وب</strong>
+      <small>پیدا کردن اطلاعات به‌روز</small>
+    </div>
+  </button>
+
+  <button class="advanced-btn" onclick="toggleVoiceChat()">
+    <span class="advanced-icon">♫</span>
+    <div>
+      <strong>گفت‌وگوی صوتی</strong>
+      <small>صحبت کنید و بشنوید</small>
+    </div>
+  </button>
+
+  <div class="promo">
+    <strong>✧ Nexus1 AI</strong>
+    <p>آینده در دستان توست...</p>
+    <button onclick="quickPrompt('سلام Nexus1 AI!')">شروع کن 🚀</button>
+  </div>
+
+</aside>
+
 </div>
+
+<div class="mobile-overlay" onclick="toggleSidebar()"></div>
 
 <script>
-  let currentMode = "chat";
-  let selectedImage = null;
-  let recognition = null;
-  let voiceChatActive = false;
-  let isSpeaking = false;
 
-  const messages = document.getElementById("messages");
-  const input = document.getElementById("messageInput");
-  const sendButton = document.getElementById("sendButton");
+/* ==================================
+   NEXUS1 AI
+   ================================== */
 
-  function setMode(mode, button) {
-    currentMode = mode;
+let currentMode = "chat";
+let selectedImage = null;
+let recognition = null;
+let voiceChatActive = false;
+let isSpeaking = false;
 
-    document.querySelectorAll(".menu-btn").forEach(btn => {
-      btn.classList.remove("active");
-    });
+let conversations = [];
+let activeConversationId = null;
 
-    if (button) button.classList.add("active");
+const STORAGE_KEY = "nexus1_conversations_v1";
 
-    const labels = {
-      chat: "حالت چت",
-      study: "حالت مطالعه",
-      image: "حالت تولید تصویر",
-      code: "حالت برنامه‌نویسی"
-    };
+const app = document.getElementById("app");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const chatArea = document.getElementById("chatArea");
 
-    document.getElementById("modeLabel").textContent = labels[mode];
+/* ==================================
+   HISTORY STORAGE
+   ================================== */
 
-    const placeholders = {
-      chat: "پیامت رو برای Nexus1 AI بنویس...",
-      study: "سؤال درسی‌ات رو بنویس...",
-      image: "توضیح بده چه تصویری می‌خوای...",
-      code: "سؤال یا کدت رو اینجا بنویس..."
-    };
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
 
-    input.placeholder = placeholders[mode];
+function loadConversations() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
 
-    const prompts = {
-      chat: "",
-      study: "در حالت مطالعه، این درخواست را مرحله‌به‌مرحله و ساده توضیح بده:\n",
-      image: "درخواست من درباره تولید تصویر است. اگر امکان تولید تصویر در این نسخه فعال نیست، صادقانه توضیح بده:\n",
-      code: "در نقش دستیار برنامه‌نویسی، ساده و مرحله‌به‌مرحله کمکم کن:\n"
-    };
+    conversations = Array.isArray(parsed) ? parsed : [];
 
-    input.dataset.prefix = prompts[mode];
+  } catch {
+    conversations = [];
   }
 
-  function insertSearch() {
-    input.value = "در اینترنت جست‌وجو کن و لینک منابع معتبر را هم بده: ";
-    input.focus();
+  renderHistory();
+}
+
+function saveConversations() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+    renderHistory();
+  } catch (error) {
+    console.error("History storage error:", error);
+    alert("فضای ذخیره مرورگر پر شده است. ممکن است لازم باشد چند گفت‌وگوی قدیمی را حذف کنید.");
+  }
+}
+
+function getActiveConversation() {
+  return conversations.find(c => c.id === activeConversationId) || null;
+}
+
+function ensureConversation(firstText) {
+
+  let conversation = getActiveConversation();
+
+  if (!conversation) {
+
+    conversation = {
+      id: uid(),
+      title: (firstText || "گفت‌وگوی جدید").slice(0,34),
+      messages: [],
+      updatedAt: Date.now()
+    };
+
+    conversations.unshift(conversation);
+    activeConversationId = conversation.id;
   }
 
-  function hideWelcome() {
-    const welcome = document.getElementById("welcome");
-    if (welcome) welcome.remove();
+  return conversation;
+}
+
+function renderHistory() {
+
+  const box = document.getElementById("historyList");
+  const search = document.getElementById("historySearch");
+
+  const query = (search.value || "").trim().toLowerCase();
+
+  box.replaceChildren();
+
+  const filtered = conversations.filter(c =>
+    c.title.toLowerCase().includes(query)
+  );
+
+  document.getElementById("historyCount").textContent =
+    conversations.length.toLocaleString("fa-IR");
+
+  if (!filtered.length) {
+
+    const empty = document.createElement("div");
+    empty.className = "empty-history";
+
+    empty.textContent = conversations.length
+      ? "گفت‌وگویی پیدا نشد"
+      : "هنوز گفت‌وگویی ذخیره نشده است";
+
+    box.appendChild(empty);
+    return;
   }
 
-  function addMessage(role, text, imageData = null, sources = []) {
-    hideWelcome();
+  filtered.forEach(c => {
 
     const row = document.createElement("div");
-    row.className = "message " + role;
 
-    const avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.textContent = role === "user" ? "شما" : "AI";
+    row.className =
+      "history-item" +
+      (c.id === activeConversationId ? " active" : "");
 
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-
-    // متن پاسخ با حفظ امنیت نمایش داده می‌شود
-    bubble.textContent = text || "";
-
-    if (imageData) {
-      const img = document.createElement("img");
-      img.src = imageData;
-      img.className = "message-image";
-      img.alt = "تصویر ارسال‌شده";
-      bubble.appendChild(img);
-    }
-
-    if (role === "assistant" && sources.length) {
-      const sourceBox = document.createElement("div");
-      sourceBox.className = "sources";
-
-      const title = document.createElement("div");
-      title.className = "sources-title";
-      title.textContent = "🌐 منابع پیدا شده در اینترنت";
-      sourceBox.appendChild(title);
-      sources.forEach(source => {
-        try {
-          const url = new URL(source.url);
-
-          if (!["http:", "https:"].includes(url.protocol)) return;
-
-          const link = document.createElement("a");
-          link.className = "source-item";
-          link.href = url.href;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-
-          const name = document.createElement("span");
-          name.textContent = source.title || "مشاهده منبع";
-
-          const address = document.createElement("span");
-          address.className = "source-url";
-          address.textContent = url.hostname;
-
-          link.appendChild(name);
-          link.appendChild(address);
-          sourceBox.appendChild(link);
-        } catch {
-          // لینک نامعتبر نمایش داده نمی‌شود
-        }
-      });
-
-      bubble.appendChild(sourceBox);
-    }
-
-    row.appendChild(avatar);
-    row.appendChild(bubble);
-    messages.appendChild(row);
-
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
-
-    return bubble;
-  }
-
-  function handleImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const allowed = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-      "image/gif"
-    ];
-
-    if (!allowed.includes(file.type)) {
-      alert("فرمت تصویر پشتیبانی نمی‌شود.");
-      event.target.value = "";
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert("حجم تصویر باید حداکثر ۵ مگابایت باشد.");
-      event.target.value = "";
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      selectedImage = {
-        mimeType: file.type,
-        data: reader.result.split(",")[1],
-        preview: reader.result
-      };
-
-      document.getElementById("previewImage").src = reader.result;
-      document.getElementById("imagePreview").style.display = "block";
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  function removeImage() {
-    selectedImage = null;
-    document.getElementById("imageInput").value = "";
-    document.getElementById("imagePreview").style.display = "none";
-  }
-
-  function handleEnter(event) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      sendMessage();
-    }
-  }
-
-  async function sendMessage() {
-    let message = input.value.trim();
-    const image = selectedImage;
-
-    if (!message && !image) return;
-
-    if (input.dataset.prefix) {
-      message = input.dataset.prefix + message;
-    }
-
-    const preview = image ? image.preview : null;
-
-    addMessage("user", message || "لطفاً این تصویر را بررسی کن.", preview);
-
-    input.value = "";
-    removeImage();
-
-    const waiting = addMessage("assistant", "در حال فکر کردن...");
-
-    sendButton.disabled = true;
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message,
-          image: image ? {
-            mimeType: image.mimeType,
-            data: image.data
-          } : null
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "ارتباط با هوش مصنوعی با مشکل مواجه شد.");
-      }
-
-      waiting.textContent = data.reply || "پاسخی دریافت نشد.";
-
-      // نمایش لینک‌های جست‌وجوی واقعی برگشتی از سرور
-      if (Array.isArray(data.sources) && data.sources.length) {
-        const sourceBox = document.createElement("div");
-        sourceBox.className = "sources";
-
-        const title = document.createElement("div");
-        title.className = "sources-title";
-        title.textContent = "🌐 منابع جست‌وجو";
-        sourceBox.appendChild(title);
-
-        data.sources.forEach(source => {
-          try {
-            const url = new URL(source.url);
-
-            if (!["https:", "http:"].includes(url.protocol)) return;
-            const link = document.createElement("a");
-            link.className = "source-item";
-            link.href = url.href;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-
-            const name = document.createElement("span");
-            name.textContent = source.title || "مشاهده نتیجه";
-
-            const host = document.createElement("span");
-            host.className = "source-url";
-            host.textContent = url.hostname;
-
-            link.append(name, host);
-            sourceBox.appendChild(link);
-          } catch {
-            // لینک نامعتبر نادیده گرفته می‌شود
-          }
-        });
-
-        waiting.appendChild(sourceBox);
-      }
-
-      if (voiceChatActive) {
-        speakVoiceReply(data.reply || "");
-      }
-
-    } catch (error) {
-      waiting.textContent = "خطا: " + error.message;
-    } finally {
-      sendButton.disabled = false;
-      input.focus();
-    }
-  }
-
-  function getSpeechRecognition() {
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      alert("مرورگر شما از تشخیص گفتار پشتیبانی نمی‌کند.");
-      return null;
-    }
-
-    const rec = new SpeechRecognition();
-    rec.lang = "fa-IR";
-    rec.interimResults = false;
-    rec.continuous = false;
-
-    return rec;
-  }
-
-  function startVoice() {
-    const rec = getSpeechRecognition();
-    if (!rec) return;
-
-    recognition = rec;
-
-    rec.onresult = event => {
-      const text = event.results[0][0].transcript;
-      input.value = (input.value + " " + text).trim();
-      input.focus();
-    };
-
-    rec.onerror = () => {
-      console.log("Speech recognition error");
-    };
-
-    rec.start();
-  }
-
-  function toggleVoiceChat() {
-    if (voiceChatActive) {
-      stopVoiceChat();
-      return;
-    }
-
-    const rec = getSpeechRecognition();
-    if (!rec) return;
-
-    voiceChatActive = true;
-    recognition = rec;
-
-    document.getElementById("voiceChatButton").textContent =
-      "⏹ توقف گفت‌وگوی صوتی";
-
-    listenForVoiceTurn();
-  }
-
-  function stopVoiceChat() {
-    voiceChatActive = false;
-    isSpeaking = false;
-
-    if (recognition) {
-      try {
-        recognition.abort();
-      } catch {}
-    }
-
-    window.speechSynthesis.cancel();
-
-    document.getElementById("voiceChatButton").textContent =
-      "🔊 گفت‌وگوی صوتی";
-  }
-
-  function listenForVoiceTurn() {
-    if (!voiceChatActive || isSpeaking) return;
-
-    const rec = getSpeechRecognition();
-    if (!rec) {
-      stopVoiceChat();
-      return;
-    }
-
-    recognition = rec;
-
-    rec.onresult = async event => {
-      const spokenText = event.results[0][0].transcript;
-      input.value = spokenText;
-      await sendMessage();
-    };
-
-    rec.onerror = () => {
-      if (voiceChatActive && !isSpeaking) {
-        stopVoiceChat();
-      }
-    };
-
-    rec.onend = () => {
-      if (voiceChatActive && !isSpeaking) {
-        // شروع دوباره شنیدن در صورت پایان طبیعی
-        setTimeout(() => {
-          if (voiceChatActive && !isSpeaking) {
-            listenForVoiceTurn();
-          }
-        }, 500);
-      }
-    };
-
-    try {
-      rec.start();
-    } catch {
-      stopVoiceChat();
-    }
-  }
-
-  function speakVoiceReply(text) {
-    if (!voiceChatActive || !("speechSynthesis" in window)) return;
-
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "fa-IR";
-    utterance.rate = 1;
-    utterance.pitch = 1;
-
-    isSpeaking = true;
-
-    utterance.onend = () => {
-      isSpeaking = false;
-
-      if (voiceChatActive) {
-        listenForVoiceTurn();
-      }
-    };
-
-    utterance.onerror = () => {
-      isSpeaking = false;
-
-      if (voiceChatActive) {
-        listenForVoiceTurn();
-      }
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }
-</script>
-</body>
-</html>
+    const open = document.crea
