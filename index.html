@@ -1,968 +1,502 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080817">
 <title>Nexus1 AI</title>
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --p:#8c35ff;
-  --line:#7652bd66;
-  --glass:#0b0b22dd;
-  --muted:#aaa4c7;
+  --purple:#913cff;
+  --blue:#54aaff;
+  --glass:rgba(10,10,32,.91);
+  --border:rgba(155,105,255,.35);
 }
-
-* { box-sizing:border-box; }
-
-body {
-  margin:0;
-  background:#070716;
-  color:#f8f4ff;
-  font-family:Vazirmatn,Tahoma,sans-serif;
-  background-image:linear-gradient(90deg,#07071666,#070716a8),url('nexus-bg.png');
-  background-position:center;
-  background-size:cover;
-  background-attachment:fixed;
-  min-height:100vh;
+*{box-sizing:border-box}
+body{
+ margin:0;min-height:100vh;color:white;
+ font-family:Vazirmatn,Tahoma,sans-serif;
+ background:#070716 url("nexus-bg.png") center/cover fixed;
 }
-
-button,textarea { font:inherit;color:inherit; }
-button { cursor:pointer; }
-
-.app {
-  min-height:100vh;
-  padding:12px;
-  display:grid;
-  grid-template-columns:260px minmax(0,1fr) 230px;
-  gap:12px;
+button,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+.app{
+ min-height:100vh;padding:12px;
+ display:grid;grid-template-columns:300px minmax(400px,1fr) 275px;
+ gap:12px;
 }
-
-.panel,.top,.hero,.composer,.tile {
-  background:var(--glass);
-  border:1px solid var(--line);
-  backdrop-filter:blur(15px);
-  box-shadow:0 0 25px #6122ba20;
+.panel,.top,.composer,.tile,.tool-card{
+ background:var(--glass);
+ border:1px solid var(--border);
+ backdrop-filter:blur(16px);
+ box-shadow:0 0 25px #6925bd22;
 }
-
-.panel {
-  border-radius:20px;
-  padding:16px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+.panel{
+ border-radius:22px;padding:16px;
+ display:flex;flex-direction:column;gap:13px;
+ min-height:calc(100vh - 24px);
 }
-
-.brand {
-  font-size:22px;
-  font-weight:800;
-  color:#d6baff;
-  padding:10px;
+.brand{display:flex;align-items:center;gap:12px;padding:8px 3px 17px;border-bottom:1px solid var(--border)}
+.logo{
+ width:53px;height:53px;border-radius:16px;
+ display:grid;place-items:center;font-size:30px;
+ background:linear-gradient(140deg,#5015db,#c02cff);
+ box-shadow:0 0 25px #923cff88;
 }
-
-.brand small {
-  display:block;
-  font-size:10px;
-  color:var(--muted);
-  font-weight:400;
+.brand strong{font-size:25px;color:#d9baff}
+.brand small{display:block;color:#aaa4c7;font-size:10px}
+.primary,.send{
+ border:0;border-radius:14px;padding:13px 18px;
+ font-weight:bold;background:linear-gradient(110deg,#5014e8,#a51cff);
+ box-shadow:0 0 20px #782dff66;
 }
-
-button.primary,.send {
-  border:0;
-  background:linear-gradient(110deg,#5114e8,#a51cff);
-  border-radius:12px;
-  padding:12px 15px;
-  font-weight:700;
-  box-shadow:0 0 18px #782dff66;
+.primary{width:100%}
+.label{font-size:13px;font-weight:bold}
+.search{
+ width:100%;padding:12px;border-radius:13px;
+ border:1px solid var(--border);background:#171631;
+ outline:none;
 }
-
-.menu,.histbtn,.tile {
-  border:1px solid transparent;
-  background:#171631bb;
-  border-radius:12px;
-  padding:12px;
-  text-align:right;
+.history{display:flex;flex-direction:column;gap:8px;overflow:auto;max-height:55vh}
+.hist{display:flex;align-items:center;gap:5px;padding:8px;background:#171631;border-radius:12px}
+.hist button{background:none;border:0}
+.hist .open{flex:1;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+.promo{
+ margin-top:auto;text-align:center;padding:15px;border-radius:16px;
+ border:1px solid var(--purple);
+ background:linear-gradient(130deg,#25105a,#7024c7);
 }
-
-.menu:hover,.menu.active,.tile:hover {
-  border-color:#a779ff;
-  background:#29204b;
+.promo b{color:#ffd76b}
+.foot{text-align:center;color:#aaa4c7;font-size:11px}
+.main{min-width:0;display:flex;flex-direction:column;gap:12px}
+.top{
+ height:65px;border-radius:18px;padding:8px 15px;
+ display:flex;align-items:center;justify-content:space-between;
 }
-
-.label {
-  font-size:12px;
-  color:var(--muted);
-  padding:8px;
+.online{color:#6ff0b4;font-size:12px}
+.icon-btn{border:1px solid var(--border);background:#20183e;border-radius:12px;padding:9px 13px;font-size:20px}
+.avatar-top{width:42px;height:42px;border-radius:50%;background:#2812bd;display:grid;place-items:center;font-size:22px}
+.hero{
+ flex:1;min-height:370px;border-radius:22px;padding:28px;
+ display:flex;align-items:center;justify-content:flex-end;
+ background:linear-gradient(90deg,#07071608,#07071622 40%,#07071699),url("nexus-bg.png") center/cover;
+ overflow:hidden;
 }
-
-.history {
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-  max-height:50vh;
-  overflow:auto;
+.hero-copy{max-width:510px;text-align:right;text-shadow:0 2px 12px #000}
+.hero h1{font-size:clamp(38px,5vw,66px);line-height:1.2;margin:10px 0}
+.hero p{line-height:2}
+.hero-note{
+ display:inline-block;padding:13px 18px;border-radius:16px;
+ background:#0b0b2bd9;border:1px solid var(--border);line-height:2;
 }
-
-.hist {
-  display:flex;
-  gap:5px;
-  align-items:center;
-  background:#171631;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:7px;
+.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.tile{
+ min-height:94px;border-radius:18px;padding:10px 4px;
+ text-align:center;font-size:12px;transition:.2s;
 }
-
-.hist button:first-child {
-  flex:1;
-  min-width:0;
-  text-align:right;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  background:none;
-  border:0;
-  font-size:12px;
+.tile .ico{display:block;font-size:27px;margin-bottom:7px;color:#bd8bff}
+.tile:hover,.tile.active{border-color:#b78cff;background:linear-gradient(145deg,#2d155e,#17102e);box-shadow:0 0 18px #8b35ff66}
+.messages{max-height:34vh;overflow:auto;padding:4px 8px}
+  .hint{text-align:center;color:#c4badf;padding:12px}
+.msg{display:flex;gap:9px;margin:13px 0}
+.msg.user{flex-direction:row-reverse}
+.avatar{width:36px;height:36px;flex:none;border-radius:12px;background:#382365;display:grid;place-items:center}
+.bubble{
+ max-width:86%;white-space:pre-wrap;overflow-wrap:anywhere;
+ line-height:1.9;background:#11132c;border:1px solid var(--border);
+ border-radius:15px;padding:12px;
 }
-
-.del {
-  background:none;
-  border:0;
-  color:#d2b5ff;
-  font-size:18px;
+.msg.user .bubble{background:#282047}
+.bubble img{display:block;max-width:240px;max-height:220px;border-radius:10px;margin-top:8px}
+.sources{border-top:1px solid var(--border);margin-top:8px;padding-top:8px}
+.sources a{display:block;color:#cbb4ff;font-size:12px;margin:5px}
+.composer{
+ border-radius:20px;padding:13px;position:sticky;bottom:8px;
 }
-
-.foot {
-  margin-top:auto;
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  padding:10px;
+.composer textarea{
+ width:100%;min-height:65px;max-height:150px;resize:vertical;
+ background:transparent;border:0;outline:0;padding:8px;line-height:1.8;
 }
-
-.main {
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-width:0;
+.composer textarea::placeholder{color:#aaa4c7}
+.bar{border-top:1px solid var(--border);padding-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tool{background:#201b3b;border:1px solid var(--border);border-radius:11px;padding:8px 12px;font-size:12px}
+.send{margin-right:auto;padding:11px 20px}
+.preview{display:none;padding:7px}
+.preview img{width:72px;height:60px;object-fit:cover;border-radius:9px}
+.right h3{font-size:15px;margin:4px 2px 8px}
+.tool-card{
+ border-radius:16px;padding:13px 11px;display:flex;
+ align-items:center;gap:12px;text-align:right;width:100%;min-height:68px;
 }
-
-.top {
-  height:58px;
-  border-radius:16px;
-  padding:8px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.tool-card .ico{font-size:26px;color:#bd8bff;min-width:35px}
+.tool-card b{display:block;font-size:13px}
+.tool-card small{display:block;color:#aaa4c7;font-size:10px;margin-top:3px}
+.mobile{display:none}
+@media(max-width:1120px){
+ .app{grid-template-columns:260px minmax(0,1fr)}
+ .right{display:none}
+ .tiles{grid-template-columns:repeat(4,1fr)}
 }
-
-.online {
-  color:#6ff0b4;
-  font-size:12px;
+@media(max-width:760px){
+ .app{display:flex;flex-direction:column;padding:7px;gap:9px}
+ .left{display:none;position:fixed;z-index:50;top:7px;bottom:7px;right:7px;width:min(310px,88vw);box-shadow:0 0 0 100vmax #000b;overflow:auto}
+ .left.open{display:flex}
+ .mobile{display:inline-block}
+ .top{height:56px}
+ .hero{min-height:390px;padding:14px;background-position:38% center}
+ .hero-copy{max-width:85%;padding:12px;border-radius:14px;background:#08081766}
+ .hero h1{font-size:37px}
+ .hero p{font-size:12px}
+ .tiles{grid-template-columns:repeat(4,1fr);gap:6px}
+ .tile{min-height:78px;font-size:10px}
+ .tile .ico{font-size:23px}
+ .messages{max-height:30vh}
 }
-
-.icon {
-  border:1px solid var(--line);
-  background:#20183e;
-  border-radius:11px;
-  padding:9px 13px;
-  font-size:18px;
-}
-
-.hero {
-  min-height:360px;
-  border-radius:22px;
-  padding:30px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  background-image:linear-gradient(90deg,#07071616,#070716d9 60%),url('nexus-bg.png');
-  background-position:center;
-  background-size:cover;
-}
-
-.hero-copy {
-  max-width:540px;
-  text-align:right;
-}
-
-.hero h1 {
-  font-size:clamp(34px,5vw,58px);
-  line-height:1.3;
-  margin:12px 0;
-}
-
-.hero p {
-  line-height:2;
-  color:#e1d9f6;
-}
-
-.tools {
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:9px;
-}
-
-.tile {
-  text-align:center;
-  min-height:88px;
-  font-size:13px;
-}
-
-.tile b {
-  display:block;
-  font-size:25px;
-  color:#b88aff;
-  margin-bottom:5px;
-}
-
-.messages {
-  padding:5px 8px 15px;
-  min-height:100px;
-}
-
-.hint {
-  text-align:center;
-  color:var(--muted);
-  padding:12px;
-}
-
-.msg {
-  display:flex;
-  gap:8px;
-  margin:14px 0;
-}
-
-.msg.user {
-  flex-direction:row-reverse;
-}
-
-.avatar {
-  width:34px;
-  height:34px;
-  flex:none;
-  border-radius:10px;
-  background:#382365;
-  display:grid;
-  place-items:center;
-  font-size:11px;
-}
-  .bubble {
-  max-width:85%;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  line-height:1.9;
-  background:#11132c;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;
-}
-
-.msg.user .bubble {
-  background:#282047;
-}
-
-.bubble img {
-  display:block;
-  max-width:230px;
-  max-height:220px;
-  border-radius:9px;
-  margin-top:8px;
-}
-
-.sources {
-  border-top:1px solid var(--line);
-  margin-top:8px;
-  padding-top:8px;
-}
-
-.sources a {
-  display:block;
-  color:#cbb4ff;
-  font-size:12px;
-  margin:5px;
-}
-
-.composer {
-  position:sticky;
-  bottom:8px;
-  border-radius:18px;
-  padding:12px;
-}
-
-.composer textarea {
-  width:100%;
-  min-height:62px;
-  max-height:150px;
-  resize:vertical;
-  background:transparent;
-  border:0;
-  outline:0;
-  color:white;
-  padding:8px;
-  line-height:1.8;
-}
-
-.composer textarea::placeholder {
-  color:#aaa4c7;
-}
-
-.bar {
-  border-top:1px solid var(--line);
-  padding-top:9px;
-  display:flex;
-  align-items:center;
-  gap:7px;
-  flex-wrap:wrap;
-}
-
-.tool {
-  background:#201b3b;
-  border:1px solid var(--line);
-  border-radius:9px;
-  padding:8px 10px;
-  font-size:12px;
-}
-
-.send {
-  margin-right:auto;
-}
-
-.preview {
-  display:none;
-  padding:7px;
-}
-
-.preview img {
-  width:70px;
-  height:60px;
-  object-fit:cover;
-  border-radius:8px;
-}
-
-.right .menu {
-  border-color:var(--line);
-  text-align:right;
-}
-
-.right h3 {
-  font-size:15px;
-}
-
-.promo {
-  margin-top:auto;
-  text-align:center;
-  border-radius:14px;
-  padding:15px;
-  background:linear-gradient(130deg,#25105a,#7024c7);
-}
-
-.mobile {
-  display:none;
-}
-
-@media(max-width:1050px) {
-  .app {
-    grid-template-columns:230px minmax(0,1fr);
-  }
-
-  .right { display:none; }
-
-  .tools {
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-
-@media(max-width:700px) {
-  body { background-attachment:scroll; }
-
-  .app {
-    display:flex;
-    flex-direction:column;
-    padding:7px;
-    gap:9px;
-  }
-
-  .left {
-    display:none;
-    position:fixed;
-    z-index:30;
-    top:7px;
-    bottom:7px;
-    right:7px;
-    width:min(290px,86vw);
-    box-shadow:0 0 0 100vmax #000a;
-  }
-
-  .left.open { display:flex; }
-  .mobile { display:inline-block; }
-  .top { height:54px; }
-
-  .hero {
-    min-height:370px;
-    padding:16px;
-    background-position:35% center;
-  }
-
-  .hero-copy {
-    background:#08081775;
-    border-radius:12px;
-    padding:12px;
-  }
-
-  .hero h1 { font-size:36px; }
-  .hero p { font-size:13px; }
-
-  .tools {
-    grid-template-columns:repeat(3,1fr);
-    gap:6px;
-  }
-
-  .tile {
-    min-height:80px;
-    padding:8px 3px;
-    font-size:11px;
-  }
-
-  .tile b { font-size:22px; }
-  .composer { padding:8px; }
-
-  .tool {
-    font-size:11px;
-    padding:7px;
-  }
-
-  .messages { padding-bottom:5px; }
-  .bubble { font-size:13px; }
-}
+@media(max-width:390px){.tiles{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
-
 <body>
+
 <div class="app">
 
+<!-- پنل سمت چپ -->
 <aside class="panel left" id="sidebar">
-  <div class="brand">
-    ✦ Nexus1 AI
-    <small>One AI. Endless Possibilities.</small>
-  </div>
+ <div class="brand">
+  <div class="logo">✥</div>
+  <div><strong>Nexus1 AI</strong><small>One AI. Endless Possibilities.</small></div>
+ </div>
 
-  <button class="primary" onclick="newChat()">＋ چت جدید</button>
+ <button class="primary" onclick="newChat()">＋ چت جدید</button>
+ <div class="label">◷ تاریخچه چت‌ها</div>
+ <input class="search" id="historySearch" placeholder="جست‌وجو در چت‌ها..." oninput="drawHistory()">
+ <div class="history" id="history"></div>
 
-  <div class="label">◷ تاریخچه گفتگوها</div>
-  <div class="history" id="history"></div>
-
-  <div class="foot">
-    Nexus1 AI<br>
-    Created by ehsanGGExE 💜
-  </div>
+ <div class="promo"><b>♛ Nexus1 AI</b><div>هوش مصنوعی نسل جدید</div></div>
+ <div class="foot">Created by ehsanGGExE 💜</div>
+ <div class="foot">⚙ تنظیمات　　؟ راهنما　　☾ حالت تاریک</div>
 </aside>
 
+<!-- بخش مرکزی -->
 <main class="main">
 
-<header class="top">
-  <div>
-    <button class="icon mobile" onclick="toggleMenu()">☰</button>
-    <span class="online">● آنلاین</span>
+ <header class="top">
+  <div><button class="icon-btn mobile" onclick="toggleMenu()">☰</button></div>
+  <div style="display:flex;align-items:center;gap:12px">
+   <span class="online">● آنلاین</span>
+   <button class="icon-btn" onclick="fullscreen()">⛶</button>
+   <div class="avatar-top">N</div>
   </div>
+ </header>
 
-  <div>
-    <button class="icon" onclick="fullscreen()">⛶</button>
-    <b>Nexus1 AI</b>
-  </div>
-</header>
-
-<section class="hero" id="hero">
+ <section class="hero" id="hero">
   <div class="hero-copy">
-    <div style="color:#d4b5ff">✦ دستیار هوشمند نسل جدید</div>
-
-    <h1>سلام! من<br>Nexus1 AI هستم</h1>
-
-    <p>
-      چطور می‌تونم کمکت کنم؟<br>
-      سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.
-    </p>
-
-    <button class="primary" onclick="document.getElementById('message').focus()">
-      ✨ شروع گفتگو
-    </button>
-
-    <button class="tool" onclick="searchPrompt()">
-      🌐 جست‌وجوی وب
-    </button>
+   <div style="color:#d4b5ff;font-weight:bold">سلام! من</div>
+   <h1>Nexus1 AI<br>هستم ✨</h1>
+   <div class="hero-note">
+    <b>چطور می‌تونم کمکت کنم؟</b><br>
+    <small>سؤال بپرس، عکس بفرست یا از من بخواه در اینترنت جست‌وجو کنم.</small>
+   </div>
   </div>
-</section>
-<section class="tools">
-  <button class="tile" onclick="mode('chat')"><b>💬</b>چت هوشمند</button>
-  <button class="tile" onclick="mode('study')"><b>📖</b>حالت مطالعه</button>
-  <button class="tile" onclick="mode('image')"><b>🎨</b>تولید تصویر</button>
-  <button class="tile" onclick="mode('code')"><b>⌨️</b>برنامه‌نویسی</button>
-  <button class="tile" onclick="searchPrompt()"><b>🌐</b>جست‌وجوی وب</button>
-  <button class="tile" onclick="voice()"><b>🎙️</b>میکروفون</button>
-</section>
+ </section>
+ <section class="tiles">
+  <button class="tile active" data-mode="chat" onclick="setMode('chat')"><span class="ico">💬</span>چت هوشمند</button>
+  <button class="tile" data-mode="study" onclick="setMode('study')"><span class="ico">📖</span>حالت مطالعه</button>
+  <button class="tile" data-mode="image" onclick="setMode('image')"><span class="ico">▧</span>تولید تصویر</button>
+  <button class="tile" data-mode="code" onclick="setMode('code')"><span class="ico">‹/›</span>برنامه‌نویسی</button>
+  <button class="tile" onclick="searchPrompt()"><span class="ico">◎</span>جست‌وجوی وب</button>
+  <button class="tile" onclick="voice()"><span class="ico">🎙</span>میکروفون</button>
+  <button class="tile" onclick="document.getElementById('message').focus()"><span class="ico">▦</span>سایر ابزارها</button>
+ </section>
 
-<section class="messages" id="messages">
-  <div class="hint" id="hint">
-    گفتگوی تازه شما اینجا نمایش داده می‌شود ✨
-  </div>
-</section>
+ <section class="messages" id="messages">
+  <div class="hint" id="hint">گفتگوی تازه شما اینجا نمایش داده می‌شود ✨</div>
+ </section>
 
-<div class="composer">
+ <section class="composer">
   <div class="preview" id="preview">
-    <img id="previewImg" alt="پیش‌نمایش">
-    <button class="tool" onclick="removeImage()">حذف تصویر ×</button>
+   <img id="previewImg" alt="پیش‌نمایش تصویر">
+   <button class="tool" onclick="removeImage()">حذف تصویر ×</button>
   </div>
 
-  <textarea
-    id="message"
-    placeholder="پیامت رو برای Nexus1 AI بنویس..."
-    onkeydown="enterSend(event)"
-  ></textarea>
+  <textarea id="message" placeholder="پیامت رو برای Nexus1 AI بنویس..." onkeydown="enterSend(event)"></textarea>
 
   <div class="bar">
-    <input
-      id="imageFile"
-      type="file"
-      accept="image/jpeg,image/png,image/webp"
-      hidden
-      onchange="pickImage(event)"
-    >
-
-    <button class="tool" onclick="imageFile.click()">🖼 عکس</button>
-    <button class="tool" onclick="voice()">🎤 صدا</button>
-    <button class="tool" onclick="searchPrompt()">🌐 وب</button>
-
-    <span id="modeLabel" style="color:#c6aaff;font-size:11px">
-      حالت چت
-    </span>
-
-    <button class="send" id="send" onclick="sendMessage()">ارسال ↑</button>
+   <input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp" hidden onchange="pickImage(event)">
+   <input id="docFile" type="file" accept=".txt,.md,.csv" hidden onchange="pickTextFile(event)">
+   <button class="tool" onclick="document.getElementById('imageFile').click()">▧ عکس</button>
+   <button class="tool" onclick="voice()">🎙 صدا</button>
+   <button class="tool" onclick="searchPrompt()">◎ وب</button>
+   <button class="tool" onclick="document.getElementById('docFile').click()">▱ فایل</button>
+   <span id="modeLabel" style="color:#c6aaff;font-size:11px">حالت چت</span>
+   <button class="send" id="send" onclick="sendMessage()">ارسال ➤</button>
   </div>
-</div>
-
+ </section>
 </main>
 
+<!-- پنل ابزارهای سمت راست -->
 <aside class="panel right">
-  <h3>✨ ابزارهای پیشرفته</h3>
+ <h3>ابزارهای پیشرفته ✨</h3>
 
-  <button class="menu" onclick="mode('image')">
-    🎨 تولید تصویر با هوش مصنوعی
-  </button>
+ <button class="tool-card" onclick="setMode('image')">
+  <span class="ico">🎨</span><span><b>تولید تصویر با هوش مصنوعی</b><small>تصاویر شگفت‌انگیز بسازید</small></span>
+ </button>
+ <button class="tool-card" onclick="setMode('code')">
+  <span class="ico">‹/›</span><span><b>کمک در برنامه‌نویسی</b><small>کدنویسی حرفه‌ای و سریع</small></span>
+ </button>
+ <button class="tool-card" onclick="setMode('study')">
+  <span class="ico">🎓</span><span><b>حالت مطالعه</b><small>یادگیری ساده و عمیق</small></span>
+ </button>
+ <button class="tool-card" onclick="searchPrompt()">
+  <span class="ico">🌐</span><span><b>جست‌وجوی وب</b><small>پیدا کردن اطلاعات به‌روز</small></span>
+ </button>
+ <button class="tool-card" onclick="voice()">
+  <span class="ico">▥</span><span><b>گفت‌وگوی صوتی</b><small>صحبت کنید و بشنوید</small></span>
+ </button>
+ <button class="tool-card" onclick="fullscreen()">
+  <span class="ico">⚙</span><span><b>تنظیمات پیشرفته</b><small>نمایش تمام‌صفحه</small></span>
+ </button>
 
-  <button class="menu" onclick="mode('code')">
-    ⌨️ کمک در برنامه‌نویسی
-  </button>
-
-  <button class="menu" onclick="mode('study')">
-    🎓 حالت مطالعه
-  </button>
-
-  <button class="menu" onclick="searchPrompt()">
-    🌐 جست‌وجوی وب
-  </button>
-
-  <button class="menu" onclick="voice()">
-    🎙️ میکروفون
-  </button>
-
-  <div class="promo">
-    💎 <b>Nexus1 AI</b>
-    <p>آینده در دستان توست...</p>
-    <button class="tool" onclick="newChat()">🚀 شروع کن</button>
-  </div>
+ <div class="promo">
+  <div style="font-size:27px">◇</div>
+  <b>Nexus1 AI</b>
+  <p>آینده در دستان توست...</p>
+  <button class="tool" onclick="newChat()">🚀 شروع کن</button>
+ </div>
 </aside>
 
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
+let currentMode='chat',pickedImage=null,activeChat=null;
+let chats=[];
 
-let modeNow = 'chat';
-let picked = null;
-let active = null;
+try{
+ chats=JSON.parse(localStorage.getItem('nexus1_chats')||'[]');
+ if(!Array.isArray(chats))chats=[];
+}catch{chats=[]}
 
-let chats = [];
-
-try {
-  chats = JSON.parse(localStorage.getItem('nexus1_chats') || '[]');
-} catch {
-  chats = [];
+function saveChats(){
+ try{localStorage.setItem('nexus1_chats',JSON.stringify(chats))}
+ catch{alert('فضای ذخیره مرورگر پر شده است. چند گفتگوی قدیمی را حذف کن.')}
 }
 
-function store() {
-  try {
-    localStorage.setItem('nexus1_chats', JSON.stringify(chats));
-  } catch {
-    alert('فضای ذخیره مرورگر پر شده است. چند گفتگوی قدیمی را حذف کن.');
-  }
+function currentChat(){return chats.find(c=>c.id===activeChat)}
+
+function ensureChat(title){
+ let c=currentChat();
+ if(!c){
+  c={id:Date.now()+'-'+Math.random(),title:(title||'گفتگوی جدید').slice(0,32),items:[],time:Date.now()};
+  chats.unshift(c);activeChat=c.id;
+ }
+ return c;
+}
+  function saveMessage(role,text,img=null,sources=[]){
+ let c=ensureChat(text);
+ c.items.push({role,text,img,sources});
+ c.time=Date.now();
+ if(role==='user'&&c.items.filter(x=>x.role==='user').length===1)
+  c.title=(text||'گفتگوی تصویری').slice(0,32);
+ saveChats();drawHistory();
 }
 
-function current() {
-  return chats.find(c => c.id === active);
+function drawHistory(){
+ const box=$('history');box.replaceChildren();
+ const q=$('historySearch').value.trim().toLowerCase();
+ [...chats].sort((a,b)=>b.time-a.time)
+ .filter(c=>c.title.toLowerCase().includes(q))
+ .forEach(c=>{
+  const row=document.createElement('div');row.className='hist';
+  const b=document.createElement('button');b.className='open';
+  b.textContent='▣ '+c.title;b.onclick=()=>openChat(c.id);
+  const d=document.createElement('button');d.textContent='🗑';
+  d.title='حذف گفتگو';
+  d.onclick=()=>{
+   if(!confirm('این گفتگو حذف شود؟'))return;
+   chats=chats.filter(x=>x.id!==c.id);
+   if(activeChat===c.id)newChat();
+   saveChats();drawHistory();
+  };
+  row.append(b,d);box.append(row);
+ });
 }
 
-function ensure(title) {
-  let c = current();
-
-  if (!c) {
-    c = {
-      id: Date.now() + '-' + Math.random(),
-      title: (title || 'گفتگوی جدید').slice(0, 32),
-      items: [],
-      time: Date.now()
-    };
-
-    chats.unshift(c);
-    active = c.id;
-  }
-
-  return c;
+function newChat(){
+ activeChat=null;
+ $('messages').replaceChildren();
+ const h=document.createElement('div');h.className='hint';h.id='hint';
+ h.textContent='گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';
+ $('messages').append(h);
+ $('hero').style.display='';
+ $('message').value='';
+ removeImage();
+ $('sidebar').classList.remove('open');
 }
 
-function save(role, text, img = null, sources = []) {
-  let c = ensure(text);
-
-  c.items.push({ role, text, img, sources });
-  c.time = Date.now();
-
-  if (
-    role === 'user' &&
-    c.items.filter(x => x.role === 'user').length === 1
-  ) {
-    c.title = (text || 'گفتگوی تصویری').slice(0, 32);
-  }
-
-  store();
-  drawHistory();
+function openChat(id){
+ const c=chats.find(x=>x.id===id);if(!c)return;
+ activeChat=id;$('messages').replaceChildren();
+ $('hero').style.display='none';
+ c.items.forEach(m=>addMessage(m.role,m.text,m.img,m.sources,false));
+ $('sidebar').classList.remove('open');
 }
 
-function drawHistory() {
-  let box = $('history');
-  box.replaceChildren();
-
-  [...chats]
-    .sort((a,b) => b.time - a.time)
-    .forEach(c => {
-      let row = document.createElement('div');
-      row.className = 'hist';
-
-      let b = document.createElement('button');
-      b.textContent = '▣ ' + c.title;
-      b.onclick = () => openChat(c.id);
-
-      let d = document.createElement('button');
-      d.className = 'del';
-      d.textContent = '×';
-      d.title = 'حذف';
-
-      d.onclick = () => {
-        chats = chats.filter(x => x.id !== c.id);
-
-        if (active === c.id) {
-          newChat();
-        }
-
-        store();
-        drawHistory();
-      };
-
-      row.append(b,d);
-      box.append(row);
-    });
-}
-
-function clear() {
-  $('messages').replaceChildren();
-}
-
-function newChat() {
-  active = null;
-  clear();
-  let h = document.createElement('div');
-  h.className = 'hint';
-  h.id = 'hint';
-  h.textContent = 'گفتگوی تازه شما اینجا نمایش داده می‌شود ✨';
-
-  $('messages').append(h);
-  $('hero').style.display = '';
-  $('message').value = '';
-
-  removeImage();
-  $('sidebar').classList.remove('open');
-}
-
-function openChat(id) {
-  let c = chats.find(x => x.id === id);
-  if (!c) return;
-
-  active = id;
-  clear();
-
-  $('hero').style.display = 'none';
-
-  c.items.forEach(m => {
-    add(m.role,m.text,m.img,m.sources,false);
+function addMessage(role,text,img=null,sources=[],saveIt=true){
+ $('hint')?.remove();$('hero').style.display='none';
+ const row=document.createElement('div');row.className='msg '+role;
+ const av=document.createElement('div');av.className='avatar';
+ av.textContent=role==='user'?'شما':'AI';
+ const bubble=document.createElement('div');bubble.className='bubble';
+ bubble.textContent=text||'';
+ if(img){
+  const im=document.createElement('img');im.src=img;
+  im.alt='تصویر ارسال‌شده';bubble.append(im);
+ }
+ if(sources?.length){
+  const box=document.createElement('div');box.className='sources';
+  sources.forEach(s=>{
+   try{
+    const u=new URL(s.url);
+    if(!['http:','https:'].includes(u.protocol))return;
+    const a=document.createElement('a');a.href=u.href;
+    a.target='_blank';a.rel='noopener noreferrer';
+    a.textContent=s.title||u.hostname;box.append(a);
+   }catch{}
   });
-
-  $('sidebar').classList.remove('open');
+  bubble.append(box);
+ }
+ row.append(av,bubble);$('messages').append(row);
+ if(saveIt)saveMessage(role,text,img,sources);
+ $('messages').scrollTop=$('messages').scrollHeight;
+ return bubble;
 }
 
-function add(role,text,img = null,sources = [],saveIt = true) {
-  $('hint')?.remove();
-
-  let row = document.createElement('div');
-  row.className = 'msg ' + role;
-
-  let av = document.createElement('div');
-  av.className = 'avatar';
-  av.textContent = role === 'user' ? 'شما' : 'AI';
-
-  let b = document.createElement('div');
-  b.className = 'bubble';
-  b.textContent = text || '';
-
-  if (img) {
-    let im = document.createElement('img');
-    im.src = img;
-    im.alt = 'تصویر ارسال‌شده';
-    b.append(im);
-  }
-
-  if (sources?.length) {
-    let box = document.createElement('div');
-    box.className = 'sources';
-
-    sources.forEach(s => {
-      try {
-        let u = new URL(s.url);
-
-        if (!['http:','https:'].includes(u.protocol)) return;
-
-        let a = document.createElement('a');
-        a.href = u.href;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = s.title || u.hostname;
-
-        box.append(a);
-      } catch {}
-    });
-
-    b.append(box);
-  }
-
-  row.append(av,b);
-  $('messages').append(row);
-
-  if (saveIt) save(role,text,img,sources);
-
-  return b;
+function setMode(m){
+ currentMode=m;
+ const names={chat:'حالت چت',study:'حالت مطالعه',image:'تولید تصویر',code:'برنامه‌نویسی'};
+ const prefixes={
+  chat:'',
+  study:'در حالت مطالعه، ساده و مرحله‌به‌مرحله توضیح بده:\n',
+  image:'درخواست من درباره تولید تصویر است. اگر قابلیت تولید تصویر فعال نیست، صادقانه بگو:\n',
+  code:'در نقش دستیار برنامه‌نویسی، ساده و مرحله‌به‌مرحله کمکم کن:\n'
+ };
+ $('modeLabel').textContent=names[m];
+ $('message').dataset.prefix=prefixes[m];
+ $('message').placeholder=m==='study'?'سؤال درسی‌ات را بنویس...':
+ m==='code'?'سؤال یا کدت را بنویس...':
+ m==='image'?'تصویر موردنظرت را توصیف کن...':'پیامت را بنویس...';
+ document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
+ $('message').focus();
 }
 
-function mode(m) {
-  modeNow = m;
+function searchPrompt(){
+ $('message').value='در اینترنت جست‌وجو کن و لینک منابع معتبر را هم بده: ';
+ $('message').focus();
+}
 
-  let names = {
-    chat:'حالت چت',
-    study:'حالت مطالعه',
-    image:'تولید تصویر',
-    code:'برنامه‌نویسی'
-  };
+function enterSend(e){
+ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}
+}
 
-  let pre = {
-    chat:'',
-    study:'در حالت مطالعه، ساده و مرحله‌به‌مرحله توضیح بده:\n',
-    image:'درخواست من درباره تولید تصویر است. اگر تولید تصویر در این نسخه فعال نیست، صادقانه بگو:\n',
-    code:'در نقش دستیار برنامه‌نویسی، ساده و مرحله‌به‌مرحله کمکم کن:\n'
-  };
+async function sendMessage(){
+ let text=$('message').value.trim(),im=pickedImage;
+ if(!text&&!im)return;
+ if($('message').dataset.prefix)text=$('message').dataset.prefix+text;
+ let userText=text||'لطفاً این تصویر را بررسی کن.';
+ addMessage('user',userText,im?im.preview:null);
+ $('message').value='';removeImage();
+ let wait=addMessage('assistant','در حال فکر کردن...');
+ $('send').disabled=true;
+  try{
+  const r=await fetch('/api/chat',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({
+    message:text,
+    image:im?{mimeType:im.mimeType,data:im.data}:null
+   })
+  });
+  const data=await r.json();
+  if(!r.ok)throw Error(data.error||'ارتباط با هوش مصنوعی با مشکل مواجه شد.');
+  const reply=data.reply||'پاسخی دریافت نشد.';
+  wait.textContent=reply;
+  const src=Array.isArray(data.sources)?data.sources:[];
+  if(src.length){
+   const box=document.createElement('div');box.className='sources';
+   src.forEach(s=>{
+    try{
+     const u=new URL(s.url);
+     if(!['http:','https:'].includes(u.protocol))return;
+     const a=document.createElement('a');a.href=u.href;
+     a.target='_blank';a.rel='noopener noreferrer';
+     a.textContent=s.title||u.hostname;box.append(a);
+    }catch{}
+   });
+   wait.append(box);
+  }
+  const c=currentChat(),last=c?.items[c.items.length-1];
+  if(last?.role==='assistant'&&last.text==='در حال فکر کردن...'){
+   last.text=reply;last.sources=src;saveChats();
+  }
+ }catch(e){
+  wait.textContent='خطا: '+e.message;
+  const c=currentChat(),last=c?.items[c.items.length-1];
+  if(last?.role==='assistant'){last.text='خطا: '+e.message;saveChats()}
+ }finally{
+  $('send').disabled=false;$('message').focus();
+ }
+}
 
-  $('modeLabel').textContent = names[m];
-  $('message').dataset.prefix = pre[m];
+function pickImage(e){
+ const f=e.target.files[0];if(!f)return;
+ if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5*1024*1024){
+  alert('فقط JPG، PNG یا WEBP تا حجم ۵ مگابایت مجاز است.');
+  e.target.value='';return;
+ }
+ const rd=new FileReader();
+ rd.onload=()=>{
+  pickedImage={mimeType:f.type,data:rd.result.split(',')[1],preview:rd.result};
+  $('previewImg').src=rd.result;$('preview').style.display='block';
+ };
+ rd.readAsDataURL(f);
+}
 
-  $('message').placeholder =
-    m === 'study' ? 'سؤال درسی‌ات را بنویس...' :
-    m === 'code' ? 'سؤال یا کدت را بنویس...' :
-    m === 'image' ? 'تصویر موردنظرت را توصیف کن...' :
-    'پیامت را بنویس...';
+function removeImage(){
+ pickedImage=null;
+ if($('imageFile'))$('imageFile').value='';
+ if($('preview'))$('preview').style.display='none';
+}
 
+function pickTextFile(e){
+ const f=e.target.files[0];if(!f)return;
+ if(f.size>500000){alert('حجم فایل متنی باید کمتر از ۵۰۰ کیلوبایت باشد.');e.target.value='';return}
+ const r=new FileReader();
+ r.onload=()=>{
+  $('message').value+=\n\nمحتوای فایل ${f.name}:\n${r.result};
   $('message').focus();
+ };
+ r.readAsText(f);e.target.value='';
 }
 
-function searchPrompt() {
-  $('message').value = 'در اینترنت جست‌وجو کن و لینک منابع معتبر را هم بده: ';
-  $('message').focus();
+function toggleMenu(){$('sidebar').classList.toggle('open')}
+
+function fullscreen(){
+ if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
+ else document.exitFullscreen?.();
 }
 
-function enterSend(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-async function sendMessage() {
-  let text = $('message').value.trim();
-  let im = picked;
-
-  if (!text && !im) return;
-
-  if ($('message').dataset.prefix) {
-    text = $('message').dataset.prefix + text;
-  }
-let userText = text || 'لطفاً این تصویر را بررسی کن.';
-add('user', userText, im ? im.preview : null);
-  $('message').value = '';
-  removeImage();
-
-  let wait = add('assistant','در حال فکر کردن...');
-  $('send').disabled = true;
-
-  try {
-    let r = await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        message:text,
-        image:im ? {
-          mimeType:im.mimeType,
-          data:im.data
-        } : null
-      })
-    });
-
-    let data = await r.json();
-
-    if (!r.ok) {
-      throw Error(data.error || 'ارتباط با هوش مصنوعی با مشکل مواجه شد.');
-    }
-
-    let reply = data.reply || 'پاسخی دریافت نشد.';
-    wait.textContent = reply;
-
-    let src = Array.isArray(data.sources) ? data.sources : [];
-
-    if (src.length) {
-      let box = document.createElement('div');
-      box.className = 'sources';
-
-      src.forEach(s => {
-        try {
-          let u = new URL(s.url);
-
-          if (!['https:','http:'].includes(u.protocol)) return;
-
-          let a = document.createElement('a');
-          a.href = u.href;
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.textContent = s.title || u.hostname;
-          box.append(a);
-        } catch {}
-      });
-
-      wait.append(box);
-    }
-
-    let c = current();
-    let last = c?.items.at(-1);
-
-    if (last?.role === 'assistant' && last.text === 'در حال فکر کردن...') {
-      last.text = reply;
-      last.sources = src;
-      store();
-    }
-
-  } catch(e) {
-    wait.textContent = 'خطا: ' + e.message;
-
-    let c = current();
-    let last = c?.items.at(-1);
-
-    if (last?.role === 'assistant') {
-      last.text = 'خطا: ' + e.message;
-      store();
-    }
-
-  } finally {
-    $('send').disabled = false;
-    $('message').focus();
-  }
-}
-
-function pickImage(e) {
-  let f = e.target.files[0];
-  if (!f) return;
-
-  if (
-    !['image/jpeg','image/png','image/webp'].includes(f.type) ||
-    f.size > 5 * 1024 * 1024
-  ) {
-    alert('فقط JPG، PNG یا WEBP تا حجم ۵ مگابایت مجاز است.');
-    e.target.value = '';
-    return;
-  }
-
-  let rd = new FileReader();
-
-  rd.onload = () => {
-    picked = {
-      mimeType:f.type,
-      data:rd.result.split(',')[1],
-      preview:rd.result
-    };
-
-    $('previewImg').src = rd.result;
-    $('preview').style.display = 'block';
-  };
-
-  rd.readAsDataURL(f);
-}
-
-function removeImage() {
-  picked = null;
-  $('imageFile').value = '';
-  $('preview').style.display = 'none';
-}
-
-function toggleMenu() {
-  $('sidebar').classList.toggle('open');
-}
-
-function fullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen?.();
-  } else {
-    document.exitFullscreen?.();
-  }
-}
-
-function voice() {
-  let SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SR) {
-    alert('مرورگر شما تشخیص گفتار را پشتیبانی نمی‌کند.');
-    return;
-  }
-
-  let r = new SR();
-  r.lang = 'fa-IR';
-
-  r.onresult = e => {
-    $('message').value =
-      ($('message').value + ' ' + e.results[0][0].transcript).trim();
-  };
-
-  r.start();
+function voice(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){alert('مرورگر شما تشخیص گفتار را پشتیبانی نمی‌کند.');return}
+ const r=new SR();r.lang='fa-IR';
+ r.onresult=e=>$('message').value=($('message').value+' '+e.results[0][0].transcript).trim();
+ r.onerror=()=>alert('دریافت صدا انجام نشد. دوباره امتحان کن.');
+ r.start();
 }
 
 drawHistory();
-
-if (!chats.length) {
-  newChat();
-}
+if(!chats.length)newChat();
 </script>
 </body>
 </html>
